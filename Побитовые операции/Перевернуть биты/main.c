@@ -1,48 +1,76 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-
-typedef unsigned char byte;
+#include <stdlib.h>
 
 enum
 {
 	SUCCESS = 0,
 	FAILURE = 1,
-	BYTE_SIZE = 8
+	BYTE_SIZE = 8,
+    INT_BYTE = 4
 };
+
+void Swap(char* A, char* B)
+{
+	char Buffer = *A;
+	*A = *B;
+	*B = Buffer;
+}
 
 void PrintBits(unsigned int Symbol)
 {
-	printf("%d = ", Symbol);
-	unsigned int Mask = ~0;
-	Mask <<= 1;
+	printf("%u =", Symbol);
+    unsigned int Mask = ~0;
 	Mask >>= 1;
-	Mask++;
+	Mask = ~Mask;
 
-	for (int i = 0; i < BYTE_SIZE * sizeof(unsigned int); i++)
+	for (int i = 0; i < BYTE_SIZE * INT_BYTE; ++i)
 	{
-		printf("%d", ((Mask & Symbol) != 0) ? 1 : 0);
-		Symbol <<= 1;
-
-		if ((i % 4) == 3)
+		if (i % BYTE_SIZE == 0)
 		{
 			printf(" ");
 		}
 
-		if ((i % 8) == 7)
-		{
-			printf("  ");
-		}
+		printf("%d", ((Mask & Symbol) != 0) ? 1 : 0);
+		Symbol <<= 1;
 	}
 }
 
-byte ReverseBitsOfByte(byte Symbol, byte Mask, int Size)
+unsigned char* IntToCharArray(unsigned int number)
+{
+    unsigned char Mask = ~0;
+    unsigned char* Array = malloc(4 * sizeof(*Array));
+
+    for(int i = INT_BYTE - 1; i >= 0; i--)
+    {
+        Array[i] = Mask & number;
+        number >>= BYTE_SIZE;
+    }
+
+    return Array;
+}
+
+unsigned int CharArrayToInt(unsigned char* Array)
+{
+    unsigned int Number = 0;
+
+    for(size_t i = 0; i < INT_BYTE; ++i)
+    {
+        Number <<= BYTE_SIZE;
+        Number |= Array[i];
+    }
+
+    return Number;
+}
+
+unsigned char ReverseCharBits(unsigned char Symbol, unsigned char Mask, int Size)
 {
 	Size /= 2;
 
-	byte Mask1 = Mask << Size & Mask;
-	byte Mask2 = Mask >> Size & Mask;
-	byte Symbol1 = (Symbol & Mask1) >> Size;
-	byte Symbol2 = (Symbol & Mask2) << Size;
+	unsigned char Mask1 = Mask << Size & Mask;
+	unsigned char Mask2 = Mask >> Size & Mask;
+	unsigned char Symbol1 = (Symbol & Mask1) >> Size;
+	unsigned char Symbol2 = (Symbol & Mask2) << Size;
 
 	if (((Mask - 1) & Mask) == 0)
 	{
@@ -50,68 +78,45 @@ byte ReverseBitsOfByte(byte Symbol, byte Mask, int Size)
 	}
 	else
 	{
-		return ReverseBitsOfByte(Symbol1, Mask2, Size) | ReverseBitsOfByte(Symbol2, Mask1, Size);
+		return ReverseCharBits(Symbol1, Mask2, Size) | ReverseCharBits(Symbol2, Mask1, Size);
 	}
 }
 
-void GetArray(unsigned int object, byte Array[])
+void ReverseArray(unsigned char* Array)
 {
-	unsigned int Mask = 255;
-
-	for (int i = sizeof(object) - 1; i >= 0; i--)
-	{
-		Array[i] = ReverseBitsOfByte((byte)(object & Mask), ~0, BYTE_SIZE);
-		object >>= 8;
-	}
+    for(size_t i = 0; i < INT_BYTE / 2; ++i)
+    {
+        Swap(&(Array[i]), &(Array[INT_BYTE - 1 - i]));
+    }
 }
 
-void ReverseArray(byte Array[])
+unsigned int ReverseIntBits(unsigned int Number)
 {
-	int ArraySize = sizeof(Array);
-	byte Buffer;
+    unsigned char* Array = IntToCharArray(Number);
 
-	for (int i = 0; i < ArraySize / 2; i++)
-	{
-		Buffer = Array[i];
-		Array[i] = Array[ArraySize - 1 - i];
-		Array[ArraySize - 1 - i] = Buffer;
-	}
-}
+    for(size_t i = 0; i < INT_BYTE; ++i)
+    {
+        Array[i] = ReverseCharBits(Array[i], ~0, BYTE_SIZE);
+    }
 
-unsigned int GetUnsignedInt(byte Array[])
-{
-	unsigned int Mask = 255;
-	unsigned int Symbol = 0;
-
-	for (int i = sizeof(Array) - 1; i >= 0; i--)
-	{
-		Symbol += Array[i] | Mask;
-		Mask <<= 8;
-	}
-
-	return Symbol;
-}
-
-unsigned int ReverseBits(unsigned int Symbol)
-{
-	byte Array[sizeof(unsigned int)];
-	GetArray(Symbol, Array);
-	ReverseArray(Array);
-	return GetUnsignedInt(Array);
+    ReverseArray(Array);
+    return CharArrayToInt(Array);
 }
 
 int main()
 {
-	unsigned int Symbol;
+	unsigned int Number;
 
-	if (scanf("%d", &Symbol) == EOF)
+	if (scanf("%d", &Number) == EOF)
 	{
 		return FAILURE;
 	}
 
-	PrintBits(Symbol);
+	PrintBits(Number);
 	printf("\n");
-	PrintBits(ReverseBits(Symbol));
+	PrintBits(ReverseIntBits(Number));
+    printf("\n");
 
+    system("pause");
 	return SUCCESS;
 }
