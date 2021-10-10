@@ -7,7 +7,7 @@ enum
 	SUCCESS = 0,
 	FAILURE = 1,
 	BYTE_SIZE = 8,
-    INT_BYTE = 4
+        INT_BYTE = 4
 };
 
 void Swap(char* A, char* B)
