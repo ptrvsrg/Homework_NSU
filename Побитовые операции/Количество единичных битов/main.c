@@ -12,9 +12,11 @@ enum
 
 void PrintBits(unsigned int Number)
 {
+    printf("%u = ", Number);
+
 	for (int i = 0; i < UNSIGNED_INT_SIZE; i++)
 	{
-		if (i % 4 == 0)
+		if (i % 8 == 0)
 		{
 			printf(" ");
 		}
@@ -56,10 +58,9 @@ int main()
 	{
 		return FAILURE;
 	}
-
-	printf("Количество единичных битов в записи символа ");
+    
 	PrintBits(Number);
-	printf(" составляет %d", PopulationCount(Number, ~0, UNSIGNED_INT_SIZE));
+	printf("\nCount of single bits is %d", PopulationCount(Number, ~0, UNSIGNED_INT_SIZE));
 
 	return SUCCESS;
 }
