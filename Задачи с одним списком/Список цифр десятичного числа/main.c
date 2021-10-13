@@ -16,11 +16,6 @@ TList CreateList()
     return NULL;
 }
 
-bool IsEmpty(TList list)
-{
-    return list == NULL;
-}
-
 void Push(unsigned int value, TList* list)
 {
     TList new = malloc(sizeof(*new));
@@ -42,37 +37,32 @@ void CreateListOfDigits(unsigned int number, TList* list)
 
 int SumList(TList list)
 {
-    int sum = 0;
-
-    while(!IsEmpty(list))
+    if(list == NULL)
     {
-        sum += list->Value;
-        list = list->Next;
+        return 0;
     }
-
-    return sum;
+    else
+    {
+        return list->Value + SumList(list->Next);
+    }
 }
+
 void PrintList(TList list)
 {
-    while(!IsEmpty(list))
+    if(list != NULL)
     {
         printf("%d ", list->Value);
-        list = list->Next;
+        PrintList(list->Next);
     }
 }
 
 void FreeList(TList* list) 
 {
-    TList buffer = NULL;
-
-    while ((*list)->Next) 
+    if(list != NULL)
     {
-        buffer = (*list);
-        (*list) = (*list)->Next;
-        free(buffer);
+        FreeList(&((*list)->Next));
+        free(list);
     }
-
-    free(*list);
 }
 
 int main(void)
