@@ -52,7 +52,6 @@ int SumList(TList list)
 
     return sum;
 }
-
 void PrintList(TList list)
 {
     while(!IsEmpty(list))
@@ -85,3 +84,5 @@ int main(void)
     FreeList(&list);
     return 0;
 }
+
+//Виталя лох
