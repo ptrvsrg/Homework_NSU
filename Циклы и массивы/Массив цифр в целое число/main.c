@@ -7,7 +7,7 @@ enum
 	FAILURE = 1
 };
 
-int GetNumberFromArrayOfDigits(int* Array, int SizeOfArray)
+int NumberToDigitsArray(int* Array, int SizeOfArray)
 {
 	int Sum = 0;
 
@@ -22,6 +22,6 @@ int GetNumberFromArrayOfDigits(int* Array, int SizeOfArray)
 int main()
 {
 	int Array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-	printf("Number is %d\n", GetNumberFromArrayOfDigits(Array, sizeof(Array) / sizeof(*Array)));
+	printf("Number is %d\n", NumberToDigitsArray(Array, sizeof(Array) / sizeof(*Array)));
 	return SUCCESS;
 }
