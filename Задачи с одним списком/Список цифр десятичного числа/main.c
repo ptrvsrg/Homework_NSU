@@ -84,5 +84,3 @@ int main(void)
     FreeList(&list);
     return 0;
 }
-
-//Виталя лох
