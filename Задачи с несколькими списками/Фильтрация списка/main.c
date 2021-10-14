@@ -11,11 +11,6 @@ struct TList
 
 typedef struct TList* TList;
 
-TList CreateList()
-{
-    return NULL;
-}
-
 void Push(int value, TList* list)
 {
     TList new = malloc(sizeof(*new));
@@ -69,20 +64,20 @@ void FreeList(TList* list)
     }
 }
 
-bool FindList(int value, TList list)
+bool FindList(int value, TList filter)
 {
-    while(list)
+    while(filter)
     {
-        if(list->Value > value)
+        if(filter->Value > value)
         {
             return false;
         }
-        else if(list->Value == value)
+        else if(filter->Value == value)
         {
             return true;
         }
 
-        list = list->Next;
+        filter = filter->Next;
     }
 
     return false;
@@ -106,14 +101,14 @@ void FilterList(TList* list, TList filter)
 
 int main()
 {
-    TList list = CreateList();
-    TList filter = CreateList();
+    TList list = NULL;
+    TList filter = NULL;
 
-    int array1 [] = { 0, 1, 2, 5, 8, 9 };
-    int array2 [] = { 1, 8 };
+    int arrayList [] = { 0, 1, 2, 5, 8, 9 };
+    int arrayFilter [] = { 1, 8 };
 
-    ArrayToList(sizeof(array1) / sizeof(*array1), array1, &list);
-    ArrayToList(sizeof(array2) / sizeof(*array2), array2, &filter);
+    ArrayToList(sizeof(arrayList) / sizeof(*arrayList), arraarrayListy1, &list);
+    ArrayToList(sizeof(arrayFilter) / sizeof(*arrayFilter), arrayFilter, &filter);
 
     CheckNonDecreasing(list);
     CheckNonDecreasing(filter);
