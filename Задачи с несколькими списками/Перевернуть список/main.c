@@ -11,11 +11,6 @@ struct TList
 
 typedef struct TList* TList;
 
-TList CreateList()
-{
-    return NULL;
-}
-
 void Push(int value, TList* list)
 {
     TList new = malloc(sizeof(*new));
@@ -44,34 +39,40 @@ void PrintList(TList list)
 
 void FreeList(TList* list) 
 {
-    if(list != NULL)
+    if(*list != NULL)
     {
         FreeList(&((*list)->Next));
-        free(list);
+        free(*list);
     }
 }
 
 void ReverseList(TList* list)
 {
-    TList result = CreateList();
-
-    while (*list != NULL)
+    if (*list == NULL || (*list)->Next == NULL)
     {
-        TList buffer = (*list)->Next;
-        (*list)->Next = result;
-        result = *list;
-        (*list) = buffer;
+        return;
     }
 
-    (*list) = result;
+    TList current, next, result = NULL;
+    current = *list;
+
+    while(current != NULL)
+    {
+        next = current->Next;
+        current->Next = result;
+        result = current;
+        current = next;
+    }
+
+    *list = result;
 }
 
 int main(void)
 {
-    TList list = CreateList();
-    int array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    TList list = NULL;
+    int array[] = { 1, 2, 3, 4 };
 
-    ArrayToList(9, array, &list);
+    ArrayToList(sizeof(array) / sizeof(*array), array, &list);
     PrintList(list);
     printf("\n");
     ReverseList(&list);

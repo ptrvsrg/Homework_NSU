@@ -16,7 +16,7 @@ TList CreateList()
     return NULL;
 }
 
-void Push(unsigned int value, TList* list)
+void Push(int value, TList* list)
 {
     TList new = malloc(sizeof(*new));
     assert(new != NULL);
@@ -25,14 +25,12 @@ void Push(unsigned int value, TList* list)
     (*list) = new;
 }
 
-void CreateListOfDigits(unsigned int number, TList* list)
+void ArrayToList(size_t arraySize, int array[], TList* list)
 {
-    do
+    for(size_t i = 0; i < arraySize; ++i)
     {
-        unsigned int digit = number % 10;
-        number /= 10;
-        Push(digit, list);
-    } while (number != 0);
+        Push(array[arraySize - 1 - i], list);
+    }
 }
 
 void CheckNonDecreasing(TList list)
@@ -79,10 +77,10 @@ void PrintList(TList list)
 
 void FreeList(TList* list) 
 {
-    if(list != NULL)
+    if(*list != NULL)
     {
         FreeList(&((*list)->Next));
-        free(list);
+        free(*list);
     }
 }
 
@@ -91,8 +89,11 @@ int main()
     TList list1 = CreateList();
     TList list2 = CreateList();
 
-    CreateListOfDigits(135, &list1);
-    CreateListOfDigits(17, &list2);
+    int array1 [] = { 1, 2, 5, 8, 9 };
+    int array2 [] = { 0, 3, 8 };
+
+    ArrayToList(sizeof(array1) / sizeof(*array1), array1, &list1);
+    ArrayToList(sizeof(array2) / sizeof(*array2), array2, &list2);
 
     CheckNonDecreasing(list1);
     CheckNonDecreasing(list2);
