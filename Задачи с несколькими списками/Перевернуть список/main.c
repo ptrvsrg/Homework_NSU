@@ -51,21 +51,19 @@ void FreeList(TList* list)
     }
 }
 
-TList ReverseList(TList list, TList resultList)
+void ReverseList(TList* list)
 {
-    TList bufferList;
-    if(list->Next == NULL) 
+    TList result = CreateList();
+
+    while (*list != NULL)
     {
-        list->Next = resultList;
-        return list;
-    } 
-    else 
-    {
-        bufferList = ReverseList(list->Next, list);
-        list->Next = resultList;
-        resultList = bufferList;
-        return resultList;
+        TList buffer = (*list)->Next;
+        (*list)->Next = result;
+        result = *list;
+        (*list) = buffer;
     }
+
+    (*list) = result;
 }
 
 int main(void)
@@ -76,8 +74,9 @@ int main(void)
     ArrayToList(9, array, &list);
     PrintList(list);
     printf("\n");
-    PrintList(ReverseList(list, NULL));
+    ReverseList(&list);
+    PrintList(list);
     printf("\n");
 
-    FreeList(list);
+    FreeList(&list);
 }

@@ -58,10 +58,10 @@ void PrintList(TList list)
 
 void FreeList(TList* list) 
 {
-    if(list != NULL)
+    if(*list != NULL)
     {
         FreeList(&((*list)->Next));
-        free(list);
+        free(*list);
     }
 }
 
