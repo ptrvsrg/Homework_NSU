@@ -11,11 +11,6 @@ struct TList
 
 typedef struct TList* TList;
 
-TList CreateList()
-{
-    return NULL;
-}
-
 void Push(unsigned int value, TList* list)
 {
     TList new = malloc(sizeof(*new));
@@ -37,7 +32,7 @@ void CreateListOfDigits(unsigned int number, TList* list)
 
 int SumList(TList list)
 {
-    if(list == NULL)
+    if(!list)
     {
         return 0;
     }
@@ -49,7 +44,7 @@ int SumList(TList list)
 
 void PrintList(TList list)
 {
-    if(list != NULL)
+    if(list)
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -58,7 +53,7 @@ void PrintList(TList list)
 
 void FreeList(TList* list) 
 {
-    if(*list != NULL)
+    if(*list)
     {
         FreeList(&((*list)->Next));
         free(*list);
@@ -67,7 +62,7 @@ void FreeList(TList* list)
 
 int main(void)
 {
-    TList list = CreateList();
+    TList list = NULL;
     CreateListOfDigits(461148, &list);
     PrintList(list);
     printf("\n%d\n", SumList(list));
