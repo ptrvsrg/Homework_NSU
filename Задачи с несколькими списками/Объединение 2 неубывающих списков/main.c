@@ -30,7 +30,7 @@ void ArrayToList(size_t arraySize, int array[], TList* list)
 
 void CheckNonDecreasing(TList list)
 {
-    if(list == NULL || list->Next == NULL)
+    if(!list || !list->Next)
     {
         return;
     }
@@ -41,11 +41,11 @@ void CheckNonDecreasing(TList list)
 
 TList MergeLists(TList list1, TList list2)
 {
-    if(list1 == NULL)
+    if(!list1)
     {
         return list2;
     }
-    else if(list2 == NULL)
+    else if(!list2)
     {
         return list1;
     }
@@ -63,7 +63,7 @@ TList MergeLists(TList list1, TList list2)
 
 void PrintList(TList list)
 {
-    if(list != NULL)
+    if(list)
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -72,7 +72,7 @@ void PrintList(TList list)
 
 void FreeList(TList* list) 
 {
-    if(*list != NULL)
+    if(*list)
     {
         FreeList(&((*list)->Next));
         free(*list);

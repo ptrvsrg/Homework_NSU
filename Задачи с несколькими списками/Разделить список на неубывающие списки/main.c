@@ -30,7 +30,7 @@ void ArrayToList(size_t arraySize, int array[], TList* list)
 
 void PrintList(TList list)
 {
-    if(list != NULL)
+    if(list)
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -127,7 +127,7 @@ TList SplitByIncrease(TList* list)
 int main(void)
 {
     TList list = NULL;
-    int array[] = { 4, 3, 2, 1, 2, 3, 1 };
+    int array[] = { 1, 2, 3, 4, 2, 5, 7, 9, -1, -2, 0 };
 
     ArrayToList(sizeof(array) / sizeof(*array), array, &list);
     PrintList(list);

@@ -30,7 +30,7 @@ void ArrayToList(size_t arraySize, int array[], TList* list)
 
 void PrintList(TList list)
 {
-    if(list != NULL)
+    if(list)
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -39,7 +39,7 @@ void PrintList(TList list)
 
 void FreeList(TList* list) 
 {
-    if(*list != NULL)
+    if(*list)
     {
         FreeList(&((*list)->Next));
         free(*list);
@@ -48,15 +48,16 @@ void FreeList(TList* list)
 
 void ReverseList(TList* list)
 {
-    if (*list == NULL || (*list)->Next == NULL)
+    if (!(*list) || !(*list)->Next)
     {
         return;
     }
 
-    TList current, next, result = NULL;
-    current = *list;
+    TList current = *list;
+    TList next;
+    TList result = NULL;
 
-    while(current != NULL)
+    while(current)
     {
         next = current->Next;
         current->Next = result;
@@ -70,7 +71,7 @@ void ReverseList(TList* list)
 int main(void)
 {
     TList list = NULL;
-    int array[] = { 1, 2, 3, 4 };
+    int array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     ArrayToList(sizeof(array) / sizeof(*array), array, &list);
     PrintList(list);

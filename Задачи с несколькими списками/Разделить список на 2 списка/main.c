@@ -30,7 +30,7 @@ void ArrayToList(size_t arraySize, int array[], TList* list)
 
 void PrintList(TList list)
 {
-    if(list != NULL)
+    if(list)
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -39,7 +39,7 @@ void PrintList(TList list)
 
 void FreeList(TList* list) 
 {
-    if(*list != NULL)
+    if(*list)
     {
         FreeList(&((*list)->Next));
         free(*list);

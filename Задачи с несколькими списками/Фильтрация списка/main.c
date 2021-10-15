@@ -30,7 +30,7 @@ void ArrayToList(size_t arraySize, int array[], TList* list)
 
 void CheckNonDecreasing(TList list)
 {
-    if(list == NULL || list->Next == NULL)
+    if(!list || !list->Next)
     {
         return;
     }
@@ -41,7 +41,7 @@ void CheckNonDecreasing(TList list)
 
 void PrintList(TList list)
 {
-    if(list != NULL)
+    if(list)
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -57,7 +57,7 @@ void Remove(TList* list)
 
 void FreeList(TList* list) 
 {
-    if(*list != NULL)
+    if(*list)
     {
         Remove(list);
         FreeList(list);
@@ -105,9 +105,9 @@ int main()
     TList filter = NULL;
 
     int arrayList [] = { 0, 1, 2, 5, 8, 9 };
-    int arrayFilter [] = { 1, 8 };
+    int arrayFilter [] = { 1, 4, 8 };
 
-    ArrayToList(sizeof(arrayList) / sizeof(*arrayList), arraarrayListy1, &list);
+    ArrayToList(sizeof(arrayList) / sizeof(*arrayList), arrayList, &list);
     ArrayToList(sizeof(arrayFilter) / sizeof(*arrayFilter), arrayFilter, &filter);
 
     CheckNonDecreasing(list);
