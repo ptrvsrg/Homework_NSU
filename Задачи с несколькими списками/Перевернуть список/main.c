@@ -80,4 +80,6 @@ int main(void)
     printf("\n");
 
     FreeList(&list);
+
+    return 0;
 }

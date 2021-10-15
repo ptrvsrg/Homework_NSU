@@ -58,11 +58,11 @@ size_t LengthList(TList list)
     }
 }
 
-TList SplitList(TList list) 
+TList SplitList(TList* list) 
 {
     TList first = NULL;
-    TList second = list;
-    size_t length = LengthList(list);
+    TList second = *list;
+    size_t length = LengthList(*list);
 
     for(size_t i = 0; i < length / 2; ++i)
     {
@@ -86,10 +86,12 @@ int main(void)
     ArrayToList(sizeof(array) / sizeof(*array), array, &list);
     PrintList(list);
     printf("\n");
-    PrintList(SplitList(list));
+    PrintList(SplitList(&list));
     printf("\n");
     PrintList(list);
     printf("\n");
 
     FreeList(&list);
+
+    return 0;
 }

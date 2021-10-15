@@ -11,11 +11,6 @@ struct TList
 
 typedef struct TList* TList;
 
-TList CreateList()
-{
-    return NULL;
-}
-
 void Push(int value, TList* list)
 {
     TList new = malloc(sizeof(*new));
@@ -86,8 +81,8 @@ void FreeList(TList* list)
 
 int main()
 {
-    TList list1 = CreateList();
-    TList list2 = CreateList();
+    TList list1 = NULL;
+    TList list2 = NULL;
 
     int array1 [] = { 1, 2, 5, 8, 9 };
     int array2 [] = { 0, 3, 8 };
