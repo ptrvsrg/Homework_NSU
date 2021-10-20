@@ -68,6 +68,7 @@ void FilterList(TList* list, TList filter)
 {
     if(!filter)
     {
+        FreeList(list);
         *list = NULL;
     }
 
