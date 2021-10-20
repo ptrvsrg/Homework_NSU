@@ -46,14 +46,15 @@ void FreeList(TList* list)
     }
 }
 
-TList SplitList(TList* list) 
+TList SplitList(TList list) 
 {
     TList first = NULL;
-    TList second = *list;
-    int lastValue;
+    TList second = list;
 
     if(second)
     {
+        int lastValue;
+        
         do
         {
             lastValue = second->Value;
@@ -108,13 +109,13 @@ TList SplitByIncrease(TList* list)
 
     while(*list)
     {
-        buffer = SplitList(list);
+        buffer = SplitList(*list);
         first = MergeLists(first, *list);
         *list = buffer;
 
         if(*list)
         {
-            buffer = SplitList(list);
+            buffer = SplitList(*list);
             second = MergeLists(second, *list);
             *list = buffer;
         }
