@@ -69,7 +69,6 @@ int main(void)
     printf("\n");
     PrintList(ReverseList(list));
     printf("\n");
-
     FreeList(&list);
 
     return 0;
