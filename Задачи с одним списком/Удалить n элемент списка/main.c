@@ -57,37 +57,17 @@ void FreeList(TList* list)
     }
 }
 
-TValue PopNext(TList list)
-{
-    assert(list->next);
-
-    TList removeElem = list->Next;
-    TValue value = removeElem->Value;
-    list->Next = list->Next->Next;
-    free(removeElem);
-
-    return value;
-}
-
-TList GetNth(size_t n, TList list)
-{
-    for(size_t i = 0; i < n; ++i)
-    {
-        list = list->Next;
-    }
-
-    return list;
-}
-
 void DeleteNth(size_t n, TList* list)
 {
+    assert(*list);
+
     if(n == 0)
     {
         PopFront(list);
     }
     else
     {
-       PopNext(GetNth(n-1, *list));
+       DeleteNth(n - 1, &((*list)->Next));
     }
 }
 
@@ -99,7 +79,7 @@ int main(void)
     ArrayToList(sizeof(array) / sizeof(*array), array, &list);
     PrintList(list);
     printf("\n");
-    DeleteNth(5, &list);
+    DeleteNth(2, &list);
     PrintList(list);
     printf("\n");
     FreeList(&list);
