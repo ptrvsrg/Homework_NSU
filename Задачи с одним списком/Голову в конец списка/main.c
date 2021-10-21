@@ -25,7 +25,7 @@ TList PushFront(TValue value, TList* list)
     return *list;
 }
 
-void PushBack(TValue value, TList list)
+TList PushBack(TValue value, TList list)
 {
     if(!list)
     {
@@ -39,6 +39,8 @@ void PushBack(TValue value, TList list)
     }
 
     list->Next = PushFront(value, &(list->Next));
+
+    return list->Next;
 }
 
 void ArrayToList(size_t arraySize, int array[], TList* list)
