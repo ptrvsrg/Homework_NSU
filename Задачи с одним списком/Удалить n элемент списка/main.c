@@ -39,20 +39,34 @@ void PrintList(TList list)
     }
 }
 
+TValue PopFront(TList* list)
+{
+    TList removeElem = *list;
+    TValue value = removeElem->Value;
+    *list = (*list)->Next;
+    free(removeElem);
+    return value;
+}
+
 void FreeList(TList* list) 
 {
     if(*list)
     {
-        FreeList(&((*list)->Next));
-        free(*list);
+        PopFront(list);
+        FreeList(list);
     }
 }
 
-void RemoveNext(TList list)
+TValue PopNext(TList list)
 {
+    assert(list->next);
+
     TList removeElem = list->Next;
+    TValue value = removeElem->Value;
     list->Next = list->Next->Next;
     free(removeElem);
+
+    return value;
 }
 
 TList GetNth(size_t n, TList list)
@@ -67,7 +81,14 @@ TList GetNth(size_t n, TList list)
 
 void DeleteNth(size_t n, TList* list)
 {
-    RemoveNext(GetNth(n-1, *list));
+    if(n == 0)
+    {
+        PopFront(list);
+    }
+    else
+    {
+       PopNext(GetNth(n-1, *list));
+    }
 }
 
 int main(void)
