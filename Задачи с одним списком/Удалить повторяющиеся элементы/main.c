@@ -71,18 +71,18 @@ void FreeList(TList* list)
     }
 }
 
-void RemoveDupicate(TList* list)
+void RemoveDuplicate(TList* list)
 {
     if(*list && (*list)->Next)
     {
         if((*list)->Value == (*list)->Next->Value)
         {
             PopFront(list);
-            RemoveDupicate(list);
+            RemoveDuplicate(list);
         }
         else
         {
-            RemoveDupicate(&((*list)->Next));
+            RemoveDuplicate(&((*list)->Next));
         }
     }
 }
@@ -99,7 +99,8 @@ int main(void)
 
     PrintList(list);
     printf("\n");
-    RemoveDupicate(&list);
+    
+    RemoveDuplicate(&list);
     PrintList(list);
     printf("\n");
 
