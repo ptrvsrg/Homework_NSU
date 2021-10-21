@@ -29,7 +29,7 @@ void PushBack(TValue value, TList list)
 {
     if(!list)
     {
-        PushFront(value, list);
+        PushFront(value, &list);
         return;
     }
 
@@ -101,7 +101,7 @@ int main(void)
 {
     TList list = NULL;
 
-    int array [] = { 1, 2, 3 };
+    int array [] = { 1, 2, 3, 4 };
 
     ArrayToList(sizeof(array) / sizeof(*array), array, &list);
 
@@ -109,6 +109,7 @@ int main(void)
 
     PrintList(list);
     printf("\n");
+
     Rotate(&list);
     PrintList(list);
     printf("\n");
