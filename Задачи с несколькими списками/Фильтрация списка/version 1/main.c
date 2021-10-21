@@ -3,15 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int TValue;
+
 struct TList
 {
-    int Value;
+    TValue Value;
     struct TList* Next;    
 };
 
 typedef struct TList* TList;
 
-void Push(int value, TList* list)
+void PushFront(TValue value, TList* list)
 {
     TList new = malloc(sizeof(*new));
     assert(new != NULL);
@@ -20,22 +22,26 @@ void Push(int value, TList* list)
     (*list) = new;
 }
 
-void ArrayToList(size_t arraySize, int array[], TList* list)
+void ArrayToList(size_t arraySize, TValue array[], TList* list)
 {
     for(size_t i = 0; i < arraySize; ++i)
     {
-        Push(array[arraySize - 1 - i], list);
+        PushFront(array[arraySize - 1 - i], list);
     }
 }
 
-void CheckNonDecreasing(TList list)
+bool CheckNonDecreasing(TList list)
 {
     if(!list || !list->Next)
     {
-        return;
+        return true;
     }
     
-    assert(list->Value <= list->Next->Value);
+    if(list->Value > list->Next->Value)
+    {
+        return false;
+    }
+
     CheckNonDecreasing(list->Next);
 }
 
@@ -48,23 +54,25 @@ void PrintList(TList list)
     }
 }
 
-void Remove(TList* list)
+TValue PopFront(TList* list)
 {
     TList removeElem = *list;
+    TValue value = removeElem->Value;
     *list = (*list)->Next;
     free(removeElem);
+    return value;
 }
 
 void FreeList(TList* list) 
 {
     if(*list)
     {
-        Remove(list);
+        PopFront(list);
         FreeList(list);
     }
 }
 
-bool FindList(int value, TList filter)
+bool FindList(TValue value, TList filter)
 {
     while(filter)
     {
@@ -89,7 +97,7 @@ void FilterList(TList* list, TList filter)
     {
         if(!FindList((*list)->Value, filter))
         {
-            Remove(list);
+            PopFront(list);
             FilterList(list, filter);
         }
         else
@@ -104,14 +112,14 @@ int main()
     TList list = NULL;
     TList filter = NULL;
 
-    int arrayList [] = { 0, 1, 2, 5, 8, 9 };
-    int arrayFilter [] = { 1, 4, 8 };
+    TValue arrayList [] = { 0, 1, 2, 5, 8, 9 };
+    TValue arrayFilter [] = { 1, 4, 8 };
 
     ArrayToList(sizeof(arrayList) / sizeof(*arrayList), arrayList, &list);
     ArrayToList(sizeof(arrayFilter) / sizeof(*arrayFilter), arrayFilter, &filter);
 
-    CheckNonDecreasing(list);
-    CheckNonDecreasing(filter);
+    assert(CheckNonDecreasing(list));
+    assert(CheckNonDecreasing(filter));
 
     PrintList(list);
     printf("\n");

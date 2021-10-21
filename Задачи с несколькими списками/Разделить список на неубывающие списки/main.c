@@ -3,15 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int TValue;
+
 struct TList
 {
-    int Value;
+    TValue Value;
     struct TList* Next;
 };
 
 typedef struct TList* TList;
 
-void Push(int value, TList* list)
+void PushFront(TValue value, TList* list)
 {
     TList new = malloc(sizeof(*new));
     assert(new != NULL);
@@ -20,11 +22,11 @@ void Push(int value, TList* list)
     (*list) = new;
 }
 
-void ArrayToList(size_t arraySize, int array[], TList* list)
+void ArrayToList(size_t arraySize, TValue array[], TList* list)
 {
     for(size_t i = 0; i < arraySize; ++i)
     {
-        Push(array[arraySize - 1 - i], list);
+        PushFront(array[arraySize - 1 - i], list);
     }
 }
 
@@ -53,19 +55,14 @@ TList SplitList(TList list)
 
     if(second)
     {
-        int lastValue;
+        TValue lastValue;
         
         do
         {
             lastValue = second->Value;
             first = second;
             second = second->Next;
-
-            if (!second)
-            {
-                break;
-            }
-        } while (lastValue <= second->Value);
+        } while (second && lastValue <= second->Value);
     }
     
     if (first)
@@ -128,7 +125,7 @@ TList SplitByIncrease(TList* list)
 int main(void)
 {
     TList list = NULL;
-    int array[] = { 1, 2, 3, 4, 2, 5, 7, 9, -1, -2, 0 };
+    TValue array[] = { 1, 2, 3, 4, 2, 5, 7, 9, -1, -2, 0 };
 
     ArrayToList(sizeof(array) / sizeof(*array), array, &list);
     PrintList(list);

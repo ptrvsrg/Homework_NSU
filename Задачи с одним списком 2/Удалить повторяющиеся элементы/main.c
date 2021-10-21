@@ -1,17 +1,16 @@
 #include <assert.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef int TValue;
 
-struct TList
+struct Tlist
 {
     TValue Value;
-    struct TList* Next;    
+    struct Tlist* Next;    
 };
 
-typedef struct TList* TList;
+typedef struct Tlist* TList;
 
 void PushFront(TValue value, TList* list)
 {
@@ -72,54 +71,39 @@ void FreeList(TList* list)
     }
 }
 
-void FilterList(TList* list, TList filter)
+void RemoveDupicate(TList* list)
 {
-    if(!filter)
+    if(*list && (*list)->Next)
     {
-        FreeList(list);
-        *list = NULL;
-    }
-
-    if(*list)
-    {
-        if((*list)->Value < filter->Value)
+        if((*list)->Value == (*list)->Next->Value)
         {
             PopFront(list);
-            FilterList(list, filter);
-        }
-        else if((*list)->Value > filter->Value)
-        {
-            FilterList(list, filter->Next);
+            RemoveDupicate(list);
         }
         else
         {
-            FilterList(&((*list)->Next), filter);
+            RemoveDupicate(&((*list)->Next));
         }
     }
 }
 
-int main()
+int main(void)
 {
     TList list = NULL;
-    TList filter = NULL;
 
-    TValue arrayList [] = { 0, 1, 2, 5, 8, 9 };
-    TValue arrayFilter [] = { 1, 4, 8 };
+    TValue array [] = { 1, 2, 2, 5, 8, 8, 9 };
 
-    ArrayToList(sizeof(arrayList) / sizeof(*arrayList), arrayList, &list);
-    ArrayToList(sizeof(arrayFilter) / sizeof(*arrayFilter), arrayFilter, &filter);
+    ArrayToList(sizeof(array) / sizeof(*array), array, &list);
 
     assert(CheckNonDecreasing(list));
-    assert(CheckNonDecreasing(filter));
 
     PrintList(list);
     printf("\n");
-    FilterList(&list, filter);
+    RemoveDupicate(&list);
     PrintList(list);
     printf("\n");
 
     FreeList(&list);
-    FreeList(&filter);
 
     return 0;
 }

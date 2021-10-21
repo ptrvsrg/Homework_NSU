@@ -3,15 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int TValue;
+
 struct Tlist
 {
-    unsigned int Value;
+    TValue Value;
     struct Tlist* Next;
 };
 
 typedef struct Tlist* TList;
 
-void Push(int value, TList* list)
+void PushFront(TValue value, TList* list)
 {
     TList new = malloc(sizeof(*new));
     assert(new != NULL);
@@ -20,11 +22,11 @@ void Push(int value, TList* list)
     (*list) = new;
 }
 
-void ArrayToList(size_t arraySize, int array[], TList* list)
+void ArrayToList(size_t arraySize, TValue array[], TList* list)
 {
     for(size_t i = 0; i < arraySize; ++i)
     {
-        Push(array[arraySize - 1 - i], list);
+        PushFront(array[arraySize - 1 - i], list);
     }
 }
 
@@ -52,7 +54,7 @@ TList ReverseList(TList list)
 
     while(list)
     {
-        Push(list->Value, &result);
+        PushFront(list->Value, &result);
         list = list->Next;
     }
 
@@ -62,7 +64,7 @@ TList ReverseList(TList list)
 int main(void)
 {
     TList list = NULL;
-    int array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    TValue array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     ArrayToList(sizeof(array) / sizeof(*array), array, &list);
     PrintList(list);

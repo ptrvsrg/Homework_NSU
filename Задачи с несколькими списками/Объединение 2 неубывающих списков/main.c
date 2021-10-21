@@ -3,15 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int TValue;
+
 struct TList
 {
-    int Value;
+    TValue Value;
     struct TList* Next;    
 };
 
 typedef struct TList* TList;
 
-void Push(int value, TList* list)
+void PushFront(TValue value, TList* list)
 {
     TList new = malloc(sizeof(*new));
     assert(new != NULL);
@@ -20,22 +22,26 @@ void Push(int value, TList* list)
     (*list) = new;
 }
 
-void ArrayToList(size_t arraySize, int array[], TList* list)
+void ArrayToList(size_t arraySize, TValue array[], TList* list)
 {
     for(size_t i = 0; i < arraySize; ++i)
     {
-        Push(array[arraySize - 1 - i], list);
+        PushFront(array[arraySize - 1 - i], list);
     }
 }
 
-void CheckNonDecreasing(TList list)
+bool CheckNonDecreasing(TList list)
 {
     if(!list || !list->Next)
     {
-        return;
+        return true;
     }
     
-    assert(list->Value <= list->Next->Value);
+    if(list->Value > list->Next->Value)
+    {
+        return false;
+    }
+
     CheckNonDecreasing(list->Next);
 }
 
@@ -84,14 +90,14 @@ int main()
     TList list1 = NULL;
     TList list2 = NULL;
 
-    int array1 [] = { 1, 2, 5, 8, 9 };
-    int array2 [] = { 0, 3, 8 };
+    TValue array1 [] = { 1, 2, 5, 8, 9 };
+    TValue array2 [] = { 0, 3, 8 };
 
     ArrayToList(sizeof(array1) / sizeof(*array1), array1, &list1);
     ArrayToList(sizeof(array2) / sizeof(*array2), array2, &list2);
 
-    CheckNonDecreasing(list1);
-    CheckNonDecreasing(list2);
+    assert(CheckNonDecreasing(list1));
+    assert(CheckNonDecreasing(list2));
 
     PrintList(MergeLists(list1, list2));
     printf("\n");

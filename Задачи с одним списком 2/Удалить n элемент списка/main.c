@@ -5,13 +5,13 @@
 
 typedef int TValue;
 
-struct TList
+struct Tlist
 {
     TValue Value;
-    struct TList* Next;
+    struct Tlist* Next;
 };
 
-typedef struct TList* TList;
+typedef struct Tlist* TList;
 
 void PushFront(TValue value, TList* list)
 {
@@ -48,37 +48,37 @@ void FreeList(TList* list)
     }
 }
 
-void ReverseList(TList* list)
+void RemoveNext(TList list)
 {
-    if (!(*list) || !(*list)->Next)
+    TList removeElem = list->Next;
+    list->Next = list->Next->Next;
+    free(removeElem);
+}
+
+TList GetNth(size_t n, TList list)
+{
+    for(size_t i = 0; i < n; ++i)
     {
-        return;
+        list = list->Next;
     }
 
-    TList current = *list;
-    TList next;
-    TList result = NULL;
+    return list;
+}
 
-    while(current)
-    {
-        next = current->Next;
-        current->Next = result;
-        result = current;
-        current = next;
-    }
-
-    *list = result;
+void DeleteNth(size_t n, TList* list)
+{
+    RemoveNext(GetNth(n-1, *list));
 }
 
 int main(void)
 {
     TList list = NULL;
-    TValue array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    int array[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     ArrayToList(sizeof(array) / sizeof(*array), array, &list);
     PrintList(list);
     printf("\n");
-    ReverseList(&list);
+    DeleteNth(5, &list);
     PrintList(list);
     printf("\n");
     FreeList(&list);

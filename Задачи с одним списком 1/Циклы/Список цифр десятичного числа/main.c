@@ -1,17 +1,18 @@
 #include <assert.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef unsigned int TValue;
+
 struct TList
 {
-    unsigned int Value;
+    TValue Value;
     struct TList* Next;
 };
 
 typedef struct TList* TList;
 
-void Push(unsigned int value, TList* list)
+void PushFront(TValue value, TList* list)
 {
     TList new = malloc(sizeof(*new));
     assert(new != NULL);
@@ -26,7 +27,7 @@ void CreateListOfDigits(unsigned int number, TList* list)
     {
         unsigned int digit = number % 10;
         number /= 10;
-        Push(digit, list);
+        PushFront(digit, list);
     } while (number != 0);
 }
 
@@ -52,18 +53,20 @@ void PrintList(TList list)
     }
 }
 
-void Remove(TList* list)
+TValue PopFront(TList* list)
 {
     TList removeElem = *list;
+    TValue value = removeElem->Value;
     *list = (*list)->Next;
     free(removeElem);
+    return value;
 }
 
 void FreeList(TList* list) 
 {
     while(*list)
     {
-        Remove(list);
+        PopFront(list);
     }
 }
 

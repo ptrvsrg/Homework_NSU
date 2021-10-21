@@ -5,24 +5,43 @@
 
 typedef int TValue;
 
-struct TList
+struct Tlist
 {
     TValue Value;
-    struct TList* Next;    
+    struct Tlist* Next;    
 };
 
-typedef struct TList* TList;
+typedef struct Tlist* TList;
 
-void PushFront(TValue value, TList* list)
+TList PushFront(TValue value, TList* list)
 {
     TList new = malloc(sizeof(*new));
     assert(new != NULL);
+
     new->Value = value;
     new->Next = *list;
     (*list) = new;
+
+    return *list;
 }
 
-void ArrayToList(size_t arraySize, TValue array[], TList* list)
+void PushBack(TValue value, TList list)
+{
+    if(!list)
+    {
+        PushFront(value, list);
+        return;
+    }
+
+    while(list->Next)
+    {
+        list = list->Next;
+    }
+
+    list->Next = PushFront(value, &(list->Next));
+}
+
+void ArrayToList(size_t arraySize, int array[], TList* list)
 {
     for(size_t i = 0; i < arraySize; ++i)
     {
@@ -72,54 +91,29 @@ void FreeList(TList* list)
     }
 }
 
-void FilterList(TList* list, TList filter)
+void Rotate(TList* list)
 {
-    if(!filter)
-    {
-        FreeList(list);
-        *list = NULL;
-    }
-
-    if(*list)
-    {
-        if((*list)->Value < filter->Value)
-        {
-            PopFront(list);
-            FilterList(list, filter);
-        }
-        else if((*list)->Value > filter->Value)
-        {
-            FilterList(list, filter->Next);
-        }
-        else
-        {
-            FilterList(&((*list)->Next), filter);
-        }
-    }
+    TValue value = PopFront(list);
+    PushBack(value, *list);
 }
 
-int main()
+int main(void)
 {
     TList list = NULL;
-    TList filter = NULL;
 
-    TValue arrayList [] = { 0, 1, 2, 5, 8, 9 };
-    TValue arrayFilter [] = { 1, 4, 8 };
+    int array [] = { 1, 2, 3 };
 
-    ArrayToList(sizeof(arrayList) / sizeof(*arrayList), arrayList, &list);
-    ArrayToList(sizeof(arrayFilter) / sizeof(*arrayFilter), arrayFilter, &filter);
+    ArrayToList(sizeof(array) / sizeof(*array), array, &list);
 
     assert(CheckNonDecreasing(list));
-    assert(CheckNonDecreasing(filter));
 
     PrintList(list);
     printf("\n");
-    FilterList(&list, filter);
+    Rotate(&list);
     PrintList(list);
     printf("\n");
 
     FreeList(&list);
-    FreeList(&filter);
 
     return 0;
 }
