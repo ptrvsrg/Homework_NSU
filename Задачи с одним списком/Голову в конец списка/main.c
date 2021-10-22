@@ -30,7 +30,7 @@ TList PushBack(TValue value, TList list)
     if(!list)
     {
         PushFront(value, &list);
-        return;
+        return list;
     }
 
     while(list->Next)
@@ -39,7 +39,6 @@ TList PushBack(TValue value, TList list)
     }
 
     list->Next = PushFront(value, &(list->Next));
-
     return list->Next;
 }
 
