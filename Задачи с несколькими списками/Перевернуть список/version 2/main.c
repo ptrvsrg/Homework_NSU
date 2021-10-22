@@ -13,13 +13,16 @@ struct Tlist
 
 typedef struct Tlist* TList;
 
-void PushFront(TValue value, TList* list)
+TList PushFront(TValue value, TList* list)
 {
     TList new = malloc(sizeof(*new));
     assert(new != NULL);
+
     new->Value = value;
     new->Next = *list;
     (*list) = new;
+
+    return *list;
 }
 
 void ArrayToList(size_t arraySize, TValue array[], TList* list)

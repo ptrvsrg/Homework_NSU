@@ -1,91 +1,60 @@
 #define _CRT_SECURE_NO_WARNINGS
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-enum
+void PrintArray(size_t row, size_t column, const float array[row][column])
 {
-	SUCCESS = 0,
-	FAILURE = 1
-};
-
-void PrintArray(int row, int column, const int array[row][column])
-{
-	for (int i = 0; i < row; i++)
+	for (size_t i = 0; i < row; i++)
 	{
-		for (int j = 0; j < column; j++)
+		for (size_t j = 0; j < column; j++)
 		{
-			printf("%d ", array[i][j]);
+			printf("%f ", array[i][j]);
 		}
 
 		printf("\n");
 	}
 }
 
-void FillRandomValues(int row, int column, int array[row][column])
+void FillRandomValues(size_t row, size_t column, float array[row][column])
 {
 	srand(time(NULL));
 
-	for (int i = 0; i < row; i++)
+	for (size_t i = 0; i < row; i++)
 	{
-		for (int j = 0; j < column; j++)
+		for (size_t j = 0; j < column; j++)
 		{
-			array[i][j] = rand() % 100;
+			array[i][j] = (float)rand() / (float)rand();
 		}
 	}
 }
 
-int ArrayCopy(int row1, int column1, const int array1[row1][column1], int row2, int column2, int array2[row2][column2])
+void ArrayCopy(size_t row1, size_t column1, const float array1[row1][column1], size_t row2, size_t column2, float array2[row2][column2])
 {
-	if (row1 == row2 && column1 == column2)
-	{
-		for (int i = 0; i < row1; i++)
-		{
-			for (int j = 0; j < column1; j++)
-			{
-				array2[i][j] = array1[i][j];
-			}
-		}
+	assert(row1 == row2 && column1 == column2);
 
-		return SUCCESS;
-	}
-	else
-	{
-		return FAILURE;
-	}
+    for (size_t i = 0; i < row1; i++)
+    {
+        for (size_t j = 0; j < column1; j++)
+        {
+            array2[i][j] = array1[i][j];
+        }
+    }
 }
 
-int main()
+int main(void)
 {
-	int array1[3][4];
-	int array2[3][4];
-	int array3[5][5];
+	float array1[3][4];
+	float array2[3][4];
 
 	FillRandomValues(3, 4, array1);
 	printf("First matrix: \n");
 	PrintArray(3, 4, array1);
 
-	if (ArrayCopy(3, 4, array1, 3, 4, array2) == FAILURE)
-	{
-		printf("\nBad matrix!\n");
-		return FAILURE;
-	}
-	else
-	{
-		printf("\nCopied matrix:\n");
-		PrintArray(3, 4, array2);
-	}
+    printf("\nCopied matrix:\n");
+    ArrayCopy(3, 4, array1, 3, 4, array2);
+    PrintArray(3, 4, array2);
 
-	if (ArrayCopy(3, 4, array1, 5, 5, array3) == FAILURE)
-	{
-		printf("\nBad matrix!\n");
-		return FAILURE;
-	}
-	else
-	{
-		printf("\nCopied matrix:\n");
-		PrintArray(5, 5, array3);
-	}
-
-	return SUCCESS;
+	return 0;
 }

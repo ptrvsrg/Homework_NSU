@@ -1,19 +1,14 @@
 #define _CRT_SECURE_NO_WARNINGS
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-enum
+void PrintArray(size_t row, size_t column, const float array[row][column])
 {
-	SUCCESS = 0,
-	FAILURE = 1
-};
-
-void PrintArray(int row, int column, const float array[row][column])
-{
-	for (int i = 0; i < row; i++)
+	for (size_t i = 0; i < row; i++)
 	{
-		for (int j = 0; j < column; j++)
+		for (size_t j = 0; j < column; j++)
 		{
 			printf("%f ", array[i][j]);
 		}
@@ -22,20 +17,20 @@ void PrintArray(int row, int column, const float array[row][column])
 	}
 }
 
-void FillRandomValues(int row, int column, float array[row][column])
+void FillRandomValues(size_t row, size_t column, float array[row][column])
 {
 	srand(time(NULL));
 
-	for (int i = 0; i < row; i++)
+	for (size_t i = 0; i < row; i++)
 	{
-		for (int j = 0; j < column; j++)
+		for (size_t j = 0; j < column; j++)
 		{
 			array[i][j] = (float)rand() / (float)rand();
 		}
 	}
 }
 
-float CalcPoly(int row, int column, const float array[row][column], float x, float y)
+float CalcPoly(size_t row, size_t column, const float array[row][column], float x, float y)
 {
 	if (x == 0.0 || y == 0.0)
 	{
@@ -46,9 +41,9 @@ float CalcPoly(int row, int column, const float array[row][column], float x, flo
 	float powX = 1.0;
 	float powY = 1.0;
 
-	for (int i = 0; i < row; i++)
+	for (size_t i = 0; i < row; i++)
 	{
-		for (int j = 0; j < column; j++)
+		for (size_t j = 0; j < column; j++)
 		{
 			sum += array[i][j] * powX * powY;
 			powY *= y;
@@ -61,20 +56,17 @@ float CalcPoly(int row, int column, const float array[row][column], float x, flo
 	return sum;
 }
 
-int main()
+int main(void)
 {
 	float array[2][3];
 	float x, y;
 
-	if (scanf("%f %f", &x, &y) == EOF)
-	{
-		return FAILURE;
-	}
+	assert(scanf("%f %f", &x, &y) != 2);
 
 	FillRandomValues(2, 3, array);
 	PrintArray(2, 3, array);
 
 	printf("\nPolynom is %f\n", CalcPoly(2, 3, array, x, y));
 
-	return SUCCESS;
+	return 0;
 }

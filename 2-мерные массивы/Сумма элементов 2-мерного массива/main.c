@@ -3,45 +3,39 @@
 #include <stdlib.h>
 #include <time.h>
 
-enum
+void PrintArray(size_t row, size_t column, const float array[row][column])
 {
-	SUCCESS = 0,
-	FAILURE = 1
-};
-
-void PrintArray(int row, int column, const int array[row][column])
-{
-	for (int i = 0; i < row; i++)
+	for (size_t i = 0; i < row; i++)
 	{
-		for (int j = 0; j < column; j++)
+		for (size_t j = 0; j < column; j++)
 		{
-			printf("%d ", array[i][j]);
+			printf("%f ", array[i][j]);
 		}
 
 		printf("\n");
 	}
 }
 
-void FillRandomValues(int row, int column, int array[row][column])
+void FillRandomValues(size_t row, size_t column, float array[row][column])
 {
 	srand(time(NULL));
 
-	for (int i = 0; i < row; i++)
+	for (size_t i = 0; i < row; i++)
 	{
-		for (int j = 0; j < column; j++)
+		for (size_t j = 0; j < column; j++)
 		{
-			array[i][j] = rand() % 100;
+			array[i][j] = (float)rand() / (float)rand();
 		}
 	}
 }
 
-int SumElementOfArray(int row, int column, const int array[row][column])
+float SumElementOfArray(size_t row, size_t column, const float array[row][column])
 {
-	int sum = 0;
+	float sum = 0.0;
 
-	for (int i = 0; i < row; i++)
+	for (size_t i = 0; i < row; i++)
 	{
-		for (int j = 0; j < column; j++)
+		for (size_t j = 0; j < column; j++)
 		{
 			sum += array[i][j];
 		}
@@ -50,14 +44,14 @@ int SumElementOfArray(int row, int column, const int array[row][column])
 	return sum;
 }
 
-int main()
+int main(void)
 {
-	int array[3][4];
+	float array[3][4];
 
 	FillRandomValues(3, 4, array);
 	PrintArray(3, 4, array);
 
-	printf("\nSum is %d\n", SumElementOfArray(3, 4, array));
+	printf("\nSum is %f\n", SumElementOfArray(3, 4, array));
 
-	return SUCCESS;
+	return 0;
 }

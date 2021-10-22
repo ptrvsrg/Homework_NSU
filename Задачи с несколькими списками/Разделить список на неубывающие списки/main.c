@@ -13,13 +13,16 @@ struct TList
 
 typedef struct TList* TList;
 
-void PushFront(TValue value, TList* list)
+TList PushFront(TValue value, TList* list)
 {
     TList new = malloc(sizeof(*new));
     assert(new != NULL);
+
     new->Value = value;
     new->Next = *list;
     (*list) = new;
+
+    return *list;
 }
 
 void ArrayToList(size_t arraySize, TValue array[], TList* list)
@@ -85,16 +88,13 @@ TList MergeLists(TList list1, TList list2)
         list2->Next = MergeLists(list1, list2->Next);
         return list2;
     }
+    else if (!list1)
+    {
+        return list2;
+    }
     else
     {
-        if (list1 == NULL)
-        {
-            return list2;
-        }
-        else if (list2 == NULL)
-        {
-            return list1;
-        }
+        return list1;
     }
 }
 
@@ -128,10 +128,13 @@ int main(void)
     TValue array[] = { 1, 2, 3, 4, 2, 5, 7, 9, -1, -2, 0 };
 
     ArrayToList(sizeof(array) / sizeof(*array), array, &list);
+
     PrintList(list);
     printf("\n");
+
     PrintList(SplitByIncrease(&list));    
     printf("\n");
+    
     PrintList(list);
     printf("\n");  
 
