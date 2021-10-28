@@ -76,6 +76,8 @@ void PrintList(TList list)
 
 TValue PopFront(TList* list)
 {
+    assert(*list);
+    
     TList removeElem = *list;
     TValue value = removeElem->Value;
     *list = (*list)->Next;
