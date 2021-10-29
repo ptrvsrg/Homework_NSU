@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct Tstack 
 {
@@ -21,6 +22,12 @@ void Push(float value, TStack* stack)
     *stack = new;
 }
 
+TStack GetNext(TStack stack)
+{
+    assert(stack);
+    return stack->Next;
+}
+
 float Pop(TStack* stack)
 {
     assert(*stack);
@@ -28,7 +35,7 @@ float Pop(TStack* stack)
     float value = (*stack)->Value;
 
     TStack removeElem = *stack;
-    *stack = (*stack)->Next;
+    *stack = GetNext(*stack);
 
     free(removeElem);
 
@@ -40,6 +47,14 @@ void FreeStack(TStack* stack)
     while (*stack)
     {
         Pop(stack);
+    }
+}
+
+void ArrayToList(size_t length, const char* line, TStack* stack)
+{
+    for(size_t i = 0; i < length; ++i)
+    {
+        Push(line[length - i - 1], stack);
     }
 }
 
@@ -67,24 +82,24 @@ float GetExpressionValue(char operator, float first, float second)
     }
 }
 
-float CalcPostfix(const char* postfixNotation)
+float CalcPostfix(TStack postfix)
 {
     TStack numberStack = NULL;
 
-    while(*postfixNotation)
+    while(postfix)
     {
-        if(IsDigit(*postfixNotation))
+        if(IsDigit(postfix->Value))
         {
-            Push(SymbolToDigit(*postfixNotation), &numberStack);
+            Push(SymbolToDigit(postfix->Value), &numberStack);
         }
         else
         {
             float a = Pop(&numberStack);
             float b = Pop(&numberStack);
-            Push(GetExpressionValue(*postfixNotation, b, a), &numberStack);
+            Push(GetExpressionValue(postfix->Value, b, a), &numberStack);
         }
 
-        ++postfixNotation;
+        postfix = GetNext(postfix);
     }
 
     float answer = Pop(&numberStack);
@@ -96,11 +111,17 @@ float CalcPostfix(const char* postfixNotation)
 
 int main(void)
 {
-    char* postfixNotation1 = "43-12+/";
-    char* postfixNotation2 = "/";
-    
-    printf("%s = %f\n", postfixNotation1, CalcPostfix(postfixNotation1));
-    printf("%s = %f\n", postfixNotation2, CalcPostfix(postfixNotation2));
+    char* postfix1 = "43-12+/";
+    char* postfix2 = "/";
+
+    TStack stack1 = NULL;
+    TStack stack2 = NULL;
+
+    ArrayToList(strlen(postfix1), postfix1, &stack1);
+    ArrayToList(strlen(postfix2), postfix2, &stack2);
+
+    printf("%s = %f\n", postfix1, CalcPostfix(stack1));
+    printf("%s = %f\n", postfix2, CalcPostfix(stack2));
 
     return 0;
 }

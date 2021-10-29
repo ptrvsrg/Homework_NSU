@@ -4,15 +4,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef char TValue;
+
 struct Tstack 
 {
-    float Value;
+    TValue Value;
     struct Tstack* Next;
 };
 
 typedef struct Tstack* TStack;
 
-void Push(float value, TStack* stack)
+void Push(TValue value, TStack* stack)
 {
     TStack new = malloc(sizeof(*new));
     assert(new != NULL);
@@ -24,15 +26,15 @@ void Push(float value, TStack* stack)
 
 TStack GetNext(TStack stack)
 {
-    assert(stack->Next);
+    assert(stack);
     return stack->Next;
 }
 
-float Pop(TStack* stack)
+TValue Pop(TStack* stack)
 {
     assert(*stack);
 
-    float value = (*stack)->Value;
+    TValue value = (*stack)->Value;
 
     TStack removeElem = *stack;
     *stack = GetNext(*stack);
@@ -50,11 +52,11 @@ void FreeStack(TStack* stack)
     }
 }
 
-void ArrayToList(size_t length, const char* line, TStack* stack)
+void ArrayToList(size_t arraySize, TValue* array, TStack* stack)
 {
-    for(size_t i = 0; i < length; ++i)
+    for(size_t i = 0; i < arraySize; ++i)
     {
-        Push(line[length - i - 1], stack);
+        Push(array[arraySize - 1 - i], stack);
     }
 }
 
@@ -82,46 +84,49 @@ float GetExpressionValue(char operator, float first, float second)
     }
 }
 
-float CalcPostfix(TStack postfix)
+float CalcPrefix(TStack* prefix)
 {
-    TStack numberStack = NULL;
+    assert(!IsDigit((*prefix)->Value));
 
-    while(postfix)
+    char operator = Pop(prefix);
+    float first;
+    float second;
+
+    assert(*prefix);
+    if(IsDigit((*prefix)->Value))
     {
-        if(IsDigit(postfix->Value))
-        {
-            Push(SymbolToDigit(postfix->Value), &numberStack);
-        }
-        else
-        {
-            float a = Pop(&numberStack);
-            float b = Pop(&numberStack);
-            Push(GetExpressionValue(postfix->Value, b, a), &numberStack);
-        }
-
-        postfix = GetNext(postfix);
+        first = SymbolToDigit(Pop(prefix));
+    }
+    else
+    {
+        first = CalcPrefix(prefix);
     }
 
-    float answer = Pop(&numberStack);
+    assert(*prefix);
+    if(IsDigit((*prefix)->Value))
+    {
+        second = SymbolToDigit(Pop(prefix));
+    }
+    else
+    {
+        second = CalcPrefix(prefix);
+    }
 
-    assert(!numberStack);
-
-    return answer;
+    return GetExpressionValue(operator, first, second);
 }
 
 int main(void)
 {
-    char* postfix1 = "43-12+/";
-    char* postfix2 = "/";
-
+    char* prefix1 = "/*32-51";
+    char* prefix2 = "/";
     TStack stack1 = NULL;
     TStack stack2 = NULL;
 
-    ArrayToList(strlen(postfix1), postfix1, &stack1);
-    ArrayToList(strlen(postfix2), postfix2, &stack2);
-
-    printf("%s = %f\n", postfix1, CalcPostfix(stack1));
-    printf("%s = %f\n", postfix2, CalcPostfix(stack2));
+    ArrayToList(strlen(prefix1), prefix1, &stack1);
+    ArrayToList(strlen(prefix2), prefix2, &stack2);
+    
+    printf("%s = %f\n", prefix1, CalcPrefix(&stack1));
+    printf("%s = %f\n", prefix2, CalcPrefix(&stack2));
 
     return 0;
 }
