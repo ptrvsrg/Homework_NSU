@@ -24,12 +24,6 @@ void Push(TValue value, TStack* stack)
     *stack = new;
 }
 
-TStack GetNext(TStack stack)
-{
-    assert(stack);
-    return stack->Next;
-}
-
 TValue Pop(TStack* stack)
 {
     assert(*stack);
@@ -37,7 +31,7 @@ TValue Pop(TStack* stack)
     TValue value = (*stack)->Value;
 
     TStack removeElem = *stack;
-    *stack = GetNext(*stack);
+    *stack = (*stack)->Next;
 
     free(removeElem);
 
@@ -86,39 +80,24 @@ float GetExpressionValue(char operator, float first, float second)
 
 float CalcPrefix(TStack* prefix)
 {
-    assert(!IsDigit((*prefix)->Value));
+    char symbol = Pop(prefix);
 
-    char operator = Pop(prefix);
-    float first;
-    float second;
-
-    assert(*prefix);
-    if(IsDigit((*prefix)->Value))
+    if(IsDigit(symbol))
     {
-        first = SymbolToDigit(Pop(prefix));
+        return SymbolToDigit(symbol);
     }
     else
     {
-        first = CalcPrefix(prefix);
+        float first = CalcPrefix(prefix);
+        float second = CalcPrefix(prefix);
+        return GetExpressionValue(symbol, first, second);
     }
-
-    assert(*prefix);
-    if(IsDigit((*prefix)->Value))
-    {
-        second = SymbolToDigit(Pop(prefix));
-    }
-    else
-    {
-        second = CalcPrefix(prefix);
-    }
-
-    return GetExpressionValue(operator, first, second);
 }
 
 int main(void)
 {
-    char* prefix1 = "/*32-51";
-    char* prefix2 = "/";
+    char* prefix1 = "/*432";
+    char* prefix2 = "2";
     TStack stack1 = NULL;
     TStack stack2 = NULL;
 
