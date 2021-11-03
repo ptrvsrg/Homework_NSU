@@ -58,6 +58,11 @@ void ArrayToList(size_t length, const char* line, TStack* stack)
     }
 }
 
+float Fabs(float num)
+{
+    return (num >= 0) ? num : -num;
+}
+
 bool IsDigit(char symbol)
 {
     return symbol >= '0' && symbol <= '9';
@@ -76,7 +81,7 @@ float GetExpressionValue(char operator, float first, float second)
         case '-': return first - second;
         case '*': return first * second;
         case '/':
-            assert(second > 1E-6);
+            assert(Fabs(second) > 1E-6);
             return first / second;
         default: assert(false);
     }
