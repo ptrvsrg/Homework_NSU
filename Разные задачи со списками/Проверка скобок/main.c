@@ -77,14 +77,13 @@ void CheckBrackets(const char* line)
                 printf("not OK\n");
                 return;
             }
-
-            ++line;
         }
-        else
+        else if(IsStartBrackets(*line))
         {
             Push(*line, &stack);
-            ++line;
         }
+        
+        ++line;
     }
 
     if(stack)
@@ -99,7 +98,7 @@ void CheckBrackets(const char* line)
 
 int main(void)
 {
-    char* line1 = "[[[[[]]]]]";
+    char* line1 = "[[[[[ыcccccccccccc]]]]]";
     char* line2 = "{";
     char* line3 = "[{])";
 
