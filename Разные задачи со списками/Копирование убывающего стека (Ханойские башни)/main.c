@@ -109,10 +109,10 @@ void HanoiTowers(size_t size, TStack* stack1, TStack* buffer, TStack* stack2)
     }
     else
     {
-        HanoisTower(size-1, stack1, stack2, buffer);
+        HanoiTowers(size-1, stack1, stack2, buffer);
         PushStack(GetValueStack(*stack1), stack2);
         *stack1 = GetNextStack(*stack1);
-        HanoisTower(size-1, buffer, stack1, stack2);
+        HanoiTowers(size-1, buffer, stack1, stack2);
     }
 }
 
