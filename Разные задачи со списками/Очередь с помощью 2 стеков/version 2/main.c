@@ -56,6 +56,19 @@ void FreeStack(TStack* stack)
     }
 }
 
+void ScanStack(size_t size, TStack* stack) 
+{
+	if (size == 0)
+    {
+		return;
+	}
+
+    TValue value;
+	assert(scanf("%d", &value) == 1);
+	PushStack(value, stack);
+    ScanStack(size - 1, stack);
+}
+
 void PrintStack(TStack stack)
 {
     if(!IsEmptyStack(stack))
@@ -95,7 +108,7 @@ TQueue CreateQueue()
 
 bool IsEmptyQueue(TQueue queue)
 {
-    return queue.Begin == NULL && queue.End == NULL;
+    return IsEmptyStack(queue.Begin) && IsEmptyStack(queue.End);
 }
 
 void PushQueue(TValue value, TQueue* queue)
@@ -122,12 +135,7 @@ TValue PopQueue(TQueue* queue)
 
 void ScanQueue(size_t size, TQueue* queue)
 {
-    for(size_t i = 0; i < size; ++i)
-    {
-        int value;
-        assert(scanf("%d", &value) == 1);
-        PushQueue(value, queue);
-    }
+    ScanStack(size, &queue->Begin);
 }
 
 void PrintQueue(TQueue queue)
@@ -138,10 +146,8 @@ void PrintQueue(TQueue queue)
 
 void FreeQueue(TQueue* queue)
 {
-    while(!IsEmptyQueue(*queue))
-    {
-        PopQueue(queue);
-    }
+    FreeStack(&queue->Begin);
+    FreeStack(&queue->End);
 }
 
 int main(void)
