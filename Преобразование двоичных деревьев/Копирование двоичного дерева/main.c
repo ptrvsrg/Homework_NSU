@@ -1,15 +1,9 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef int TValue;
-
-int Max(int a, int b)
-{
-    return (a >= b) ? a : b;
-}
 
 struct TbinTree
 {
@@ -22,7 +16,7 @@ typedef struct TbinTree* TBinTree;
 
 TBinTree CreateTree(TValue value, TBinTree left, TBinTree right)
 {
-    TBinTree tree = NULL;
+    TBinTree tree;
     tree = malloc(sizeof(*tree));
     assert(tree);
 
@@ -66,52 +60,6 @@ TBinTree CopyTree(TBinTree tree)
     TBinTree copyTree = CreateTree(tree->Value, CopyTree(tree->Left), CopyTree(tree->Right));
 }
 
-void PrintTabulation(char* tab, bool checkLeft, bool checkNextRight)
-{
-    if (*tab != '\0')
-    {
-        if (!checkLeft || !checkNextRight)
-        {
-            printf("%s%c%c%c%c ", tab + 5, 192, 196, 196, 196);
-        }
-        else
-        {
-            printf("%s%c%c%c%c ", tab + 5, 195, 196, 196, 196); 
-        }
-    }
-}
-
-void HelpPrintTree(char* tab, bool checkLeft, bool checkNextRight, TBinTree tree)
-{
-    if(tree)
-    {
-        PrintTabulation(tab, checkLeft, checkNextRight);
-        printf("%d\n", tree->Value);
-
-        char newTab[1000] = { 0 };
-        
-        if (!checkLeft)
-        {
-            sprintf(tab, "%s     ", tab);
-            sprintf(newTab, "%s", tab);
-        }
-        else
-        {
-            sprintf(tab, "%s%c    ", tab, 179);
-            sprintf(newTab, "%s", tab);
-        }
-        
-        HelpPrintTree(tab, true, tree->Right, tree->Left);
-        HelpPrintTree(newTab, false, tree->Right, tree->Right);
-    }
-}
-
-void PrintTree(TBinTree tree)
-{
-    char tab[1000] = { 0 };
-    HelpPrintTree(tab, true, tree->Right, tree);
-}
-
 int main()
 {
     TBinTree tree;
@@ -119,8 +67,8 @@ int main()
 
     ArrayToBinTree(sizeof(array) / sizeof(*array), array, &tree);
 
-    PrintTree(tree);
-    PrintTree(CopyTree(tree));
+    TBinTree copy = CopyTree(tree);
 
     DestroyTree(&tree);
+    DestroyTree(&copy);
 }
