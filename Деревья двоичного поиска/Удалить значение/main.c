@@ -6,11 +6,6 @@
 
 typedef int TValue;
 
-TValue Max(TValue first, TValue second)
-{
-    return (first < second) ? second : first;
-}
-
 struct TbinSearchTree
 {
     TValue Value;
@@ -66,20 +61,6 @@ void ArrayToTree(size_t arraySize, TValue* array, TBinSearchTree* tree)
     }
 }
 
-TBinSearchTree FindMinTree(TBinSearchTree tree)
-{
-    if(IsEmptyTree(tree))
-    {
-        return tree;
-    }
-    else if(IsEmptyTree(tree->Left))
-    {
-        return tree;
-    }
-
-    return FindMinTree(tree->Left);
-}
-
 TBinSearchTree FindMaxTree(TBinSearchTree tree)
 {
     if(IsEmptyTree(tree))
@@ -92,20 +73,6 @@ TBinSearchTree FindMaxTree(TBinSearchTree tree)
     }
 
     return FindMaxTree(tree->Right);
-}
-
-TBinSearchTree Find(TValue value, TBinSearchTree tree)
-{
-    if(IsEmptyTree(tree))
-    {
-        return NULL;
-    }
-    else if(tree->Value == value)
-    {
-        return tree;
-    }
-
-    return Find(value, (value <= tree->Value) ? tree->Left : tree->Right);
 }
 
 void DeleteTree(TValue value, TBinSearchTree* tree)
@@ -159,6 +126,8 @@ int main(void)
     printf("\n");
     DeleteTree(3, &tree);
     PrintTree(tree);
+
+    DestroyTree(&tree);
 
     return EXIT_SUCCESS;
 }

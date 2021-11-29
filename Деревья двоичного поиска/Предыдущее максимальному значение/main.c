@@ -6,11 +6,6 @@
 
 typedef int TValue;
 
-TValue Max(TValue first, TValue second)
-{
-    return (first < second) ? second : first;
-}
-
 struct TbinSearchTree
 {
     TValue Value;

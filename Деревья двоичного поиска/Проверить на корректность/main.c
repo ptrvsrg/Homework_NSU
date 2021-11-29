@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <assert.h>
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,42 +62,14 @@ void ArrayToTree(size_t arraySize, TValue* array, TBinSearchTree* tree)
     }
 }
 
-TBinSearchTree FindMinTree(TBinSearchTree tree)
-{
-    if(IsEmptyTree(tree))
-    {
-        return tree;
-    }
-    else if(IsEmptyTree(tree->Left))
-    {
-        return tree;
-    }
-
-    return FindMinTree(tree->Left);
-}
-
-TBinSearchTree FindMaxTree(TBinSearchTree tree)
-{
-    if(IsEmptyTree(tree))
-    {
-        return tree;
-    }
-    else if(IsEmptyTree(tree->Right))
-    {
-        return tree;
-    }
-
-    return FindMaxTree(tree->Right);
-}
-
-bool IsTree(TValue min, TValue max, TBinSearchTree tree)
+bool IsBinarySearchTree(TValue min, TValue max, TBinSearchTree tree)
 {
     if(IsEmptyTree(tree))
     {
         return true;
     }
 
-    return tree->Value >= min && tree->Value <= max && IsTree(min, tree->Value, tree->Left) && IsTree(tree->Value, max, tree->Right);
+    return tree->Value >= min && tree->Value <= max && IsBinarySearchTree(min, tree->Value, tree->Left) && IsBinarySearchTree(tree->Value, max, tree->Right);
 }
 
 void PrintTree(TBinSearchTree tree)
@@ -119,7 +92,7 @@ int main(void)
     ArrayToTree(sizeof(array) / sizeof(*array), array, &tree);
 
     PrintTree(tree);
-    printf("\nIs this binary search tree? - %s\n", IsTree(FindMinTree(tree)->Value, FindMaxTree(tree)->Value, tree) ? "Yes" : "No");
+    printf("\nIs this binary search tree? - %s\n", IsBinarySearchTree(INT_MIN, INT_MAX, tree) ? "Yes" : "No");
     DestroyTree(&tree);
 
     return EXIT_SUCCESS;

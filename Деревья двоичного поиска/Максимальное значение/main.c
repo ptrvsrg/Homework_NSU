@@ -65,7 +65,7 @@ TBinSearchTree FindMaxTree(TBinSearchTree tree)
 {
     if(IsEmptyTree(tree))
     {
-        return tree;
+        return NULL;
     }
     else if(IsEmptyTree(tree->Right))
     {

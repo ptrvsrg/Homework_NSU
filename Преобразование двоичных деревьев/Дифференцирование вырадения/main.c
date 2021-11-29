@@ -4,12 +4,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
-enum
-{
-    SIZE_NOTATION = 1000
-};
 
 ////////////////////////////////  VALUE  ////////////////////////////////
 
@@ -94,11 +88,6 @@ struct Ttree
 };
 
 typedef struct Ttree* TTree;
-
-TTree CreateTree()
-{
-    return NULL;
-}
 
 bool IsEmptyTree(TTree tree)
 {
@@ -334,7 +323,7 @@ TTree PrefixStackToTree(TStack* prefix)
 
 void SimplifyExpression(TTree* tree)
 {
-    if(!(*tree))
+    if(IsEmptyTree(*tree))
     {
         return;
     }
@@ -435,7 +424,7 @@ TTree BuildDerivative(TTree tree, char var)
 
 int main()
 {
-    char infix[] = "x *x/y";
+    char infix[] = "x*x/y-4*x";
 
     CheckInfix(infix);
 

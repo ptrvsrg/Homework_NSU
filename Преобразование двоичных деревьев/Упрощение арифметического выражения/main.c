@@ -4,16 +4,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef char TValue;
 struct TbinTree
 {
-    char Value;
+    TValue Value;
     struct TbinTree* Left;
     struct TbinTree* Right;
 };
 
 typedef struct TbinTree* TBinTree;
 
-TBinTree CreateTree(char value, TBinTree left, TBinTree right)
+TBinTree CreateLeaf(TValue value, TBinTree left, TBinTree right)
 {
     TBinTree tree = NULL;
     tree = malloc(sizeof(*tree));
@@ -26,9 +27,22 @@ TBinTree CreateTree(char value, TBinTree left, TBinTree right)
     return tree;
 }
 
-bool IsOperator(char symbol)
+bool IsEmptyTree(TBinTree tree)
+{
+    return tree == NULL;
+}
+
+bool IsOperator(TValue symbol)
 {
     return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
+}
+
+void RemoveBranch(bool isLeft, TBinTree* tree)
+{
+    TBinTree delete = *tree;
+    free((isLeft) ? (*tree)->Left : (*tree)->Right);
+    *tree = (isLeft) ? (*tree)->Right : (*tree)->Left;
+    free(delete);
 }
 
 void DestroyTree(TBinTree* tree)
@@ -43,7 +57,7 @@ void DestroyTree(TBinTree* tree)
 
 void SimplifyExpression(TBinTree* tree)
 {
-    if(!(*tree))
+    if(IsEmptyTree(*tree))
     {
         return;
     }
@@ -52,35 +66,32 @@ void SimplifyExpression(TBinTree* tree)
         SimplifyExpression(&(*tree)->Left);
         SimplifyExpression(&(*tree)->Right);
 
-        char left = (*tree)->Left->Value;
-        char right = (*tree)->Right->Value;
+        TValue left = (*tree)->Left->Value;
+        TValue right = (*tree)->Right->Value;
 
         switch((*tree)->Value)
         {
             case '+':
                 if(left == '0' || right == '0')
                 {
-                    DestroyTree(tree);
-                    *tree = CreateTree((left == '0') ? right : left, NULL, NULL);
+                    RemoveBranch(left == '0', tree);
                 }
                 break;
             case '-':
                 if(right == '0')
                 {
-                    DestroyTree(tree);
-                    *tree = CreateTree(left, NULL, NULL);
+                    RemoveBranch(false, tree);
                 }
                 break;
             case '*':
                 if(left == '1' || right == '1')
                 {
-                    DestroyTree(tree);
-                    *tree = CreateTree((left == '1') ? right : left, NULL, NULL);
+                    RemoveBranch(left == '1', tree);
                 }
                 else if(left == '0' || right == '0')
                 {
                     DestroyTree(tree);
-                    *tree = CreateTree('0', NULL, NULL);
+                    *tree = CreateLeaf('0', NULL, NULL);
                 }
                 break;
             case '/':
@@ -88,33 +99,32 @@ void SimplifyExpression(TBinTree* tree)
 
                 if(right == '1')
                 {
-                    DestroyTree(tree);
-                    *tree = CreateTree(left, NULL, NULL);
+                    RemoveBranch(false, tree);
                 }
                 else if(left == '0')
                 {
                     DestroyTree(tree);
-                    *tree = CreateTree('0', NULL, NULL);
+                    *tree = CreateLeaf('0', NULL, NULL);
                 }
         }
     }
     else
     {
-        assert(!(*tree)->Left && !(*tree)->Right);
+        assert(IsEmptyTree((*tree)->Left) && IsEmptyTree((*tree)->Right));
     }
 }
 
 int main()
 {
-    TBinTree tree1 = CreateTree('1', NULL, NULL);
-    TBinTree tree2 = CreateTree('0', NULL, NULL);
-    TBinTree tree3 = CreateTree('+', tree1, tree2);
-    TBinTree tree4 = CreateTree('0', NULL, NULL);
-    TBinTree tree5 = CreateTree('*', tree3, tree4);
-    TBinTree tree6 = CreateTree('3', NULL, NULL);
-    TBinTree tree7 = CreateTree('-', tree6, tree5);
-    TBinTree tree8 = CreateTree('1', NULL, NULL);
-    TBinTree tree9 = CreateTree('/', tree7, tree8);
+    TBinTree tree1 = CreateLeaf('1', NULL, NULL);
+    TBinTree tree2 = CreateLeaf('0', NULL, NULL);
+    TBinTree tree3 = CreateLeaf('+', tree1, tree2);
+    TBinTree tree4 = CreateLeaf('0', NULL, NULL);
+    TBinTree tree5 = CreateLeaf('*', tree3, tree4);
+    TBinTree tree6 = CreateLeaf('3', NULL, NULL);
+    TBinTree tree7 = CreateLeaf('-', tree6, tree5);
+    TBinTree tree8 = CreateLeaf('2', NULL, NULL);
+    TBinTree tree9 = CreateLeaf('/', tree7, tree8);
 
     SimplifyExpression(&tree9);
 
