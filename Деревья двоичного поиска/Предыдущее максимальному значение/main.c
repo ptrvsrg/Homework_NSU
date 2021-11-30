@@ -77,13 +77,17 @@ TBinSearchTree FindMaxTree(TBinSearchTree tree)
 
 TBinSearchTree FindSecondMaxTree(TBinSearchTree tree)
 {
-    if(IsEmptyTree(tree) || IsEmptyTree(tree->Right))
+    if(IsEmptyTree(tree))
     {
         return NULL;
     }
-    else if(IsEmptyTree(tree->Right->Right))
+    else if(IsEmptyTree(tree->Right) && !IsEmptyTree(tree->Left))
     {
-        return (IsEmptyTree(tree->Right->Left)) ? tree : FindMaxTree(tree->Right->Left);
+        return FindMaxTree(tree->Left);
+    }
+    else if(IsEmptyTree(tree->Right->Right) && IsEmptyTree(tree->Right->Left))
+    {
+        return tree;
     }
 
     return FindSecondMaxTree(tree->Right);
@@ -104,7 +108,7 @@ void PrintTree(TBinSearchTree tree)
 int main(void)
 {
     TBinSearchTree tree = CreateTree();
-    TValue array[] = { 3, 2, 8, 4, 7, 1 };
+    TValue array[] = { 8, 4, 7, 1 };
 
     ArrayToTree(sizeof(array) / sizeof(*array), array, &tree);
 
