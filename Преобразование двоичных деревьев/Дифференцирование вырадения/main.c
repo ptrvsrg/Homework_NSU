@@ -94,7 +94,7 @@ bool IsEmptyTree(TTree tree)
     return tree == NULL;
 }
 
-TTree CreateLeaf(TValue value, TTree left, TTree right)
+TTree CreateTree(TValue value, TTree left, TTree right)
 {
     TTree tree = malloc(sizeof(*tree));
     assert(!IsEmptyTree(tree));
@@ -307,7 +307,7 @@ TTree PrefixStackToTree(TStack* prefix)
     {
         assert(!IsEmptyStack((*prefix)->Next) && !IsEmptyStack((*prefix)->Next->Next));
 
-        TTree tree = CreateLeaf(PopStack(prefix), NULL, NULL);
+        TTree tree = CreateTree(PopStack(prefix), NULL, NULL);
         tree->Right = PrefixStackToTree(prefix);
         tree->Left = PrefixStackToTree(prefix);
 
@@ -315,7 +315,7 @@ TTree PrefixStackToTree(TStack* prefix)
     }
     else
     {
-        return CreateLeaf(PopStack(prefix), NULL, NULL);
+        return CreateTree(PopStack(prefix), NULL, NULL);
     }
 }
 
@@ -357,7 +357,7 @@ void SimplifyExpression(TTree* tree)
                 else if(left.Number == 0 || right.Number == 0)
                 {
                     DestroyTree(tree);
-                    *tree = CreateLeaf(CreateValue('\0', '\0', 0), NULL, NULL);
+                    *tree = CreateTree(CreateValue('\0', '\0', 0), NULL, NULL);
                 }
                 break;
             case '/':
@@ -370,7 +370,7 @@ void SimplifyExpression(TTree* tree)
                 else if(left.Number == 0)
                 {
                     DestroyTree(tree);
-                    *tree = CreateLeaf(CreateValue('\0', '\0', 0), NULL, NULL);
+                    *tree = CreateTree(CreateValue('\0', '\0', 0), NULL, NULL);
                 }
         }
     }
@@ -387,38 +387,44 @@ TTree CopyTree(TTree tree)
         return NULL;
     }
 
-    TTree copyTree = CreateLeaf(tree->Value, CopyTree(tree->Left), CopyTree(tree->Right));
+    TTree copyTree = CreateTree(tree->Value, CopyTree(tree->Left), CopyTree(tree->Right));
 }
 
 TTree BuildDerivative(TTree tree, char var)
 {
-    if(tree->Value.Operator == '+' || tree->Value.Operator == '-')
+    if(tree->Value.Operator == '+')
     {
-        TTree derivative = CreateLeaf(CreateValue( (tree->Value.Operator == '+') ? '+' : '-', '\0', INT_MIN), BuildDerivative(tree->Left, var), BuildDerivative(tree->Right, var));
+        TTree derivative = CreateTree(CreateValue('+', '\0', INT_MIN), BuildDerivative(tree->Left, var), BuildDerivative(tree->Right, var));
+        return  derivative;
+    }
+    if(tree->Value.Operator == '-')
+    {
+        TTree derivative = CreateTree(CreateValue('-', '\0', INT_MIN), BuildDerivative(tree->Left, var), BuildDerivative(tree->Right, var));
         return  derivative;
     }
     else if (tree->Value.Operator == '*')
     {
-        TTree derivative1 = CreateLeaf(CreateValue('*', '\0', INT_MIN), BuildDerivative(tree->Left, var), CopyTree(tree->Right));
-        TTree derivative2 = CreateLeaf(CreateValue('*', '\0', INT_MIN), CopyTree(tree->Left), BuildDerivative(tree->Right, var));
-        TTree derivative3 = CreateLeaf(CreateValue('+', '\0', INT_MIN), derivative1, derivative2);
-        return derivative3;
+        TTree derivative1 = CreateTree(CreateValue('*', '\0', INT_MIN), BuildDerivative(tree->Left, var), CopyTree(tree->Right));
+        TTree derivative2 = CreateTree(CreateValue('*', '\0', INT_MIN), CopyTree(tree->Left), BuildDerivative(tree->Right, var));
+        TTree result = CreateTree(CreateValue('+', '\0', INT_MIN), derivative1, derivative2);
+        return result;
     }
     else if (tree->Value.Operator == '/')
     {
-        TTree derivative1 = CreateLeaf(CreateValue('*', '\0', INT_MIN), BuildDerivative(tree->Left, var), CopyTree(tree->Right));
-        TTree derivative2 = CreateLeaf(CreateValue('*', '\0', INT_MIN), CopyTree(tree->Left), BuildDerivative(tree->Right, var));
-        TTree derivative3 = CreateLeaf(CreateValue('*', '\0', INT_MIN), CopyTree(tree->Right), CopyTree(tree->Right));
-        TTree derivative4 = CreateLeaf(CreateValue('-', '\0', INT_MIN), derivative1, derivative2);
-        return CreateLeaf(CreateValue('/', '\0', INT_MIN), derivative4, derivative3);
+        TTree derivative1 = CreateTree(CreateValue('*', '\0', INT_MIN), BuildDerivative(tree->Left, var), CopyTree(tree->Right));
+        TTree derivative2 = CreateTree(CreateValue('*', '\0', INT_MIN), CopyTree(tree->Left), BuildDerivative(tree->Right, var));
+        TTree denominator = CreateTree(CreateValue('*', '\0', INT_MIN), CopyTree(tree->Right), CopyTree(tree->Right));
+        TTree numerator = CreateTree(CreateValue('-', '\0', INT_MIN), derivative1, derivative2);
+        TTree result = CreateTree(CreateValue('/', '\0', INT_MIN), numerator, denominator);
+        return result;
     }
     else if(tree->Value.Variable == var)
     {
-        return CreateLeaf(CreateValue('\0', '\0', 1), NULL, NULL);
+        return CreateTree(CreateValue('\0', '\0', 1), NULL, NULL);
     }
     else
     {
-        return CreateLeaf(CreateValue('\0', '\0', 0), NULL, NULL);
+        return CreateTree(CreateValue('\0', '\0', 0), NULL, NULL);
     }
 }
 
