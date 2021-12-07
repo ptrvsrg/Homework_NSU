@@ -117,9 +117,9 @@ void ConvertBinarySearchTreeToList(const TBinSearchTree tree, TList* list)
         return;
     }
 
-    ConvertBinarySearchTreeToList(tree->Left, list);
-    PushList(tree->Value, list);
     ConvertBinarySearchTreeToList(tree->Right, list);
+    PushList(tree->Value, list);
+    ConvertBinarySearchTreeToList(tree->Left, list);
 }
 
 void PrintList(const TList list)
