@@ -110,16 +110,16 @@ void PushList(TValue value, TList* list)
     *list = new;
 }
 
-void ConvertBinarySearchTreeToList(const TBinSearchTree tree, TList* list)
+void ConvertBinarySearchTreeToDecreasingList(const TBinSearchTree tree, TList* list)
 {
     if(IsEmptyTree(tree))
     {
         return;
     }
 
-    ConvertBinarySearchTreeToList(tree->Right, list);
+    ConvertBinarySearchTreeToDecreasingList(tree->Left, list);
     PushList(tree->Value, list);
-    ConvertBinarySearchTreeToList(tree->Left, list);
+    ConvertBinarySearchTreeToDecreasingList(tree->Right, list);
 }
 
 void PrintList(const TList list)
@@ -148,7 +148,7 @@ int main(void)
     TValue array[] = { 4, 5, 9, 6, 7, 2, 3, 1, 0, 8 };
 
     ConvertArrayToBinarySearchTree(sizeof(array) / sizeof(*array), array, &tree);
-    ConvertBinarySearchTreeToList(tree, &list);
+    ConvertBinarySearchTreeToDecreasingList(tree, &list);
 
     PrintTree(tree);
     printf("\n");
