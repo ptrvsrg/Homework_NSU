@@ -13,7 +13,7 @@ typedef int TValue;
 struct TAVLtree
 {
     TValue Value;
-    int Depth;
+    int Height;
     struct TAVLtree* Left;
     struct TAVLtree* Right;
 };
@@ -30,7 +30,7 @@ TAVLTree CreateLeaf(TValue value, TAVLTree left, TAVLTree right)
     TAVLTree new = malloc(sizeof(*new));
     assert(!IsEmpty(new));
 
-    new->Depth = 1;
+    new->Height = 1;
     new->Value = value;
     new->Left = left;
     new->Right = right;
@@ -38,19 +38,19 @@ TAVLTree CreateLeaf(TValue value, TAVLTree left, TAVLTree right)
     return new;
 }
 
-int GetDepth(TAVLTree tree)
+int GetHeight(TAVLTree tree)
 {
-    return !IsEmpty(tree) ? tree->Depth : 0;
+    return !IsEmpty(tree) ? tree->Height : 0;
 }
 
-int DepthDifference(TAVLTree tree)
+int HeightDifference(TAVLTree tree)
 {
-    return GetDepth(tree->Right) - GetDepth(tree->Left);
+    return GetHeight(tree->Right) - GetHeight(tree->Left);
 }
 
-void FixDepth(TAVLTree tree)
+void FixHeight(TAVLTree tree)
 {
-    tree->Depth = Max(GetDepth(tree->Left), GetDepth(tree->Right)) + 1;
+    tree->Height = Max(GetHeight(tree->Left), GetHeight(tree->Right)) + 1;
 }
 
 TAVLTree RotateRight(TAVLTree tree)
@@ -59,8 +59,8 @@ TAVLTree RotateRight(TAVLTree tree)
     tree->Left = buffer->Right;
     buffer->Right = tree;
 
-    FixDepth(tree);
-    FixDepth(buffer);
+    FixHeight(tree);
+    FixHeight(buffer);
 
     return buffer;
 }
@@ -71,27 +71,27 @@ TAVLTree RotateLeft(TAVLTree tree)
     tree->Right = buffer->Left;
     buffer->Left = tree;
 
-    FixDepth(tree);
-    FixDepth(buffer);
+    FixHeight(tree);
+    FixHeight(buffer);
 
     return buffer;
 }
 
 TAVLTree Balance(TAVLTree tree)
 {
-    FixDepth(tree);
+    FixHeight(tree);
     
-    if(DepthDifference(tree) == 2)
+    if(HeightDifference(tree) == 2)
     {
-        if(DepthDifference(tree->Right) < 0)
+        if(HeightDifference(tree->Right) < 0)
         {
             tree->Right = RotateRight(tree->Right);
         }
         return RotateLeft(tree);
     }
-    else if(DepthDifference(tree) == -2)
+    else if(HeightDifference(tree) == -2)
     {
-        if(DepthDifference(tree->Left) > 0)
+        if(HeightDifference(tree->Left) > 0)
         {
             tree->Left = RotateLeft(tree->Left);
         }
@@ -171,7 +171,7 @@ void HelpPrintTree(char* tab, bool checkLeft, bool checkNextRight, TAVLTree tree
     if(tree)
     {
         PrintTabulation(tab, checkLeft, checkNextRight);
-        printf("%d\n", tree->Value);
+        printf("%d (%d)\n", tree->Value, tree->Height);
 
         char newTab[1000] = { 0 };
         
@@ -208,7 +208,7 @@ void ConvertArrayToTree(size_t arraySize, TValue* array, TAVLTree* tree)
 int main(void)
 {
     TAVLTree tree = NULL;
-    TValue array[] = { 1, 2, z};
+    TValue array[] = { 3, 9, 5, 1, 0, 6, 4, 8, 7, 2 };
 
     ConvertArrayToTree(sizeof(array) / sizeof(*array), array, &tree);
     Print(tree);

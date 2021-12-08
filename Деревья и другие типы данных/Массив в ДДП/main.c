@@ -71,18 +71,18 @@ void PrintArray(int arraySize, int* array)
     }
 }
 
-TBinSearchTree ConvertArrayToBinarySearchTree(TValue array[], int left, int right)
+TBinSearchTree ConvertArrayToBinarySearchTree(TValue array[], int size)
 {
-    if (left > right) 
+    if (size <= 0) 
     {
         return NULL;
     }
     else 
     {
-        int middle = (left + right) / 2;
+        int middle = size / 2;
         TBinSearchTree tree = CreateLeaf(array[middle]);
-        tree->Left = ConvertArrayToBinarySearchTree(array, left, middle - 1);
-        tree->Right = ConvertArrayToBinarySearchTree(array, middle + 1, right);
+        tree->Left = ConvertArrayToBinarySearchTree(array, middle);
+        tree->Right = ConvertArrayToBinarySearchTree(array + middle + 1, size - middle - 1);
         return tree;
     }
 }
@@ -93,7 +93,7 @@ int main(void)
     TValue array[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     int arraySize = sizeof(array) / sizeof(*array);
 
-    TBinSearchTree tree = ConvertArrayToBinarySearchTree(array, 0, arraySize - 1);
+    TBinSearchTree tree = ConvertArrayToBinarySearchTree(array, arraySize);
 
     PrintArray(arraySize, array);
     printf("\n");

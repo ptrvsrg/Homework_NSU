@@ -109,8 +109,8 @@ void PrintArray(int arraySize, const int* array)
 
 int main(void)
 {
-    TBinSearchTree tree = CreateTree();
-    TValue array1[] = { 4, 5, 9, 6, 7, 2, 3, 1 };
+    TBinSearchTree tree = NULL;
+    TValue array1[] = { 9, 6, 4, 11, 15 };
 
     ConvertArrayToBinarySearchTree(sizeof(array1) / sizeof(*array1), array1, &tree);
 
