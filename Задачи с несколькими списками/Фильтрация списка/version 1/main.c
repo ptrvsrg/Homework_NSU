@@ -13,29 +13,47 @@ struct TList
 
 typedef struct TList* TList;
 
-TList PushFront(TValue value, TList* list)
+bool IsEmptyList(TList list)
+{
+    return list == NULL;
+}
+
+TList CreateItem(TValue value)
 {
     TList new = malloc(sizeof(*new));
-    assert(new != NULL);
+    assert(!IsEmptyList(new));
 
     new->Value = value;
+    new->Next = NULL;
+    
+    return new;
+}
+
+TList PushFront(TValue value, TList* list)
+{
+    TList new = CreateItem(value);
     new->Next = *list;
     (*list) = new;
 
     return *list;
 }
 
-void ArrayToList(size_t arraySize, TValue array[], TList* list)
+TList ConvertArrayToList(size_t arraySize, TValue* array)
 {
-    for(size_t i = 0; i < arraySize; ++i)
+    if (arraySize == 0)
     {
-        PushFront(array[arraySize - 1 - i], list);
+        return NULL;
     }
+
+    TList list = CreateItem(*array);
+    list->Next = ConvertArrayToList(arraySize - 1, array + 1);
+
+    return list;
 }
 
 bool CheckNonDecreasing(TList list)
 {
-    if(!list || !list->Next)
+    if(IsEmptyList(list) || IsEmptyList(list->Next))
     {
         return true;
     }
@@ -50,7 +68,7 @@ bool CheckNonDecreasing(TList list)
 
 void PrintList(TList list)
 {
-    if(list)
+    if(!IsEmptyList(list))
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -68,7 +86,7 @@ TValue PopFront(TList* list)
 
 void FreeList(TList* list) 
 {
-    if(*list)
+    if(!IsEmptyList(*list))
     {
         PopFront(list);
         FreeList(list);
@@ -77,7 +95,7 @@ void FreeList(TList* list)
 
 bool FindList(TValue value, TList filter)
 {
-    while(filter)
+    while(!IsEmptyList(filter))
     {
         if(filter->Value > value)
         {
@@ -96,7 +114,7 @@ bool FindList(TValue value, TList filter)
 
 void FilterList(TList* list, TList filter)
 {
-    if(*list && filter)
+    if(!IsEmptyList(*list) && !IsEmptyList(filter))
     {
         if(!FindList((*list)->Value, filter))
         {
@@ -112,14 +130,11 @@ void FilterList(TList* list, TList filter)
 
 int main()
 {
-    TList list = NULL;
-    TList filter = NULL;
-
     TValue arrayList [] = { 0, 1, 2, 5, 8, 9 };
     TValue arrayFilter [] = { 1, 4, 8 };
 
-    ArrayToList(sizeof(arrayList) / sizeof(*arrayList), arrayList, &list);
-    ArrayToList(sizeof(arrayFilter) / sizeof(*arrayFilter), arrayFilter, &filter);
+    TList list = ConvertArrayToList(sizeof(arrayList) / sizeof(*arrayList), arrayList);
+    TList filter = ConvertArrayToList(sizeof(arrayFilter) / sizeof(*arrayFilter), arrayFilter);
 
     assert(CheckNonDecreasing(list));
     assert(CheckNonDecreasing(filter));

@@ -13,16 +13,42 @@ struct Tlist
 
 typedef struct Tlist* TList;
 
-TList PushFront(TValue value, TList* list)
+bool IsEmptyList(TList list)
+{
+    return list == NULL;
+}
+
+TList CreateItem(TValue value)
 {
     TList new = malloc(sizeof(*new));
-    assert(new != NULL);
+    assert(!IsEmptyList(new));
 
     new->Value = value;
+    new->Next = NULL;
+    
+    return new;
+}
+
+TList PushFront(TValue value, TList* list)
+{
+    TList new = CreateItem(value);
     new->Next = *list;
     (*list) = new;
 
     return *list;
+}
+
+TList ConvertArrayToList(size_t arraySize, TValue* array)
+{
+    if (arraySize == 0)
+    {
+        return NULL;
+    }
+
+    TList list = CreateItem(*array);
+    list->Next = ConvertArrayToList(arraySize - 1, array + 1);
+
+    return list;
 }
 
 TList PushBack(TValue value, TList list)
@@ -42,17 +68,9 @@ TList PushBack(TValue value, TList list)
     return list->Next;
 }
 
-void ArrayToList(size_t arraySize, int array[], TList* list)
-{
-    for(size_t i = 0; i < arraySize; ++i)
-    {
-        PushFront(array[arraySize - 1 - i], list);
-    }
-}
-
 bool CheckNonDecreasing(TList list)
 {
-    if(!list || !list->Next)
+    if(IsEmptyList(list) || IsEmptyList(list->Next))
     {
         return true;
     }
@@ -67,7 +85,7 @@ bool CheckNonDecreasing(TList list)
 
 void PrintList(TList list)
 {
-    if(list)
+    if(!IsEmptyList(list))
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -87,7 +105,7 @@ TValue PopFront(TList* list)
 
 void FreeList(TList* list) 
 {
-    if(*list)
+    if(!IsEmptyList(*list))
     {
         PopFront(list);
         FreeList(list);
@@ -102,11 +120,9 @@ void Rotate(TList* list)
 
 int main(void)
 {
-    TList list = NULL;
-
     int array [] = { 1, 2, 3, 4 };
 
-    ArrayToList(sizeof(array) / sizeof(*array), array, &list);
+    TList list = ConvertArrayToList(sizeof(array) / sizeof(*array), array);
 
     assert(CheckNonDecreasing(list));
 

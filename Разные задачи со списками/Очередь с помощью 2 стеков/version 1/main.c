@@ -15,24 +15,40 @@ struct Tstack
 
 typedef struct Tstack* TStack;
 
-TStack CreateStack()
-{
-    return NULL;
-}
-
 bool IsEmptyStack(TStack stack)
 {
     return stack == NULL;
 }
 
-void PushStack(TValue value, TStack* stack)
+TStack CreateItem(TValue value)
 {
     TStack new = malloc(sizeof(*new));
     assert(!IsEmptyStack(new));
 
     new->Value = value;
+    new->Next = NULL;
+    
+    return new;
+}
+
+void PushStack(TValue value, TStack* stack)
+{
+    TStack new = CreateItem(value);
     new->Next = *stack;
-    *stack = new;
+    (*stack) = new;
+}
+
+TStack ConvertArrayToStack(size_t arraySize, TValue* array)
+{
+    if (arraySize == 0)
+    {
+        return NULL;
+    }
+
+    TStack stack = CreateItem(*array);
+    stack->Next = ConvertArrayToStack(arraySize - 1, array + 1);
+
+    return stack;
 }
 
 TValue PopStack(TStack* stack)
@@ -75,8 +91,8 @@ typedef struct TQueue
 TQueue CreateQueue()
 {
     TQueue queue;
-    queue.Begin = CreateStack();
-    queue.End = CreateStack();
+    queue.Begin = NULL;
+    queue.End = NULL;
 
     return queue;
 }
@@ -109,14 +125,11 @@ TValue PopQueue(TQueue* queue)
     return PopStack(&queue->End);
 }
 
-void ScanQueue(size_t size, TQueue* queue)
+TQueue ConvertArrayToQueue(size_t arraySize, TValue* array)
 {
-    for(size_t i = 0; i < size; ++i)
-    {
-        int value;
-        assert(scanf("%d", &value) == 1);
-        PushQueue(value, queue);
-    }
+    TQueue queue = CreateQueue();
+    queue.Begin = ConvertArrayToStack(arraySize, array);
+    return queue;
 }
 
 void PrintQueue(TQueue* queue)
@@ -143,9 +156,9 @@ void FreeQueue(TQueue* queue)
 
 int main(void)
 {
-    TQueue queue = CreateQueue();
+    TValue array[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    ScanQueue(3, &queue);
+    TQueue queue = ConvertArrayToQueue(sizeof(array) / sizeof(*array), array);
 
     PrintQueue(&queue);
     printf("\n");

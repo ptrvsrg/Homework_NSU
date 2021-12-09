@@ -11,19 +11,34 @@ struct Tstack
 
 typedef struct Tstack* TStack;
 
-void Push(char value, TStack* stack)
+bool IsEmptyStack(TStack list)
+{
+    return list == NULL;
+}
+
+TStack CreateItem(char value)
 {
     TStack new = malloc(sizeof(*new));
-    assert(new != NULL);
+    assert(!IsEmptyStack(new));
 
     new->Value = value;
-    new->Next = *stack;
-    *stack = new;
+    new->Next = NULL;
+    
+    return new;
+}
+
+TStack Push(char value, TStack* list)
+{
+    TStack new = CreateItem(value);
+    new->Next = *list;
+    (*list) = new;
+
+    return *list;
 }
 
 char Pop(TStack* stack)
 {
-    assert(*stack);
+    assert(!IsEmptyStack(*stack));
 
     char value = (*stack)->Value;
 
@@ -37,7 +52,7 @@ char Pop(TStack* stack)
 
 void FreeStack(TStack* stack) 
 {
-    while (*stack)
+    while (!IsEmptyStack(*stack))
     {
         Pop(stack);
     }
@@ -86,7 +101,7 @@ void CheckBrackets(const char* line)
         ++line;
     }
 
-    if(stack)
+    if(!IsEmptyStack(stack))
     {
         printf("not OK\n");
         FreeStack(&stack);

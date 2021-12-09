@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,26 +13,47 @@ struct Tlist
 
 typedef struct Tlist* TList;
 
-void PushFront(TValue value, TList* list)
+bool IsEmptyList(TList list)
 {
-    TList new = malloc(sizeof(*new));
-    assert(new != NULL);
-    new->Value = value;
-    new->Next = *list;
-    (*list) = new;
+    return list == NULL;
 }
 
-void ArrayToList(size_t arraySize, TValue array[], TList* list)
+TList CreateItem(TValue value)
 {
-    for(size_t i = 0; i < arraySize; ++i)
+    TList new = malloc(sizeof(*new));
+    assert(!IsEmptyList(new));
+
+    new->Value = value;
+    new->Next = NULL;
+    
+    return new;
+}
+
+TList PushFront(TValue value, TList* list)
+{
+    TList new = CreateItem(value);
+    new->Next = *list;
+    (*list) = new;
+
+    return *list;
+}
+
+TList ConvertArrayToList(size_t arraySize, TValue* array)
+{
+    if (arraySize == 0)
     {
-        PushFront(array[arraySize - 1 - i], list);
+        return NULL;
     }
+
+    TList list = CreateItem(*array);
+    list->Next = ConvertArrayToList(arraySize - 1, array + 1);
+
+    return list;
 }
 
 bool CheckNonDecreasing(TList list)
 {
-    if(!list || !list->Next)
+    if(IsEmptyList(list) || IsEmptyList(list->Next))
     {
         return true;
     }
@@ -46,7 +68,7 @@ bool CheckNonDecreasing(TList list)
 
 void PrintList(TList list)
 {
-    if(list)
+    if(!IsEmptyList(list))
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -64,7 +86,7 @@ TValue PopFront(TList* list)
 
 void FreeList(TList* list) 
 {
-    if(*list)
+    if(!IsEmptyList(*list))
     {
         PopFront(list);
         FreeList(list);
@@ -73,7 +95,7 @@ void FreeList(TList* list)
 
 void RemoveDuplicate(TList* list)
 {
-    if(*list && (*list)->Next)
+    if(!IsEmptyList(*list) && !IsEmptyList((*list)->Next))
     {
         if((*list)->Value == (*list)->Next->Value)
         {
@@ -89,11 +111,9 @@ void RemoveDuplicate(TList* list)
 
 int main(void)
 {
-    TList list = NULL;
-
     TValue array [] = { 1, 2, 2, 5, 8, 8, 9 };
 
-    ArrayToList(sizeof(array) / sizeof(*array), array, &list);
+    TList list = ConvertArrayToList(sizeof(array) / sizeof(*array), array);
 
     assert(CheckNonDecreasing(list));
 

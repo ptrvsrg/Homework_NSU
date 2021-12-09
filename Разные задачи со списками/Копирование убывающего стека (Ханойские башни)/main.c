@@ -15,14 +15,20 @@ struct Tstack
 
 typedef struct Tstack* TStack;
 
-TStack CreateStack()
-{
-    return NULL;
-}
-
-bool IsEmpty(TStack stack)
+bool IsEmptyStack(TStack stack)
 {
     return stack == NULL;
+}
+
+TStack CreateItem(TValue value)
+{
+    TStack new = malloc(sizeof(*new));
+    assert(!IsEmptyStack(new));
+
+    new->Value = value;
+    new->Next = NULL;
+    
+    return new;
 }
 
 TStack GetNextStack(TStack stack)
@@ -37,22 +43,19 @@ TValue GetValueStack(TStack stack)
 
 void PushStack(TValue value, TStack* stack)
 {
-    if(!IsEmpty(*stack))
+    if(!IsEmptyStack(*stack))
     {
         assert(value < GetValueStack(*stack));
     }
 
-    TStack new = malloc(sizeof(*new));
-    assert(!IsEmpty(new));
-
-    new->Value = value;
+    TStack new = CreateItem(value);
     new->Next = *stack;
     *stack = new;
 }
 
 TValue PopStack(TStack* stack)
 {
-    assert(!IsEmpty(*stack));
+    assert(!IsEmptyStack(*stack));
 
     TValue value = GetValueStack(*stack);
 
@@ -66,7 +69,7 @@ TValue PopStack(TStack* stack)
 
 void FreeStack(TStack* stack) 
 {
-    while (!IsEmpty(*stack))
+    while (!IsEmptyStack(*stack))
     {
         PopStack(stack);
     }
@@ -74,7 +77,7 @@ void FreeStack(TStack* stack)
 
 void PrintStack(TStack stack)
 {
-    if(!IsEmpty(stack))
+    if(!IsEmptyStack(stack))
     {
         printf("%d ", stack->Value);
         PrintStack(stack->Next);
@@ -83,7 +86,7 @@ void PrintStack(TStack stack)
 
 size_t GetSizeStack(TStack stack)
 {
-    if(IsEmpty(stack))
+    if(IsEmptyStack(stack))
     {
         return 0;
     }
@@ -93,12 +96,17 @@ size_t GetSizeStack(TStack stack)
     }
 }
 
-void ArrayToStack(size_t arraySize, TValue array[], TStack* stack)
+TStack ConvertArrayToStack(size_t arraySize, TValue* array)
 {
-    for(size_t i = 0; i < arraySize; ++i)
+    if (arraySize == 0)
     {
-        PushStack(array[arraySize - 1 - i], stack);
+        return NULL;
     }
+
+    TStack list = CreateItem(*array);
+    list->Next = ConvertArrayToStack(arraySize - 1, array + 1);
+
+    return list;
 }
 
 void HanoiTowers(size_t size, TStack* stack1, TStack* buffer, TStack* stack2)
@@ -118,9 +126,9 @@ void HanoiTowers(size_t size, TStack* stack1, TStack* buffer, TStack* stack2)
 
 void CopyStack(TStack stack1, TStack* stack2)
 {
-    TStack buffer = CreateStack();
+    TStack buffer = NULL;
     FreeStack(stack2);
-    *stack2 = CreateStack();
+    *stack2 = NULL;
     HanoiTowers(GetSizeStack(stack1), &stack1, &buffer, stack2);
 }
 
@@ -128,11 +136,9 @@ int main(void)
 {
     int array1[] = { 1, 2, 3 };
     int array2[] = { 0 };
-    TStack stack1 = CreateStack();
-    TStack stack2 = CreateStack();
 
-    ArrayToStack(sizeof(array1)/sizeof(*array1), array1, &stack1);
-    ArrayToStack(sizeof(array2)/sizeof(*array2), array2, &stack2);
+    TStack stack1 = ConvertArrayToStack(sizeof(array1)/sizeof(*array1), array1);
+    TStack stack2 = ConvertArrayToStack(sizeof(array2)/sizeof(*array2), array2);
 
     PrintStack(stack1);
     printf("\n");

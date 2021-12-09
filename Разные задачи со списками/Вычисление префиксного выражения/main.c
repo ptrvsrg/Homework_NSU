@@ -14,19 +14,47 @@ struct Tstack
 
 typedef struct Tstack* TStack;
 
-void Push(TValue value, TStack* stack)
+bool IsEmptyStack(TStack list)
+{
+    return list == NULL;
+}
+
+TStack CreateItem(TValue value)
 {
     TStack new = malloc(sizeof(*new));
-    assert(new != NULL);
+    assert(!IsEmptyStack(new));
 
     new->Value = value;
-    new->Next = *stack;
-    *stack = new;
+    new->Next = NULL;
+    
+    return new;
+}
+
+TStack Push(float value, TStack* list)
+{
+    TStack new = CreateItem(value);
+    new->Next = *list;
+    (*list) = new;
+
+    return *list;
+}
+
+TStack ConvertArrayToStack(size_t arraySize, char* array)
+{
+    if (arraySize == 0)
+    {
+        return NULL;
+    }
+
+    TStack list = CreateItem(*array);
+    list->Next = ConvertArrayToStack(arraySize - 1, array + 1);
+
+    return list;
 }
 
 TValue Pop(TStack* stack)
 {
-    assert(*stack);
+    assert(!IsEmptyStack(*stack));
 
     TValue value = (*stack)->Value;
 
@@ -40,17 +68,9 @@ TValue Pop(TStack* stack)
 
 void FreeStack(TStack* stack) 
 {
-    while (*stack)
+    while (!IsEmptyStack(*stack))
     {
         Pop(stack);
-    }
-}
-
-void ArrayToList(size_t arraySize, TValue* array, TStack* stack)
-{
-    for(size_t i = 0; i < arraySize; ++i)
-    {
-        Push(array[arraySize - 1 - i], stack);
     }
 }
 
@@ -103,11 +123,9 @@ int main(void)
 {
     char* prefix1 = "/*432";
     char* prefix2 = "2";
-    TStack stack1 = NULL;
-    TStack stack2 = NULL;
 
-    ArrayToList(strlen(prefix1), prefix1, &stack1);
-    ArrayToList(strlen(prefix2), prefix2, &stack2);
+    TStack stack1 = ConvertArrayToStack(strlen(prefix1), prefix1);
+    TStack stack2 = ConvertArrayToStack(strlen(prefix2), prefix2);
     
     printf("%s = %f\n", prefix1, CalcPrefix(&stack1));
     printf("%s = %f\n", prefix2, CalcPrefix(&stack2));

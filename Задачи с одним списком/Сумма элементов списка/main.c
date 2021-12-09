@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,13 +13,29 @@ struct TList
 
 typedef struct TList* TList;
 
-void PushFront(TValue value, TList* list)
+bool IsEmptyList(TList list)
+{
+    return list == NULL;
+}
+
+TList CreateItem(TValue value)
 {
     TList new = malloc(sizeof(*new));
-    assert(new != NULL);
+    assert(!IsEmptyList(new));
+
     new->Value = value;
+    new->Next = NULL;
+    
+    return new;
+}
+
+TList PushFront(TValue value, TList* list)
+{
+    TList new = CreateItem(value);
     new->Next = *list;
     (*list) = new;
+
+    return *list;
 }
 
 void CreateListOfDigits(unsigned int number, TList* list)
@@ -36,7 +53,7 @@ void CreateListOfDigits(unsigned int number, TList* list)
 
 int SumList(TList list)
 {
-    if(!list)
+    if(IsEmptyList(list))
     {
         return 0;
     }
@@ -48,7 +65,7 @@ int SumList(TList list)
 
 void PrintList(TList list)
 {
-    if(list)
+    if(!IsEmptyList(list))
     {
         printf("%d ", list->Value);
         PrintList(list->Next);
@@ -57,7 +74,7 @@ void PrintList(TList list)
 
 void FreeList(TList* list) 
 {
-    if(*list)
+    if(!IsEmptyList(*list))
     {
         FreeList(&((*list)->Next));
         free(*list);

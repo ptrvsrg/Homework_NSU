@@ -12,25 +12,40 @@ struct Tstack
 
 typedef struct Tstack* TStack;
 
-void Push(float value, TStack* stack)
+bool IsEmptyStack(TStack list)
+{
+    return list == NULL;
+}
+
+TStack CreateItem(float value)
 {
     TStack new = malloc(sizeof(*new));
-    assert(new != NULL);
+    assert(!IsEmptyStack(new));
 
     new->Value = value;
-    new->Next = *stack;
-    *stack = new;
+    new->Next = NULL;
+    
+    return new;
+}
+
+TStack Push(float value, TStack* list)
+{
+    TStack new = CreateItem(value);
+    new->Next = *list;
+    (*list) = new;
+
+    return *list;
 }
 
 TStack GetNext(TStack stack)
 {
-    assert(stack);
+    assert(!IsEmptyStack(stack));
     return stack->Next;
 }
 
 float Pop(TStack* stack)
 {
-    assert(*stack);
+    assert(!IsEmptyStack(*stack));
 
     float value = (*stack)->Value;
 
@@ -44,18 +59,23 @@ float Pop(TStack* stack)
 
 void FreeStack(TStack* stack) 
 {
-    while (*stack)
+    while (!IsEmptyStack(*stack))
     {
         Pop(stack);
     }
 }
 
-void ArrayToList(size_t length, const char* line, TStack* stack)
+TStack ConvertArrayToStack(size_t arraySize, char* array)
 {
-    for(size_t i = 0; i < length; ++i)
+    if (arraySize == 0)
     {
-        Push(line[length - i - 1], stack);
+        return NULL;
     }
+
+    TStack list = CreateItem(*array);
+    list->Next = ConvertArrayToStack(arraySize - 1, array + 1);
+
+    return list;
 }
 
 float Fabs(float num)
@@ -109,7 +129,7 @@ float CalcPostfix(TStack postfix)
 
     float answer = Pop(&numberStack);
 
-    assert(!numberStack);
+    assert(IsEmptyStack(numberStack));
 
     return answer;
 }
@@ -119,11 +139,8 @@ int main(void)
     char* postfix1 = "43-12+/";
     char* postfix2 = "/";
 
-    TStack stack1 = NULL;
-    TStack stack2 = NULL;
-
-    ArrayToList(strlen(postfix1), postfix1, &stack1);
-    ArrayToList(strlen(postfix2), postfix2, &stack2);
+    TStack stack1 = ConvertArrayToStack(strlen(postfix1), postfix1);
+    TStack stack2 = ConvertArrayToStack(strlen(postfix2), postfix2);
 
     printf("%s = %f\n", postfix1, CalcPostfix(stack1));
     printf("%s = %f\n", postfix2, CalcPostfix(stack2));

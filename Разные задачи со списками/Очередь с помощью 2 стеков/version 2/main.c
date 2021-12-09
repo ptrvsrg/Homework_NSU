@@ -14,24 +14,27 @@ struct Tstack
 
 typedef struct Tstack* TStack;
 
-TStack CreateStack()
-{
-    return NULL;
-}
-
 bool IsEmptyStack(TStack stack)
 {
     return stack == NULL;
 }
 
-void PushStack(TValue value, TStack* stack)
+TStack CreateItem(TValue value)
 {
     TStack new = malloc(sizeof(*new));
     assert(!IsEmptyStack(new));
 
     new->Value = value;
+    new->Next = NULL;
+    
+    return new;
+}
+
+void PushStack(TValue value, TStack* stack)
+{
+    TStack new = CreateItem(value);
     new->Next = *stack;
-    *stack = new;
+    (*stack) = new;
 }
 
 TValue PopStack(TStack* stack)
@@ -56,17 +59,17 @@ void FreeStack(TStack* stack)
     }
 }
 
-void ScanStack(size_t size, TStack* stack) 
+TStack ConvertArrayToStack(size_t arraySize, TValue* array)
 {
-	if (size == 0)
+    if (arraySize == 0)
     {
-		return;
-	}
+        return NULL;
+    }
 
-    TValue value;
-	assert(scanf("%d", &value) == 1);
-	PushStack(value, stack);
-    ScanStack(size - 1, stack);
+    TStack stack = CreateItem(*array);
+    stack->Next = ConvertArrayToStack(arraySize - 1, array + 1);
+
+    return stack;
 }
 
 void PrintStack(TStack stack)
@@ -82,7 +85,7 @@ TStack ReverseStack(TStack stack)
 {
     TStack result = NULL;
 
-    while(stack)
+    while(!IsEmptyStack(stack))
     {
         PushStack(stack->Value, &result);
         stack = stack->Next;
@@ -100,9 +103,16 @@ typedef struct TQueue
 TQueue CreateQueue()
 {
     TQueue queue;
-    queue.Begin = CreateStack();
-    queue.End = CreateStack();
+    queue.Begin = NULL;
+    queue.End = NULL;
 
+    return queue;
+}
+
+TQueue ConvertArrayToQueue(size_t arraySize, TValue* array)
+{
+    TQueue queue = CreateQueue();
+    queue.Begin = ConvertArrayToStack(arraySize, array);
     return queue;
 }
 
@@ -133,11 +143,6 @@ TValue PopQueue(TQueue* queue)
     return PopStack(&queue->End);
 }
 
-void ScanQueue(size_t size, TQueue* queue)
-{
-    ScanStack(size, &queue->Begin);
-}
-
 void PrintQueue(TQueue queue)
 {
     PrintStack(queue.End);
@@ -152,9 +157,9 @@ void FreeQueue(TQueue* queue)
 
 int main(void)
 {
-    TQueue queue = CreateQueue();
+    TValue array[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    ScanQueue(3, &queue);
+    TQueue queue = ConvertArrayToQueue(sizeof(array) / sizeof(*array), array);
 
     PrintQueue(queue);
     printf("\n");
