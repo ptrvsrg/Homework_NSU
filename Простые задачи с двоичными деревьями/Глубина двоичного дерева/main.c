@@ -19,32 +19,42 @@ struct TbinTree
 
 typedef struct TbinTree* TBinTree;
 
-TBinTree CreateTree()
+bool IsEmptyTree(TBinTree tree)
 {
-    return NULL;
+    return tree == NULL;
 }
 
-void ArrayToBinTree(size_t size, TValue* array, TBinTree* tree)
+TBinTree CreateLeaf(TValue value)
 {
-    if (size == 0) 
+    TBinTree tree = malloc(sizeof(*tree));
+    assert(!IsEmptyTree(tree));
+
+    tree->Value = value;
+    tree->Left = NULL;
+    tree->Right = NULL;
+
+    return tree;
+}
+
+TBinTree ConvertArrayToBinaryTree(int size, TValue* array)
+{
+    if (size <= 0) 
     {
-        return;
+        return NULL;
     }
-
-    *tree = malloc(sizeof(**tree));
-    assert(*tree);
-
-    (*tree)->Value = array[size / 2];
-    (*tree)->Left = NULL;
-    (*tree)->Right = NULL;
-
-    ArrayToBinTree(size / 2, array, &(*tree)->Left);
-    ArrayToBinTree(size - (size / 2 + 1), array + size / 2 + 1, &(*tree)->Right);
+    else 
+    {
+        int middle = size / 2;
+        TBinTree tree = CreateLeaf(array[middle]);
+        tree->Left = ConvertArrayToBinaryTree(middle, array);
+        tree->Right = ConvertArrayToBinaryTree(size - middle - 1, array + middle + 1);
+        return tree;
+    }
 }
 
 int CalcDepth(TBinTree tree)
 {
-    if(!tree)
+    if(IsEmptyTree(tree))
     {
         return 0;
     }
@@ -54,7 +64,7 @@ int CalcDepth(TBinTree tree)
 
 TValue CalcMax(TBinTree tree)
 {
-    assert(tree);
+    assert(!IsEmptyTree(tree));
 
     TValue maxValue = tree->Value;
 
@@ -72,7 +82,7 @@ TValue CalcMax(TBinTree tree)
 
 TValue CalcSum(TBinTree tree)
 {
-    if(!tree)
+    if(IsEmptyTree(tree))
     {
         return 0;
     }
@@ -82,7 +92,7 @@ TValue CalcSum(TBinTree tree)
 
 void DestroyTree(TBinTree* tree)
 {
-    if(*tree)
+    if(!IsEmptyTree(*tree))
     {
         DestroyTree(&(*tree)->Left);
         DestroyTree(&(*tree)->Right);
@@ -92,10 +102,9 @@ void DestroyTree(TBinTree* tree)
 
 int main()
 {
-    TBinTree tree = CreateTree();
     TValue array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    ArrayToBinTree(sizeof(array) / sizeof(*array), array, &tree);
+    TBinTree tree = ConvertArrayToBinaryTree(sizeof(array) / sizeof(*array), array);
 
     printf("Depth is %d\n", CalcDepth(tree));
     printf("Sum is %d\n", CalcSum(tree));

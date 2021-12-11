@@ -5,24 +5,24 @@
 
 typedef int TValue;
 
-struct TAVLtree
+struct TBinSearchtree
 {
     TValue Value;
-    struct TAVLtree* Left;
-    struct TAVLtree* Right;
+    struct TBinSearchtree* Left;
+    struct TBinSearchtree* Right;
 };
 
-typedef struct TAVLtree* TAVLTree;
+typedef struct TBinSearchtree* TBinSearchTree;
 
-bool IsEmpty(const TAVLTree tree)
+bool IsEmptyTree(const TBinSearchTree tree)
 {
     return tree == NULL;
 }
 
-TAVLTree CreateLeaf(TValue value)
+TBinSearchTree CreateLeaf(TValue value)
 {
-    TAVLTree new = malloc(sizeof(*new));
-    assert(!IsEmpty(new));
+    TBinSearchTree new = malloc(sizeof(*new));
+    assert(!IsEmptyTree(new));
 
     new->Value = value;
     new->Left = NULL;
@@ -30,15 +30,16 @@ TAVLTree CreateLeaf(TValue value)
 
     return new;
 }
-TAVLTree CreateMinTreeByHeight(int height, TValue* minValue)
+
+TBinSearchTree CreateMinTreeByHeight(int height, TValue* minValue)
 {
     if(height <= 0)
     {
         return NULL;
     }
 
-    TAVLTree left = CreateMinTreeByHeight(height - 2, minValue);
-    TAVLTree tree = CreateLeaf(*minValue);
+    TBinSearchTree left = CreateMinTreeByHeight(height - 2, minValue);
+    TBinSearchTree tree = CreateLeaf(*minValue);
     ++(*minValue);
     tree->Left = left;
     tree->Right = CreateMinTreeByHeight(height - 1, minValue);
@@ -46,9 +47,19 @@ TAVLTree CreateMinTreeByHeight(int height, TValue* minValue)
     return tree;
 }
 
-void DestroyTree(TAVLTree* tree)
+void PrintTree(const TBinSearchTree tree)
 {
-    if(*tree)
+    if(!IsEmptyTree(tree))
+    {
+        PrintTree(tree->Left);
+        printf("%d ", tree->Value);
+        PrintTree(tree->Right);
+    }
+}
+
+void DestroyTree(TBinSearchTree* tree)
+{
+    if(!IsEmptyTree(*tree))
     {
         DestroyTree(&(*tree)->Left);
         DestroyTree(&(*tree)->Right);
@@ -59,6 +70,7 @@ void DestroyTree(TAVLTree* tree)
 int main(void)
 {
     int minValue = 1;
-    TAVLTree tree = CreateMinTreeByHeight(10, &minValue);
+    TBinSearchTree tree = CreateMinTreeByHeight(5, &minValue);
+    PrintTree(tree);
     DestroyTree(&tree);
 }

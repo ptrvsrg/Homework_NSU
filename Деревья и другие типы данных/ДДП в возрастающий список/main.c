@@ -33,35 +33,30 @@ TBinSearchTree CreateLeaf(TValue value)
     return tree;
 }
 
-void InsertTree(TValue value, TBinSearchTree* tree)
+TBinSearchTree ConvertArrayToBinarySearchTree(int size, TValue* array)
 {
-    if(IsEmptyTree(*tree))
+    if (size <= 0) 
     {
-        *tree = CreateLeaf(value);
-        return;
+        return NULL;
     }
-
-    InsertTree(value, value <= (*tree)->Value ? &(*tree)->Left : &(*tree)->Right);
-}
-
-void ConvertArrayToBinarySearchTree(int arraySize, const TValue* array, TBinSearchTree* tree)
-{
-    for(int i = 0; i < arraySize; ++i)
+    else 
     {
-        InsertTree(array[i], tree);
+        int middle = size / 2;
+        TBinSearchTree tree = CreateLeaf(array[middle]);
+        tree->Left = ConvertArrayToBinarySearchTree(middle, array);
+        tree->Right = ConvertArrayToBinarySearchTree(size - middle - 1, array + middle + 1);
+        return tree;
     }
 }
 
 void PrintTree(const TBinSearchTree tree)
 {
-    if(IsEmptyTree(tree))
+    if(!IsEmptyTree(tree))
     {
-        return;
+        PrintTree(tree->Left);
+        printf("%d ", tree->Value);
+        PrintTree(tree->Right);
     }
-
-    PrintTree(tree->Left);
-    printf("%d ", tree->Value);
-    PrintTree(tree->Right);
 }
 
 void DestroyTree(TBinSearchTree* tree)
@@ -89,6 +84,17 @@ bool IsEmptyList(const TList list)
     return list == NULL;
 }
 
+TList CreateList(TValue value)
+{
+    TList new = malloc(sizeof(*new));
+    assert(!IsEmptyList(new));
+
+    new->Value = value;
+    new->Next = NULL;
+
+    return new;
+}
+
 TValue PopList(TList* list)
 {
     assert(!IsEmptyList(*list));
@@ -102,10 +108,7 @@ TValue PopList(TList* list)
 
 void PushList(TValue value, TList* list)
 {
-    TList new = malloc(sizeof(*new));
-    assert(!IsEmptyList(new));
-
-    new->Value = value;
+    TList new = CreateList(value);
     new->Next = *list;
     *list = new;
 }
@@ -143,11 +146,10 @@ void DestroyList(TList* list)
 
 int main(void)
 {
-    TBinSearchTree tree = NULL;
-    TList list = NULL;
-    TValue array[] = { 4, 5, 9, 6, 7, 2, 3, 1, 0, 8 };
+    TValue array[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    ConvertArrayToBinarySearchTree(sizeof(array) / sizeof(*array), array, &tree);
+    TBinSearchTree tree = ConvertArrayToBinarySearchTree(sizeof(array) / sizeof(*array), array);
+    TList list = NULL;
     ConvertBinarySearchTreeToIncreasingList(tree, &list);
 
     PrintTree(tree);

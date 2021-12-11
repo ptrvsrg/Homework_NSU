@@ -14,35 +14,42 @@ struct TbinTree
 
 typedef struct TbinTree* TBinTree;
 
-TBinTree CreateTree(TValue value, TBinTree left, TBinTree right)
+bool IsEmptyTree(TBinTree tree)
 {
-    TBinTree tree;
-    tree = malloc(sizeof(*tree));
-    assert(tree);
+    return tree == NULL;
+}
+
+TBinTree CreateLeaf(TValue value)
+{
+    TBinTree tree = malloc(sizeof(*tree));
+    assert(!IsEmptyTree(tree));
 
     tree->Value = value;
-    tree->Left = left;
-    tree->Right = right;
+    tree->Left = NULL;
+    tree->Right = NULL;
 
     return tree;
 }
 
-void ArrayToBinTree(size_t size, TValue* array, TBinTree* tree)
+TBinTree ConvertArrayToBinaryTree(int size, TValue* array)
 {
-    if (size == 0) 
+    if (size <= 0) 
     {
-        return;
+        return NULL;
     }
-
-    *tree = CreateTree(array[size / 2], NULL, NULL);
-
-    ArrayToBinTree(size / 2, array, &(*tree)->Left);
-    ArrayToBinTree(size - (size / 2 + 1), array + size / 2 + 1, &(*tree)->Right);
+    else 
+    {
+        int middle = size / 2;
+        TBinTree tree = CreateLeaf(array[middle]);
+        tree->Left = ConvertArrayToBinaryTree(middle, array);
+        tree->Right = ConvertArrayToBinaryTree(size - middle - 1, array + middle + 1);
+        return tree;
+    }
 }
 
 void DestroyTree(TBinTree* tree)
 {
-    if(*tree)
+    if(!IsEmptyTree(*tree))
     {
         DestroyTree(&(*tree)->Left);
         DestroyTree(&(*tree)->Right);
@@ -52,21 +59,23 @@ void DestroyTree(TBinTree* tree)
 
 TBinTree CopyTree(TBinTree tree)
 {
-    if(!tree)
+    if(IsEmptyTree(tree))
     {
         return NULL;
     }
 
-    TBinTree copyTree = CreateTree(tree->Value, CopyTree(tree->Left), CopyTree(tree->Right));
+    TBinTree copyTree = CreateLeaf(tree->Value);
+    copyTree->Left = CopyTree(tree->Left);
+    copyTree->Right = CopyTree(tree->Right);
+
+    return copyTree;
 }
 
-int main()
+int main(void)
 {
-    TBinTree tree;
     TValue array[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    ArrayToBinTree(sizeof(array) / sizeof(*array), array, &tree);
-
+    TBinTree tree = ConvertArrayToBinaryTree(sizeof(array) / sizeof(*array), array);
     TBinTree copy = CopyTree(tree);
 
     DestroyTree(&tree);

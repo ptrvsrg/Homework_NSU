@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -15,16 +14,38 @@ struct TbinSearchTree
 
 typedef struct TbinSearchTree* TBinSearchTree;
 
-TBinSearchTree CreateTree()
-{
-    return NULL;
-}
-
 bool IsEmptyTree(TBinSearchTree tree)
 {
     return tree == NULL;
 }
 
+TBinSearchTree CreateLeaf(TValue value)
+{
+    TBinSearchTree tree = malloc(sizeof(*tree));
+    assert(!IsEmptyTree(tree));
+
+    tree->Value = value;
+    tree->Left = NULL;
+    tree->Right = NULL;
+
+    return tree;
+}
+
+TBinSearchTree ConvertArrayToBinarySearchTree(int size, TValue* array)
+{
+    if (size <= 0) 
+    {
+        return NULL;
+    }
+    else 
+    {
+        int middle = size / 2;
+        TBinSearchTree tree = CreateLeaf(array[middle]);
+        tree->Left = ConvertArrayToBinarySearchTree(middle, array);
+        tree->Right = ConvertArrayToBinarySearchTree(size - middle - 1, array + middle + 1);
+        return tree;
+    }
+}
 void DestroyTree(TBinSearchTree* tree)
 {
     if(!IsEmptyTree(*tree))
@@ -53,14 +74,6 @@ void InsertTree(TValue value, TBinSearchTree* tree)
     InsertTree(value, (value <= (*tree)->Value) ? &(*tree)->Left : &(*tree)->Right);
 }
 
-void ArrayToTree(size_t arraySize, TValue* array, TBinSearchTree* tree)
-{
-    for(size_t i = 0; i < arraySize; ++i)
-    {
-        InsertTree(array[i], tree);
-    }
-}
-
 void PrintTree(TBinSearchTree tree)
 {
     if(IsEmptyTree(tree))
@@ -75,10 +88,9 @@ void PrintTree(TBinSearchTree tree)
 
 int main(void)
 {
-    TBinSearchTree tree = CreateTree();
-    TValue array[] = { 3, 2, 8, 9, 4, 7, 1 };
+    TValue array[] = { 1, 2, 4, 7, 9 };
 
-    ArrayToTree(sizeof(array) / sizeof(*array), array, &tree);
+    TBinSearchTree tree = ConvertArrayToBinarySearchTree(sizeof(array) / sizeof(*array), array);
 
     PrintTree(tree);
     printf("\n");

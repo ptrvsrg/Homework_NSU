@@ -111,9 +111,9 @@ TBinSearchTree ConvertDecreasingListToBinarySearchTree(int listSize, TList* list
 
     int newSize = listSize / 2;
     TBinSearchTree tree = CreateLeaf(0);
-    tree->Right = ConvertDecreasingListToBinarySearchTree(newSize, list);
+    tree->Left = ConvertDecreasingListToBinarySearchTree(newSize, list);
     tree->Value = PopList(list);
-    tree->Left = ConvertDecreasingListToBinarySearchTree(listSize - newSize - 1, list);
+    tree->Right = ConvertDecreasingListToBinarySearchTree(listSize - newSize - 1, list);
 
     return tree;
 }
@@ -142,7 +142,7 @@ void PrintTree(const TBinSearchTree tree)
 
 int main(void)
 {
-    TValue array[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+    TValue array[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     int arraySize = sizeof(array) / sizeof(*array);
 
     TList list = ConvertArrayToList(arraySize, array);

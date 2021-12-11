@@ -14,35 +14,42 @@ struct TbinTree
 
 typedef struct TbinTree* TBinTree;
 
-TBinTree CreateTree(TValue value, TBinTree left, TBinTree right)
+bool IsEmptyTree(TBinTree tree)
 {
-    TBinTree tree;
-    tree = malloc(sizeof(*tree));
-    assert(tree);
+    return tree == NULL;
+}
+
+TBinTree CreateLeaf(TValue value)
+{
+    TBinTree tree = malloc(sizeof(*tree));
+    assert(!IsEmptyTree(tree));
 
     tree->Value = value;
-    tree->Left = left;
-    tree->Right = right;
+    tree->Left = NULL;
+    tree->Right = NULL;
 
     return tree;
 }
 
-void ArrayToBinTree(size_t size, TValue* array, TBinTree* tree)
+TBinTree ConvertArrayToBinaryTree(int size, TValue* array)
 {
-    if (size == 0) 
+    if (size <= 0) 
     {
-        return;
+        return NULL;
     }
-
-    *tree = CreateTree(array[size / 2], NULL, NULL);
-
-    ArrayToBinTree(size / 2, array, &(*tree)->Left);
-    ArrayToBinTree(size - (size / 2 + 1), array + size / 2 + 1, &(*tree)->Right);
+    else 
+    {
+        int middle = size / 2;
+        TBinTree tree = CreateLeaf(array[middle]);
+        tree->Left = ConvertArrayToBinaryTree(middle, array);
+        tree->Right = ConvertArrayToBinaryTree(size - middle - 1, array + middle + 1);
+        return tree;
+    }
 }
 
 void DestroyTree(TBinTree* tree)
 {
-    if(*tree)
+    if(!IsEmptyTree(*tree))
     {
         DestroyTree(&(*tree)->Left);
         DestroyTree(&(*tree)->Right);
@@ -50,33 +57,27 @@ void DestroyTree(TBinTree* tree)
     }
 }
 
-void Swap(TBinTree* tree1, TBinTree* tree2)
+TBinTree MirrorTree(TBinTree tree)
 {
-    TBinTree buffer = *tree1;
-    *tree1 = *tree2;
-    *tree2 = buffer;
-}
-
-void MirrorTree(TBinTree* tree)
-{
-    if(!(*tree))
+    if(IsEmptyTree(tree))
     {
-        return;
+        return NULL;
     }
 
-    Swap(&(*tree)->Left, &(*tree)->Right);
-    MirrorTree(&(*tree)->Left);
-    MirrorTree(&(*tree)->Right);
+    TBinTree mirrorTree = CreateLeaf(tree->Value);
+    mirrorTree->Left = MirrorTree(tree->Right);
+    mirrorTree->Right = MirrorTree(tree->Left);
+
+    return mirrorTree;
 }
 
 int main()
 {
-    TBinTree tree;
     TValue array[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    ArrayToBinTree(sizeof(array) / sizeof(*array), array, &tree);
-
-    MirrorTree(&tree);
+    TBinTree tree = ConvertArrayToBinTree(sizeof(array) / sizeof(*array), array);
+    TBinTree mirrorTree = MirrorTree(tree);
 
     DestroyTree(&tree);
+    DestroyTree(&mirrorTree);
 }
