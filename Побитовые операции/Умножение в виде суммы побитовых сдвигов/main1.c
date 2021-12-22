@@ -7,8 +7,10 @@ enum
 	FAILURE = 1
 };
 
-void GenerateMultByConst(unsigned int Multiplier, unsigned int Position)
+void GenerateMultByConst(unsigned int Multiplier)
 {
+    static unsigned int Position = 0;
+
 	if (Position == 0)
 	{
 		printf("void GenerateMultBy%d(unsigned int x)\n{\n\treturn ", Multiplier);
@@ -26,17 +28,16 @@ void GenerateMultByConst(unsigned int Multiplier, unsigned int Position)
 	{
 		if ((Multiplier & 1 << Position) != 0)
 		{
-			if (Position == 0)
-			{
-				printf("x");
-			}
-			else
-			{
-				printf(" + (x << %d)", Position);
-			}
+			printf("(x << %d)", Position);
+
+            if(Multiplier >= (1 << Position + 1))
+            {
+                printf(" + ");
+            }
 		}
 
-		GenerateMultByConst(Multiplier, Position + 1);
+        ++Position;
+		GenerateMultByConst(Multiplier);
 	}
 }
 
@@ -49,9 +50,9 @@ int main()
 		return FAILURE;
 	}
 
-	system("cls");
+	//system("cls");
 
-	GenerateMultByConst(Multiplier, 0);
+	GenerateMultByConst(Multiplier);
 
 	return SUCCESS;
 }
