@@ -107,7 +107,7 @@ int main()
 {
 	unsigned int Number;
 
-	if (scanf("%d", &Number) == 1)
+	if (scanf("%d", &Number) != 1)
 	{
 		return FAILURE;
 	}
@@ -117,6 +117,5 @@ int main()
 	PrintBits(ReverseIntBits(Number));
     printf("\n");
 
-    system("pause");
 	return SUCCESS;
 }

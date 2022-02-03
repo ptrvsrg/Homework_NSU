@@ -31,18 +31,18 @@ TBinSearchTree CreateLeaf(TValue value)
     return new;
 }
 
-TBinSearchTree CreateMinTreeByHeight(int height, TValue* minValue)
+TBinSearchTree CreateMaxTreeByHeight(int height, TValue* minValue)
 {
     if(height <= 0)
     {
         return NULL;
     }
 
-    TBinSearchTree left = CreateMinTreeByHeight(height - 2, minValue);
+    TBinSearchTree left = CreateMaxTreeByHeight(height - 1, minValue);
     TBinSearchTree tree = CreateLeaf(*minValue);
     ++(*minValue);
     tree->Left = left;
-    tree->Right = CreateMinTreeByHeight(height - 1, minValue);
+    tree->Right = CreateMaxTreeByHeight(height - 1, minValue);
 
     return tree;
 }
@@ -60,6 +60,6 @@ void DestroyTree(TBinSearchTree* tree)
 int main(void)
 {
     int minValue = 1;
-    TBinSearchTree tree = CreateMinTreeByHeight(4, &minValue);
+    TBinSearchTree tree = CreateMaxTreeByHeight(21, &minValue);
     DestroyTree(&tree);
 }
