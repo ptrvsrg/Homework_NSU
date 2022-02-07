@@ -132,10 +132,7 @@ typedef struct TQueue
 
 TQueue CreateQueue()
 {
-    TQueue queue;
-    queue.Begin = NULL;
-    queue.End = NULL;
-
+    TQueue queue = { NULL, NULL };
     return queue;
 }
 
