@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define UINT_BITS_SIZE 8*sizeof(unsigned int)
+typedef unsigned int uint;
 
-void PrintBits(unsigned int Number)
+void PrintBits(uint Number)
 {
     printf("%u = ", Number);
 
@@ -23,7 +24,7 @@ typedef struct
 {
     int Count;
     int Max;
-    unsigned int* Array;
+    uint* Array;
 } TVector;
 
 TVector CreateVector(int max)
@@ -36,7 +37,7 @@ TVector CreateVector(int max)
     return vector;
 }
 
-void PushVector(unsigned int value, TVector* vector)
+void PushVector(uint value, TVector* vector)
 {
     assert(vector->Count != vector->Max);
     vector->Array[vector->Count] = value;
@@ -47,8 +48,8 @@ void PrintVector(TVector vector)
 {
     for (int i = 0; i < vector.Count; ++i)
     {
+        printf("\n%d) ", i+1);
         PrintBits(vector.Array[i]);
-        printf("\n");
     }
 }
 
@@ -57,14 +58,6 @@ void DestroyVector(TVector* vector)
     free(vector->Array);
     vector->Count = 0;
     vector->Max = 0;
-}
-
-void GenerateNumber(int* index, int base, TVector vector)
-{
-    while (vector.Array[(*index)] * base <= vector.Array[vector.Count - 1])
-    {
-        ++(*index);
-    }
 }
 
 TVector SpecialNumber(int n)
@@ -88,7 +81,7 @@ TVector SpecialNumber(int n)
                 break;
             }
 
-            int number = 1 << upperBit;
+            uint number = 1 << upperBit;
             number += (lowerBit == -1) ? 0 : (1 << lowerBit);
             PushVector(number, &vector);
         }
@@ -102,7 +95,7 @@ TVector SpecialNumber(int n)
 
 int main(void)
 {
-    TVector vector = SpecialNumber(100);
+    TVector vector = SpecialNumber(529);
     PrintVector(vector);
     DestroyVector(&vector);
     return EXIT_SUCCESS;
