@@ -60,42 +60,34 @@ void DestroyVector(TVector* vector)
     vector->Max = 0;
 }
 
-TVector SpecialNumber(int n)
+void SpecialNumber(int n, TVector* vector)
 {
-    TVector vector = CreateVector(n);
-    if (n == 0)
+    if (n != 0)
     {
-        return vector;
+        PushVector(0, vector);
     }
-    
-    PushVector(0, &vector);
-    int upperBit = 0;
-    int index = 1;
 
-    while (index < n)
+    for (int i = -1; i < 32; ++i)
     {
-        for (int lowerBit = -1; lowerBit < upperBit; ++lowerBit, ++index)
+        for (int j = -1; j < i; ++j)
         {
-            if (index == n)
+            if (n == 0)
             {
-                break;
+                return;
             }
 
-            uint number = 1 << upperBit;
-            number += (lowerBit == -1) ? 0 : (1 << lowerBit);
-            PushVector(number, &vector);
+            int number = (i == -1) ? 0 : (1 << i);
+            number |= (j == -1) ? 0 : (1 << j);
+            PushVector(number, vector);
+            --n;
         }
-
-        ++upperBit;
     }
-    
-    
-    return vector;
 }
 
 int main(void)
 {
-    TVector vector = SpecialNumber(529);
+    TVector vector = CreateVector(1000);
+    SpecialNumber(1000, &vector);
     PrintVector(vector);
     DestroyVector(&vector);
     return EXIT_SUCCESS;
