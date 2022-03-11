@@ -71,7 +71,7 @@ bool CheckArithmeticProgression(TVector vector)
             return false;
         }
         
-        checkArray[(vector.Array[i] - firstElem) / difference] = true;
+        checkArray[index] = true;
     }
     
     return true;
