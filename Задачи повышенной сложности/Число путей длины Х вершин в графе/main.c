@@ -82,18 +82,19 @@ int* MatrixExponentiation(int size, int* matrix, int exp)
     return MatrixMultiplication(size, matrix, MatrixExponentiation(size, matrix, exp - 1));
 }
 
-int CountPathsWithNEdges(int edgeCount, TGraph graph)
+int CountPathsWithNVertices(int begin, int end, int vertexCount, TGraph graph)
 {
-    int* matrix = MatrixExponentiation(graph.VertexCount, graph.Matrix, edgeCount);
-    int count = 0;
-
-    for (int i = 0; i < graph.VertexCount * graph.VertexCount; ++i)
+    if(vertexCount == 0 || vertexCount == 1)
     {
-        count += matrix[i];
+        return 0;
     }
-    
+
+    int* matrix = MatrixExponentiation(graph.VertexCount, graph.Matrix, vertexCount - 1);
+
+    int result = matrix[(begin - 1) * graph.VertexCount + (end - 1)];
     free(matrix);
-    return count;
+
+    return result;
 }
 
 ///////////////////////////////////  MAIN  ///////////////////////////////////
@@ -106,7 +107,11 @@ int main(void)
     PushEdge(2, 4, graph);
     PushEdge(3, 4, graph);
 
-    printf("Count of paths with %d edges is %d\n", 3, CountPathsWithNEdges(3, graph));
+    int vertexCount = 3;
+    int begin = 1;
+    int end = 4;
+
+    printf("Count of paths with %d vertices from %d to %d is %d\n", vertexCount, begin, end, CountPathsWithNVertices(begin, end, vertexCount, graph));
 
     DestroyGraph(&graph);
 
