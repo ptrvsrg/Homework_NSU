@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 int64_t GenerateNumber(int64_t lastDigit)
 {
@@ -40,5 +41,5 @@ int64_t main(void)
         }
     }
     
-    return 0;
+    return EXIT_SUCCESS;
 }
