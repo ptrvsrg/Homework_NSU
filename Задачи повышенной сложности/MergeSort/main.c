@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -22,22 +21,23 @@ bool IsEmptyList(TList list)
     return list == NULL;
 }
 
-void InputList(size_t listSize, TList* list)
+TList InputList(size_t listSize)
 {
-	if(listSize == 0)
+    if(listSize == 0)
     {
-        (*list) = NULL;
+        return NULL;
     }
     else
     {
-        TList new = malloc(sizeof(*new));
-        assert(!IsEmptyList(new));
+        TList list = malloc(sizeof(*list));
+        assert(!IsEmptyList(list));
 
-        int control = scanf("%d", &(new->Value));
+        int control = scanf("%d", &(list->Value));
         assert(control != EOF);
 
-        (*list) = new;
-        InputList(listSize - 1, &((*list)->Next));
+        list->Next = InputList(listSize - 1);
+
+        return list;
     }
 }
 
@@ -129,17 +129,16 @@ void MergeSort(TList* list)
 
 int main(void)
 {
-	int listSize = 0;
-	int control = scanf("%d", &listSize);
+    int listSize = 0;
+    int control = scanf("%d", &listSize);
     assert(control != EOF);
 
-	TList list = CreateList();
-	InputList(listSize, &list);
+    TList list = InputList(listSize);
 
-	MergeSort(&list);
-    
-	OutputList(list);
-	DestroyList(&list);
-    
-	return EXIT_SUCCESS;
+    MergeSort(&list);
+
+    OutputList(list);
+    DestroyList(&list);
+        
+    return EXIT_SUCCESS;
 }
