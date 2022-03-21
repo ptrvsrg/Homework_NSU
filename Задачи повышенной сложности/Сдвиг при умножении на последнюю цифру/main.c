@@ -1,44 +1,107 @@
+#include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <stdlib.h>
 
-int64_t GenerateNumber(int64_t lastDigit)
+typedef struct Tstack* TStack;
+
+struct Tstack 
 {
-    int64_t position = 1;
-    int64_t number = 0;
-    int64_t result = 0;
-    int64_t digit = 0;
+    int Value;
+    TStack Next;
+};
+
+TStack CreateStack(void)
+{
+    return NULL;
+}
+
+bool IsEmptyStack(TStack stack)
+{
+    return stack == NULL;
+}
+
+TStack CreateItem(int value)
+{
+    TStack new = malloc(sizeof(*new));
+    assert(!IsEmptyStack(new));
+
+    new->Value = value;
+    new->Next = NULL;
+    
+    return new;
+}
+
+void PushStack(int value, TStack* stack)
+{
+    TStack new = CreateItem(value);
+    new->Next = *stack;
+    (*stack) = new;
+}
+
+int GetTopStack(TStack stack)
+{
+    assert(!IsEmptyStack(stack));
+    return stack->Value;
+}
+
+int PopStack(TStack* stack)
+{
+    assert(!IsEmptyStack(*stack));
+
+    int value = GetTopStack(*stack);
+
+    TStack removeElem = *stack;
+    *stack = (*stack)->Next;
+
+    free(removeElem);
+
+    return value;
+}
+
+void PrintStack(TStack stack)
+{
+    if(!IsEmptyStack(stack))
+    {
+        printf("%d", stack->Value);
+        PrintStack(stack->Next);
+    }
+}
+
+void DestroyStack(TStack* stack) 
+{
+    while (!IsEmptyStack(*stack))
+    {
+        PopStack(stack);
+    }
+}
+
+TStack GenerateNumber(int lastDigit)
+{
+    TStack stack = CreateStack();
+    int additionalDigit = 0;
+    int digit = lastDigit;
     
     do
     {
-        if (number < 0)
-        {
-            return -1;
-        }
-
-        number = result * 10 + lastDigit;
-        result = (number * lastDigit) % (position * 10);
-        digit = (number * lastDigit) / position;
-        position *= 10;
-    } while (digit != lastDigit);
+        PushStack(digit, &stack);
+        int stackDigit = GetTopStack(stack);
+        digit = (stackDigit * lastDigit + additionalDigit) % 10;
+        additionalDigit = (stackDigit * lastDigit + additionalDigit) / 10;
+    } while (digit != lastDigit || additionalDigit != 0);
     
-    return number;
+    return stack;
 }
 
-int64_t main(void)
+int main(void)
 {
-    for (int64_t i = 0; i < 10; ++i)
+    for (int i = 0; i < 10; ++i)
     {
-        int64_t number = GenerateNumber(i);
-
-        if (number == -1)
-        {
-            printf("No such number\n");
-        }
-        else
-        {
-            printf("%lld * %lld = %lld\n", number, i, number * i);
-        }
+        TStack number = GenerateNumber(i);
+        printf("%d) ", i);
+        PrintStack(number);
+        printf("\n");
+        DestroyStack(&number);
     }
     
     return EXIT_SUCCESS;
