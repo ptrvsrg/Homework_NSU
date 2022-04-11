@@ -85,8 +85,20 @@ int GetCubeHeight(int x, int y, TVector cubes)
 
     for (int i = 0; i < cubes.Count; ++i)
     {
-        int currentHeight = cubeArray[i].X + cubeArray[i].Y + cubeArray[i].Z - x - y;
-        height = Max(height, currentHeight);
+        if ((cubeArray[i].X == x && cubeArray[i].Y == y) || (cubeArray[i].Y == x && cubeArray[i].X == y))
+        {
+            height = Max(height, cubeArray[i].Z);
+        }
+
+        if ((cubeArray[i].X == x && cubeArray[i].Z == y) || (cubeArray[i].Z == x && cubeArray[i].X == y))
+        {
+            height = Max(height, cubeArray[i].Y);
+        }
+
+        if ((cubeArray[i].Z == x && cubeArray[i].Y == y) || (cubeArray[i].Y == x && cubeArray[i].Z == y))
+        {
+            height = Max(height, cubeArray[i].X);
+        }
     }
 
     return height;
