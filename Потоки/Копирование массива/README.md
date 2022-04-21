@@ -1,0 +1,1 @@
+>Напишите функцию void ParallelCopy(const float* a, float* b, int size, int threadCount), которая копирует массив a размера size в массив b, используя threadCount потоков (Используйте OpenMP).
