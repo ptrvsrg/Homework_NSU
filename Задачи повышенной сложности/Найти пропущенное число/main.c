@@ -4,20 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int* ScanArray(int count)
-{
-    int* array = calloc(count, sizeof(*array));
-    assert(array != NULL);
-
-    for (int i = 0; i < count; ++i)
-    {
-        int control = scanf("%d", array + i);
-        assert(control == 1);
-    }
-
-    return array;
-}
-
 int FindMin(int begin, int end, int* array)
 {
     int min = INT_MAX;
@@ -96,7 +82,7 @@ bool FindMissingNumber(int* missingNumber, int begin, int end, int* array)
 int main(void)
 {
     int array[] = {
-        1, 2, 4, 5, 9
+        1, 2, 3, 4, 5, 6
     };
     
     int arrayCount = sizeof(array) / sizeof(*array);
