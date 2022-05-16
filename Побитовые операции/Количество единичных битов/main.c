@@ -44,7 +44,7 @@ int PopulationCount(unsigned int Number, unsigned int Mask, unsigned int Size)
 		unsigned int Mask2 = Mask >> Size & Mask;
 		unsigned int Number1 = Number & Mask1;
 		unsigned int Number2 = Number & Mask2;
-
+ 
 		return PopulationCount(Number1, Mask1, Size) + PopulationCount(Number2, Mask2, Size);
 	}
 }
