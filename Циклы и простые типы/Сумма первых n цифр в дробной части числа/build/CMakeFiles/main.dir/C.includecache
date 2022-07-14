@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ptrvsrg/NSU_Homework_C/Циклы и простые типы/Сумма первых n цифр в дробной части числа/main.c
+stdio.h
+-
+math.h
+-
+

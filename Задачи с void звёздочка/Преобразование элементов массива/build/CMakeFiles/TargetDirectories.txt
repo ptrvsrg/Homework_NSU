@@ -1,0 +1,3 @@
+/home/ptrvsrg/NSU_Homework_C/Задачи с void звёздочка/Преобразование элементов массива/build/CMakeFiles/rebuild_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Задачи с void звёздочка/Преобразование элементов массива/build/CMakeFiles/edit_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Задачи с void звёздочка/Преобразование элементов массива/build/CMakeFiles/main.dir

@@ -1,0 +1,3 @@
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Числа с 1 или 2 единичными битами/build/CMakeFiles/rebuild_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Числа с 1 или 2 единичными битами/build/CMakeFiles/edit_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Числа с 1 или 2 единичными битами/build/CMakeFiles/main.dir

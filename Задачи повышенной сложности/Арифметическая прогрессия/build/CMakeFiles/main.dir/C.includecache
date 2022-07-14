@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Арифметическая прогрессия/main.c
+assert.h
+-
+limits.h
+-
+stdbool.h
+-
+stdio.h
+-
+stdlib.h
+-
+

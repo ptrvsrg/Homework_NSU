@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Числа Хэмминга/main.c
+assert.h
+-
+stdio.h
+-
+stdlib.h
+-
+

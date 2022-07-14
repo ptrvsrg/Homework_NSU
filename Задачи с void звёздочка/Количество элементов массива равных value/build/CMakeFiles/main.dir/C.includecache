@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ptrvsrg/NSU_Homework_C/Задачи с void звёздочка/Количество элементов массива равных value/main.c
+stdbool.h
+-
+stdio.h
+-
+stdlib.h
+-
+

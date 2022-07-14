@@ -1,0 +1,10 @@
+/home/ptrvsrg/NSU_Homework_C/Циклы и простые типы/Сумма первых n цифр в дробной части числа/main.c: In function ‘main’:
+/home/ptrvsrg/NSU_Homework_C/Циклы и простые типы/Сумма первых n цифр в дробной части числа/main.c:22:2: warning: ignoring return value of ‘scanf’, declared with attribute warn_unused_result [-Wunused-result]
+   22 |  scanf("%d %f", &n, &x);
+      |  ^~~~~~~~~~~~~~~~~~~~~~
+/usr/bin/ld: CMakeFiles/main.dir/main.c.o: in function `SumDigitsFractionalPart':
+main.c:(.text+0x22): undefined reference to `pow'
+collect2: error: ld returned 1 exit status
+make[2]: *** [CMakeFiles/main.dir/build.make:84: main] Error 1
+make[1]: *** [CMakeFiles/Makefile2:76: CMakeFiles/main.dir/all] Error 2
+make: *** [Makefile:84: all] Error 2

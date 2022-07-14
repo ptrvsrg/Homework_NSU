@@ -1,0 +1,3 @@
+/home/ptrvsrg/NSU_Homework_C/Интринсики/Транспонирование марицы/build/CMakeFiles/rebuild_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Интринсики/Транспонирование марицы/build/CMakeFiles/edit_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Интринсики/Транспонирование марицы/build/CMakeFiles/main.dir

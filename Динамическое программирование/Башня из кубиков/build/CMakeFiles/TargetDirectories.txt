@@ -1,0 +1,3 @@
+/home/ptrvsrg/NSU_Homework_C/Динамическое программирование/Башня из кубиков/build/CMakeFiles/rebuild_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Динамическое программирование/Башня из кубиков/build/CMakeFiles/edit_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Динамическое программирование/Башня из кубиков/build/CMakeFiles/main.dir

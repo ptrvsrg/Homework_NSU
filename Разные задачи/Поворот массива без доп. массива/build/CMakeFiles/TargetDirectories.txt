@@ -1,0 +1,3 @@
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Поворот массива без доп. массива/build/CMakeFiles/rebuild_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Поворот массива без доп. массива/build/CMakeFiles/edit_cache.dir
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Поворот массива без доп. массива/build/CMakeFiles/main.dir

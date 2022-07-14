@@ -1,0 +1,13 @@
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Перевернуть строку/main.c: In function ‘ReverseArray’:
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Перевернуть строку/main.c:15:28: warning: passing argument 1 of ‘Swap’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   15 |         Swap(array + begin + i, array + end - 1 - i);
+      |              ~~~~~~~~~~~~~~^~~
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Перевернуть строку/main.c:4:17: note: expected ‘char *’ but argument is of type ‘const char *’
+    4 | void Swap(char* a, char* b)
+      |           ~~~~~~^
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Перевернуть строку/main.c:15:49: warning: passing argument 2 of ‘Swap’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   15 |         Swap(array + begin + i, array + end - 1 - i);
+      |                                 ~~~~~~~~~~~~~~~~^~~
+/home/ptrvsrg/NSU_Homework_C/Разные задачи/Перевернуть строку/main.c:4:26: note: expected ‘char *’ but argument is of type ‘const char *’
+    4 | void Swap(char* a, char* b)
+      |                    ~~~~~~^
