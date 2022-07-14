@@ -4,13 +4,13 @@ NORMAL='\033[0m'
 BOLD='\033[1m'
 GREEN='\033[32m'
 RED='\033[31m'
-HOME=$(pwd)
+HOME_DIR=$(pwd)
 IFS=$'\n'
 
-for line in $(find . -name "main.c" | sed -e "s/\/main.c//" | sed -e "s/.\///")
+for path in $(find . -name "CMakeLists.txt" | sed -e "s/CMakeLists.txt//")
 do
-	echo -e "${GREEN}${BOLD}Building ${line}...${NORMAL}"
-	cd $line
+	echo -e "${GREEN}${BOLD}Building ${path}...${NORMAL}"
+	cd ${path}
 	rm -rf build
 	cmake -H. -Bbuild > /dev/null
 	touch build/CMakeLog.txt
@@ -22,5 +22,5 @@ do
 	else
 		echo -e "${GREEN}${BOLD}Build completed${NORMAL}\n"
 	fi
-	cd $HOME
+	cd ${HOME_DIR}
 done
