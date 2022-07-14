@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Сдвиг при умножении на последнюю цифру/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Сдвиг при умножении на последнюю цифру/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Сдвиг при умножении на последнюю цифру/build/CMakeFiles/main.dir

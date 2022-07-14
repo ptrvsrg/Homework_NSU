@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Разные задачи/Числа-палиндромы/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Разные задачи/Числа-палиндромы/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Разные задачи/Числа-палиндромы/build/CMakeFiles/main.dir

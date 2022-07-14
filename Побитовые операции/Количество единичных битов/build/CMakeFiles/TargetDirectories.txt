@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Побитовые операции/Количество единичных битов/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Побитовые операции/Количество единичных битов/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Побитовые операции/Количество единичных битов/build/CMakeFiles/main.dir

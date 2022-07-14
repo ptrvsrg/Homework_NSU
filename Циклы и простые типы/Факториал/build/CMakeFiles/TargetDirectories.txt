@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Циклы и простые типы/Факториал/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Циклы и простые типы/Факториал/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Циклы и простые типы/Факториал/build/CMakeFiles/main.dir

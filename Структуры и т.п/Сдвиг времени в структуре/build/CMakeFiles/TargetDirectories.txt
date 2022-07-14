@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Структуры и т.п/Сдвиг времени в структуре/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Структуры и т.п/Сдвиг времени в структуре/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Структуры и т.п/Сдвиг времени в структуре/build/CMakeFiles/main.dir

@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/N-арные деревья/Печать по уровням/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/N-арные деревья/Печать по уровням/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/N-арные деревья/Печать по уровням/build/CMakeFiles/main.dir

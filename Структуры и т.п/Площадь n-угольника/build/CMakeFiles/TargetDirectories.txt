@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Структуры и т.п/Площадь n-угольника/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Структуры и т.п/Площадь n-угольника/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Структуры и т.п/Площадь n-угольника/build/CMakeFiles/main.dir

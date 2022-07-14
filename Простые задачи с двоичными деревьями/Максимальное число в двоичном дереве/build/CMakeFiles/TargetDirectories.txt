@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Простые задачи с двоичными деревьями/Максимальное число в двоичном дереве/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Простые задачи с двоичными деревьями/Максимальное число в двоичном дереве/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Простые задачи с двоичными деревьями/Максимальное число в двоичном дереве/build/CMakeFiles/main.dir

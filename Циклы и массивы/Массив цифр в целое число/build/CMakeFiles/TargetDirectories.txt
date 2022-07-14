@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Циклы и массивы/Массив цифр в целое число/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Циклы и массивы/Массив цифр в целое число/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Циклы и массивы/Массив цифр в целое число/build/CMakeFiles/main.dir

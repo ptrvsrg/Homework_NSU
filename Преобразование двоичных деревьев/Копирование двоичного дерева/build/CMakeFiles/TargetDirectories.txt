@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Преобразование двоичных деревьев/Копирование двоичного дерева/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Преобразование двоичных деревьев/Копирование двоичного дерева/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Преобразование двоичных деревьев/Копирование двоичного дерева/build/CMakeFiles/main.dir

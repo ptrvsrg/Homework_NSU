@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Деревья и другие типы данных/Убывающий список в ДДП/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Деревья и другие типы данных/Убывающий список в ДДП/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Деревья и другие типы данных/Убывающий список в ДДП/build/CMakeFiles/main.dir

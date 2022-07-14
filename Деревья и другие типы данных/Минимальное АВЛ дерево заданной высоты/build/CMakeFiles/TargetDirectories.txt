@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Деревья и другие типы данных/Минимальное АВЛ дерево заданной высоты/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Деревья и другие типы данных/Минимальное АВЛ дерево заданной высоты/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Деревья и другие типы данных/Минимальное АВЛ дерево заданной высоты/build/CMakeFiles/main.dir

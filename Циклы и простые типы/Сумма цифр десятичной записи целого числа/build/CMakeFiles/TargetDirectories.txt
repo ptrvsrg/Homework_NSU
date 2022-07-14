@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Циклы и простые типы/Сумма цифр десятичной записи целого числа/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Циклы и простые типы/Сумма цифр десятичной записи целого числа/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Циклы и простые типы/Сумма цифр десятичной записи целого числа/build/CMakeFiles/main.dir

@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Число путей длины Х вершин в графе/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Число путей длины Х вершин в графе/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Число путей длины Х вершин в графе/build/CMakeFiles/main.dir

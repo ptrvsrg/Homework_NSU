@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Задачи с несколькими списками/Разделить список на неубывающие списки/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Задачи с несколькими списками/Разделить список на неубывающие списки/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Задачи с несколькими списками/Разделить список на неубывающие списки/build/CMakeFiles/main.dir

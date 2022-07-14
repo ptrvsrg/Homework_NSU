@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Арифметическая прогрессия/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Арифметическая прогрессия/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Задачи повышенной сложности/Арифметическая прогрессия/build/CMakeFiles/main.dir

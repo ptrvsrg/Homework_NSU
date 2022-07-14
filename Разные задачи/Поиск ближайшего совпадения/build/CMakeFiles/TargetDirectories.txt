@@ -1,3 +1,0 @@
-/home/ptrvsrg/NSU_Homework_C/Разные задачи/Поиск ближайшего совпадения/build/CMakeFiles/rebuild_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Разные задачи/Поиск ближайшего совпадения/build/CMakeFiles/edit_cache.dir
-/home/ptrvsrg/NSU_Homework_C/Разные задачи/Поиск ближайшего совпадения/build/CMakeFiles/main.dir
