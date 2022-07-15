@@ -8,7 +8,7 @@ void Swap(char* a, char* b)
     *b = buffer;
 }
 
-void ReverseArray(int begin, int end, const char* array)
+void ReverseArray(int begin, int end, char* array)
 {
     for (int i = 0; i < (end - begin) / 2; ++i)
     {
@@ -29,7 +29,7 @@ int SearchSpace(int begin, int end, const char* string)
     return end;
 }
 
-void ReverseString(const char* string)
+void ReverseString(char* string)
 {
     int length = strlen(string);
     int begin = 0;
@@ -47,7 +47,7 @@ void ReverseString(const char* string)
 
 int main(void)
 {
-    const char string[] = "white sail lonely";
+    char string[] = "white sail lonely";
 
     printf("%s\n", string);
     ReverseString(string);
