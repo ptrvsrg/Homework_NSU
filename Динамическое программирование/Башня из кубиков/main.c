@@ -36,22 +36,6 @@ bool CompareInt(void* a, void* b)
     return *((int*)a) < *((int*)b);
 }
 
-void* FindMax(TVector vector, bool (*Compare)(void*, void*))
-{
-    char* vectorArray = vector.Array;
-    char* max = vectorArray;
-
-    for (int i = 1; i < vector.Count; ++i)
-    {
-        if (Compare(max, vectorArray + i * vector.Size))
-        {
-            max = vectorArray + i * vector.Size;
-        }
-    }
-
-    return max;
-}
-
 //////////////////////////////////////// VECTOR TYPE ////////////////////////////////////////
 
 typedef struct
@@ -105,6 +89,22 @@ TVector ScanVector(int size, int count, void (*Scan)(void*))
 
     free(value);
     return vector;
+}
+
+void* FindMax(TVector vector, bool (*Compare)(void*, void*))
+{
+    char* vectorArray = vector.Array;
+    char* max = vectorArray;
+
+    for (int i = 1; i < vector.Count; ++i)
+    {
+        if (Compare(max, vectorArray + i * vector.Size))
+        {
+            max = vectorArray + i * vector.Size;
+        }
+    }
+
+    return max;
 }
 
 void DestroyVector(TVector* vector)
