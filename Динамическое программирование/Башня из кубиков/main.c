@@ -31,23 +31,9 @@ int GetIndexTriangleMatrix(int row, int column, int size)
     return SumArithmeticProgression(size, size - min + 1, min) + (max - min);
 }
 
-void ScanCube(void* value)
-{
-    TCube* newValue = value;
-    int control = scanf("%d%d%d", &newValue->X, &newValue->Y, &newValue->Z);
-    assert(control == 3);
-}
-
 bool CompareInt(void* a, void* b)
 {
     return *((int*)a) < *((int*)b);
-}
-
-bool CompareTCube(void* a, void* b)
-{
-    TCube* cube1 = (TCube*)a;
-    TCube* cube2 = (TCube*)b;
-    return Max(cube1->X, Max(cube1->Y, cube1->Z)) < Max(cube2->X, Max(cube2->Y, cube2->Z));
 }
 
 void* FindMax(TVector vector, bool (*Compare)(void*, void*))
@@ -137,6 +123,20 @@ typedef struct
     int Y;
     int Z;
 } TCube;
+
+void ScanCube(void* value)
+{
+    TCube* newValue = value;
+    int control = scanf("%d%d%d", &newValue->X, &newValue->Y, &newValue->Z);
+    assert(control == 3);
+}
+
+bool CompareTCube(void* a, void* b)
+{
+    TCube* cube1 = (TCube*)a;
+    TCube* cube2 = (TCube*)b;
+    return Max(cube1->X, Max(cube1->Y, cube1->Z)) < Max(cube2->X, Max(cube2->Y, cube2->Z));
+}
 
 int GetCubeHeight(int x, int y, TVector cubes)
 {
