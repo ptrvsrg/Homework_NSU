@@ -1,11 +1,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
-void PrintArray(size_t row, size_t column, const float array[row][column])
+void PrintArray(int row, int column, const float array[row][column])
 {
-	for (size_t i = 0; i < row; i++)
+	for (int i = 0; i < row; i++)
 	{
-		for (size_t j = 0; j < column; j++)
+		for (int j = 0; j < column; j++)
 		{
 			printf("%f ", array[i][j]);
 		}
@@ -14,13 +14,13 @@ void PrintArray(size_t row, size_t column, const float array[row][column])
 	}
 }
 
-size_t GetNumberOfNullRow(size_t row, size_t column, const float array[row][column])
+int GetNumberOfNullRow(int row, int column, const float array[row][column])
 {
-	size_t nullRow = 0;
+	int nullRow = 0;
 
-	for (size_t i = 0; i < row; i++)
+	for (int i = 0; i < row; i++)
 	{
-		for (size_t j = 0; j < column; j++)
+		for (int j = 0; j < column; j++)
 		{
 			if (array[i][j] != 0.0)
 			{
@@ -36,7 +36,7 @@ size_t GetNumberOfNullRow(size_t row, size_t column, const float array[row][colu
 	return nullRow;
 }
 
-size_t main()
+int main()
 {
 	float array1[3][4] = { 
 		{1, 2, 3, 4}, 
