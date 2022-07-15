@@ -6,6 +6,66 @@
 #define IMPOSSIBLE -1
 #define MAX_CUBE_COUNT 1000
 
+//////////////////////////////////////// ADDITIONAL FUNCTION ////////////////////////////////////////
+
+int Min(int a, int b)
+{
+    return (a <= b) ? a : b;
+}
+
+int Max(int a, int b)
+{
+    return (a <= b) ? b : a;
+}
+
+int SumArithmeticProgression(int index1, int index2, int count)
+{
+    return (index1 + index2) * count / 2;
+}
+
+int GetIndexTriangleMatrix(int row, int column, int size)
+{
+    int min = Min(row, column);
+    int max = Max(row, column);
+
+    return SumArithmeticProgression(size, size - min + 1, min) + (max - min);
+}
+
+void ScanCube(void* value)
+{
+    TCube* newValue = value;
+    int control = scanf("%d%d%d", &newValue->X, &newValue->Y, &newValue->Z);
+    assert(control == 3);
+}
+
+bool CompareInt(void* a, void* b)
+{
+    return *((int*)a) < *((int*)b);
+}
+
+bool CompareTCube(void* a, void* b)
+{
+    TCube* cube1 = (TCube*)a;
+    TCube* cube2 = (TCube*)b;
+    return Max(cube1->X, Max(cube1->Y, cube1->Z)) < Max(cube2->X, Max(cube2->Y, cube2->Z));
+}
+
+void* FindMax(TVector vector, bool (*Compare)(void*, void*))
+{
+    char* vectorArray = vector.Array;
+    char* max = vectorArray;
+
+    for (int i = 1; i < vector.Count; ++i)
+    {
+        if (Compare(max, vectorArray + i * vector.Size))
+        {
+            max = vectorArray + i * vector.Size;
+        }
+    }
+
+    return max;
+}
+
 //////////////////////////////////////// VECTOR TYPE ////////////////////////////////////////
 
 typedef struct
@@ -102,66 +162,6 @@ int GetCubeHeight(int x, int y, TVector cubes)
     }
 
     return height;
-}
-
-//////////////////////////////////////// ADDITIONAL FUNCTION ////////////////////////////////////////
-
-int Min(int a, int b)
-{
-    return (a <= b) ? a : b;
-}
-
-int Max(int a, int b)
-{
-    return (a <= b) ? b : a;
-}
-
-int SumArithmeticProgression(int index1, int index2, int count)
-{
-    return (index1 + index2) * count / 2;
-}
-
-int GetIndexTriangleMatrix(int row, int column, int size)
-{
-    int min = Min(row, column);
-    int max = Max(row, column);
-
-    return SumArithmeticProgression(size, size - min + 1, min) + (max - min);
-}
-
-void ScanCube(void* value)
-{
-    TCube* newValue = value;
-    int control = scanf("%d%d%d", &newValue->X, &newValue->Y, &newValue->Z);
-    assert(control == 3);
-}
-
-bool CompareInt(void* a, void* b)
-{
-    return *((int*)a) < *((int*)b);
-}
-
-bool CompareTCube(void* a, void* b)
-{
-    TCube* cube1 = (TCube*)a;
-    TCube* cube2 = (TCube*)b;
-    return Max(cube1->X, Max(cube1->Y, cube1->Z)) < Max(cube2->X, Max(cube2->Y, cube2->Z));
-}
-
-void* FindMax(TVector vector, bool (*Compare)(void*, void*))
-{
-    char* vectorArray = vector.Array;
-    char* max = vectorArray;
-
-    for (int i = 1; i < vector.Count; ++i)
-    {
-        if (Compare(max, vectorArray + i * vector.Size))
-        {
-            max = vectorArray + i * vector.Size;
-        }
-    }
-
-    return max;
 }
 
 //////////////////////////////////////// CACHE ////////////////////////////////////////
