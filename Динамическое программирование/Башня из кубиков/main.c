@@ -136,14 +136,16 @@ void ScanCube(void* value)
     assert(control == 3);
 }
 
-bool CompareInt(int* a, int* b)
+bool CompareInt(void* a, void* b)
 {
-    return *a < *b;
+    return *((int*)a) < *((int*)b);
 }
 
-bool CompareTCube(TCube* a, TCube* b)
+bool CompareTCube(void* a, void* b)
 {
-    return Max(a->X, Max(a->Y, a->Z)) < Max(b->X, Max(b->Y, b->Z));
+    TCube* cube1 = (TCube*)a;
+    TCube* cube2 = (TCube*)b;
+    return Max(cube1->X, Max(cube1->Y, cube1->Z)) < Max(cube2->X, Max(cube2->Y, cube2->Z));
 }
 
 void* FindMax(TVector vector, bool (*Compare)(void*, void*))
