@@ -2,4 +2,4 @@ image:
   - Ubuntu2004
 
 build_script:
-  - bash building.sh
+  - bash building.sh || exit 1
