@@ -8,9 +8,9 @@ HOME_DIR=$(pwd)
 IFS=$'\n'
 EXIT_STATUS=0
 
-for path in $(find . -name "CMakeLists.txt" | sed -e "s/\/CMakeLists.txt//" | sed -e "s/.\///")
+for path in $(find . -name "CMakeLists.txt" | sed -e "s/CMakeLists.txt//")
 do
-	echo -e "${GREEN}${BOLD}Building ${path}...${NORMAL}"
+	echo -e "${BOLD}Building ${path}...${NORMAL}"
 	cd ${path}
 	rm -rf build
 	cmake -H. -Bbuild > /dev/null
