@@ -8,7 +8,7 @@ HOME_DIR=$(pwd)
 IFS=$'\n'
 EXIT_STATUS=0
 
-for path in $(find . -name "CMakeLists.txt" | sed -e "s/CMakeLists.txt//")
+for path in $(find . -name "CMakeLists.txt" | sed -e "s/\/CMakeLists.txt//" | sed -e "s/.\///")
 do
 	echo -e "${GREEN}${BOLD}Building ${path}...${NORMAL}"
 	cd ${path}
