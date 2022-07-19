@@ -73,6 +73,11 @@ int PopList(TItem item, TList* list)
 
 void PrintList(TList list)
 {
+    if (IsEmptyList(list))
+    {
+        return;
+    }
+
     TItem firstItem = list;
     do
     {
