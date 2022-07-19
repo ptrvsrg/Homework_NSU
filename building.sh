@@ -13,7 +13,7 @@ do
 	echo -e "${BOLD}Building ${path}...${NORMAL}"
 	cd ${path}
 	rm -rf build
-	cmake -H. -Bbuild > /dev/null
+	cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Debug > /dev/null
 	touch build/CMakeLog.txt
 	cmake --build build 2> build/CMakeLog.txt
 	if [ -s build/CMakeLog.txt ]
