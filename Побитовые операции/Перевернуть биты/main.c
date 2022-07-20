@@ -10,9 +10,9 @@ enum
         INT_BYTE = 4
 };
 
-void Swap(char* A, char* B)
+void Swap(unsigned char* A, unsigned char* B)
 {
-	char Buffer = *A;
+	unsigned char Buffer = *A;
 	*A = *B;
 	*B = Buffer;
 }
@@ -31,7 +31,7 @@ void PrintBits(unsigned int Symbol)
 			printf(" ");
 		}
 
-		printf("%d", ((Mask & Symbol) != 0) ? 1 : 0);
+		printf("%u", ((Mask & Symbol) != 0) ? 1 : 0);
 		Symbol <<= 1;
 	}
 }
@@ -107,7 +107,7 @@ int main()
 {
 	unsigned int Number;
 
-	if (scanf("%d", &Number) != 1)
+	if (scanf("%u", &Number) != 1)
 	{
 		return FAILURE;
 	}
