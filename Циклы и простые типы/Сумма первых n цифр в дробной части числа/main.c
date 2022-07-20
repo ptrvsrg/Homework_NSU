@@ -1,6 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <math.h>
-#pragma warning(disable : 4996)
 
 int SumDigitsFractionalPart(int n, float x)
 {
@@ -15,10 +15,15 @@ int SumDigitsFractionalPart(int n, float x)
 	return sum;
 }
 
-void main()
+int main(void)
 {
 	int n;
 	float x;
-	scanf("%d %f", &n, &x);
+	if (scanf("%d %f", &n, &x) != 2)
+    {
+        return 1;
+    }
+
 	printf("The sum is %d", SumDigitsFractionalPart(n, x));
+    return 0;
 }

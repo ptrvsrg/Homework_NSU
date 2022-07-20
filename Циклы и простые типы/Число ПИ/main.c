@@ -1,6 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <math.h>
-#pragma warning(disable : 4996)
 
 double PI(int n)
 {
@@ -19,9 +19,14 @@ double PI(int n)
 	}
 }
 
-void main()
+int main(void)
 {
 	int x;
-	scanf("%d", &x);
+	if (scanf("%d", &x) != 1)
+    {
+        return 1;
+    }
+
 	printf("PI is %lf", PI(x));
+    return 0;
 }
