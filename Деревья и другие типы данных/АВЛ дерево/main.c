@@ -151,52 +151,6 @@ void Remove(TValue value, TAVLTree* tree)
     *tree = Balance(*tree);
 }
 
-void PrintTabulation(char* tab, bool checkLeft, bool checkNextRight)
-{
-    if (*tab != '\0')
-    {
-        if (!checkLeft || !checkNextRight)
-        {
-            printf("%s%c%c%c%c ", tab + 5, 192, 196, 196, 196);
-        }
-        else
-        {
-            printf("%s%c%c%c%c ", tab + 5, 195, 196, 196, 196); 
-        }
-    }
-}
-
-void HelpPrintTree(char* tab, bool checkLeft, bool checkNextRight, TAVLTree tree)
-{
-    if(tree)
-    {
-        PrintTabulation(tab, checkLeft, checkNextRight);
-        printf("%d (%d)\n", tree->Value, tree->Height);
-
-        char newTab[1000] = { 0 };
-        
-        if (!checkLeft)
-        {
-            sprintf(tab, "%s     ", tab);
-            sprintf(newTab, "%s", tab);
-        }
-        else
-        {
-            sprintf(tab, "%s%c    ", tab, 179);
-            sprintf(newTab, "%s", tab);
-        }
-        
-        HelpPrintTree(tab, true, tree->Right, tree->Left);
-        HelpPrintTree(newTab, false, tree->Right, tree->Right);
-    }
-}
-
-void Print(TAVLTree tree)
-{
-    char tab[1000] = { 0 };
-    HelpPrintTree(tab, true, tree->Right, tree);
-}
-
 void ConvertArrayToTree(size_t arraySize, TValue* array, TAVLTree* tree)
 {
     for(size_t i = 0; i < arraySize; ++i)
@@ -211,5 +165,4 @@ int main(void)
     TValue array[] = { 3, 9, 5, 1, 0, 6, 4, 8, 7, 2 };
 
     ConvertArrayToTree(sizeof(array) / sizeof(*array), array, &tree);
-    Print(tree);
 }
