@@ -387,7 +387,7 @@ TTree CopyTree(TTree tree)
         return NULL;
     }
 
-    TTree copyTree = CreateTree(tree->Value, CopyTree(tree->Left), CopyTree(tree->Right));
+    return CreateTree(tree->Value, CopyTree(tree->Left), CopyTree(tree->Right));
 }
 
 TTree BuildDerivative(TTree tree, char var)

@@ -14,7 +14,7 @@ int GCD(int a, int b)
         return min;
     }
     
-   GCD(max % min, min);
+   return GCD(max % min, min);
 }
 
 void MoveArray(int shift, int arraySize, int* array)

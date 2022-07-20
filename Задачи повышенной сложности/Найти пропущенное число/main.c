@@ -77,6 +77,8 @@ bool FindMissingNumber(int* missingNumber, int begin, int end, int* array)
     {
         return true;
     }
+
+    return false;
 }
 
 int main(void)

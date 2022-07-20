@@ -80,7 +80,7 @@ bool CheckNonDecreasing(TList list)
         return false;
     }
 
-    CheckNonDecreasing(list->Next);
+    return CheckNonDecreasing(list->Next);
 }
 
 void PrintList(TList list)

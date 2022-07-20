@@ -63,7 +63,7 @@ bool CheckNonDecreasing(TList list)
         return false;
     }
 
-    CheckNonDecreasing(list->Next);
+    return CheckNonDecreasing(list->Next);
 }
 
 TList MergeLists(TList list1, TList list2)
