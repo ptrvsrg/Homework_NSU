@@ -1,10 +1,14 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <math.h>
-#pragma warning(disable : 4996)
+
+int Fabs(int a)
+{
+    return (a >= 0) ? a : -a;
+}
 
 int SumDigits(int x)
 {
-	int y = fabs(x);
+	int y = Fabs(x);
 	if (y < 10)
 	{
 		return y;
@@ -15,7 +19,7 @@ int SumDigits(int x)
 	}
 }
 
-void main()
+int main()
 {
 	int x;
 	scanf("%d", &x);
