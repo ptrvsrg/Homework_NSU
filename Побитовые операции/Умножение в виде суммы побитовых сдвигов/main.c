@@ -20,17 +20,17 @@ void GenerateMultByConst(unsigned int Multiplier)
 	{
 		printf("0;");
 	}
-	else if (Multiplier < (1 << Position))
+	else if (Multiplier < ((unsigned int)1 << Position))
 	{
 		printf(";\n}\n");
 	}
 	else
 	{
-		if ((Multiplier & 1 << Position) != 0)
+		if ((Multiplier & (unsigned int)1 << Position) != 0)
 		{
 			printf("(x << %d)", Position);
 
-            if(Multiplier >= (1 << Position + 1))
+            if(Multiplier >= ((unsigned int)1 << (Position + 1)))
             {
                 printf(" + ");
             }
