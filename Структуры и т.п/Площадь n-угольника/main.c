@@ -47,7 +47,7 @@ bool ConvexCheck(size_t arraySize, TPoint2D* array)
 
 float GaussArea(size_t arraySize, TPoint2D* array)
 {
-    if(arraySize >= 0 && arraySize <= 2)
+    if(arraySize <= 2)
     {
         return 0.0;
     }
@@ -56,7 +56,7 @@ float GaussArea(size_t arraySize, TPoint2D* array)
 
     float sum = 0.0;
 
-    for(int i = 0; i < arraySize - 1; i++)
+    for(size_t i = 0; i < arraySize - 1; i++)
     {
         sum += array[i + 1].X * array[i].Y - array[i + 1].Y * array[i].X;
     }
@@ -69,7 +69,7 @@ float GaussArea(size_t arraySize, TPoint2D* array)
 
 float AreaByTriangulation(size_t arraySize, TPoint2D* array)
 {
-    if(arraySize >= 0 && arraySize <= 2)
+    if(arraySize <= 2)
     {
         return 0.0;
     }
@@ -78,7 +78,7 @@ float AreaByTriangulation(size_t arraySize, TPoint2D* array)
 
     float sum = 0.0;
 
-    for(int i = 1; i < arraySize - 1; i++)
+    for(size_t i = 1; i < arraySize - 1; i++)
     {
         sum += Fabs(VectorProduct(GetVector(array[0], array[i]), GetVector(array[0], array[i + 1])));
     }
