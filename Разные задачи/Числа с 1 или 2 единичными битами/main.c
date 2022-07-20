@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define UINT_BITS_SIZE (int)8*sizeof(unsigned int)
+#define UINT_BITS_SIZE (int)(8*sizeof(unsigned int))
 typedef unsigned int uint;
 
 void PrintBits(uint Number)
