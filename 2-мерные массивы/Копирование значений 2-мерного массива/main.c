@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void PrintArray(size_t row, size_t column, const float array[row][column])
+void PrintArray(size_t row, size_t column, float array[row][column])
 {
 	for (size_t i = 0; i < row; i++)
 	{
@@ -30,7 +30,7 @@ void FillRandomValues(size_t row, size_t column, float array[row][column])
 	}
 }
 
-void ArrayCopy(size_t row1, size_t column1, const float array1[row1][column1], size_t row2, size_t column2, float array2[row2][column2])
+void ArrayCopy(size_t row1, size_t column1, float array1[row1][column1], size_t row2, size_t column2, float array2[row2][column2])
 {
 	assert(row1 == row2 && column1 == column2);
 

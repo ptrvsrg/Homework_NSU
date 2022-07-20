@@ -38,13 +38,13 @@ int GetNumberOfNullRow(int row, int column, const float array[row][column])
 
 int main()
 {
-	float array1[3][4] = { 
+	const float array1[3][4] = { 
 		{1, 2, 3, 4}, 
 		{0, 0, 0, 0}, 
 		{4, 3, 2, 1} 
 	};
 
-	float array2[5][2] = { 
+	const float array2[5][2] = { 
 		{1, 2}, 
 		{0, 0}, 
 		{4, 3}, 

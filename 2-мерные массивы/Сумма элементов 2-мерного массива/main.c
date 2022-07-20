@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void PrintArray(size_t row, size_t column, const float array[row][column])
+void PrintArray(size_t row, size_t column, float array[row][column])
 {
 	for (size_t i = 0; i < row; i++)
 	{
@@ -29,7 +29,7 @@ void FillRandomValues(size_t row, size_t column, float array[row][column])
 	}
 }
 
-float SumElementOfArray(size_t row, size_t column, const float array[row][column])
+float SumElementOfArray(size_t row, size_t column, float array[row][column])
 {
 	float sum = 0.0;
 
