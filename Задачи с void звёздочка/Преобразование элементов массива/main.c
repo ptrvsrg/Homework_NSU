@@ -11,7 +11,7 @@ void Transform(void* array, size_t size, size_t count, void (*f)(void*))
 {
     char* newArray = array;
 
-    for(int i = 0; i < count; ++i)
+    for(size_t i = 0; i < count; ++i)
     {
         f(&newArray[i * size]);
     }
@@ -25,7 +25,7 @@ int main(void)
 
     Transform(array, sizeof(*array), 5, AddOne);
 
-    for (int i = 0; i < sizeof(array) / sizeof(*array); i++)
+    for (size_t i = 0; i < sizeof(array) / sizeof(*array); i++)
     {
         printf("%d ", array[i]);
     }
