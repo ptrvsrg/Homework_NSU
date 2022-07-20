@@ -16,9 +16,7 @@ int Factorial(int x)
 int main()
 {
 	int x;
-	scanf("%d", &x);
-
-	if (x < 0)
+	if (scanf("%d", &x) != 1 || x < 0)
 	{
 		printf("Bad input");
 		return 1;
