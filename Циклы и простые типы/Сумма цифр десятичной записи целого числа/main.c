@@ -22,6 +22,11 @@ int SumDigits(int x)
 int main()
 {
 	int x;
-	scanf("%d", &x);
+	if (scanf("%d", &x) != 1)
+    {
+        return 1;
+    }
+
 	printf("The sum is %d", SumDigits(x));
+    return 0;
 }
