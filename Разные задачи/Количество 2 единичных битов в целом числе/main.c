@@ -8,7 +8,7 @@ int CountDoubleOneBits(unsigned int number)
 
     while(number > 0)
     {
-        if(number & 1 != 0)
+        if(number & (unsigned int)1 != 0)
         {
             if(!first)
             {
