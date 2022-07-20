@@ -25,4 +25,4 @@ target_compile_options(main PRIVATE
 target_link_libraries(main PUBLIC -fuse-ld=gold)
 target_link_libraries(main PUBLIC -fsanitize=undefined)
 target_link_libraries(main PUBLIC -lasan -fuse-ld=gold)
-target_link_libraries(main m)
+target_link_libraries(main PUBLIC m)
