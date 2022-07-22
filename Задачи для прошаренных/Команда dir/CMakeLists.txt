@@ -16,6 +16,7 @@ target_compile_options(main PRIVATE
             -Wunreachable-code
             -pedantic
             -pedantic-errors
+            -lstdc++
             -g
             -O1
             -fno-omit-frame-pointer
