@@ -240,4 +240,200 @@ int _tmain(int argc, TCHAR *argv[])
     return EXIT_SUCCESS;
 }
 
+#elif defined __linux__
+#include <dirent.h>
+#include <errno.h>
+#include <locale.h>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <time.h>
+
+#ifndef MAX_PATH
+#define MAX_PATH 256
+#endif // MAX_PATH
+
+#define PREFIX 1024 
+
+typedef enum DIMENSION
+{
+    B, KB, MB, GB, TB
+} DIMENSION;
+static void PrintError(void)
+{
+    perror(strerror(errno));
+}
+
+static void PrintFullPath(char* exePath, char* dirName)
+{
+    char fullPath[MAX_PATH] = { 0 };
+
+    if (dirName[1] != ':')
+    {
+        char* endPath = strrchr(exePath, '\\');
+        endPath[1] = '\0';
+        snprintf(fullPath, MAX_PATH, "%s", exePath);
+    }
+
+    printf("\n\tDirectory of %s%s\n\n", 
+        fullPath, 
+        (strcmp(dirName, ".\\") == 0) ? "" : dirName
+    );
+}
+
+static void PrintAttribute(mode_t attribute)
+{
+    switch (attribute & S_IFMT)
+    {
+        case S_IFDIR:
+            printf("d");
+            break;
+        case S_IFCHR:
+            printf("c");
+            break;
+        case S_IFBLK:
+            printf("b");
+            break;
+        case S_IFREG:
+            printf("r");
+            break;
+        case S_IFIFO:
+            printf("i");
+            break;
+        case S_IFLNK:
+            printf("l");
+            break;
+        case S_IFSOCK:
+            printf("s");
+            break;
+        default:
+            printf("u");
+    }
+
+    printf("%c", (attribute & S_IRUSR) ? 'r' : '-');
+    printf("%c", (attribute & S_IWUSR) ? 'w' : '-');
+    printf("%c", (attribute & S_IXUSR) ? 'x' : '-');
+
+    printf("%c", (attribute & S_IRGRP) ? 'r' : '-');
+    printf("%c", (attribute & S_IWGRP) ? 'w' : '-');
+    printf("%c", (attribute & S_IXGRP) ? 'x' : '-');
+
+    printf("%c", (attribute & S_IROTH) ? 'r' : '-');
+    printf("%c", (attribute & S_IWOTH) ? 'w' : '-');
+    printf("%c", (attribute & S_IXOTH) ? 'x' : '-');
+}
+
+static void StandardizeSize(off_t* size, DIMENSION* unit)
+{
+    *unit = B;
+    while ((*size) % PREFIX != (*size))
+    {
+        (*size) = (off_t)ceil((double)(*size) / PREFIX);
+        ++(*unit);
+    }
+}
+
+static void PrintFileSize(off_t fileSize)
+{
+    DIMENSION unit;
+    StandardizeSize(&fileSize, &unit);
+    printf("%lu %s", fileSize,
+        (unit == B) ? "B" :
+        (unit == KB) ? "KB" :
+        (unit == MB) ? "MB" :
+        (unit == GB) ? "GB" : "TB"
+    );
+}
+
+static void PrintSystemTime(struct timespec st)
+{
+    struct tm* clock = localtime(&st.tv_sec);
+    
+    printf("%02d/%02d/%d\t%02d:%02d %s",  
+        clock->tm_mon, clock->tm_mday, clock->tm_year,
+        (clock->tm_hour % 12 == 0) ? 12 : clock->tm_hour  % 12, 
+        clock->tm_min,
+        (clock->tm_hour < 12) ? "AM" : "PM"
+    );
+}
+
+static void PrintInfo(struct dirent* file)
+{
+    struct stat fileStat;
+    if (stat(file->d_name, &fileStat) == -1)
+    {
+        PrintError();
+        exit(EXIT_FAILURE);
+    }
+
+    PrintAttribute(fileStat.st_mode);
+    printf("\t");
+
+    if ((fileStat.st_mode & S_IFDIR) == 0)
+    {
+        PrintFileSize(fileStat.st_size);
+    }
+    printf("\t");
+
+    PrintSystemTime(fileStat.st_ctim);
+    printf("\t");
+
+    printf("%s", file->d_name);
+    printf("\n");
+}
+
+static void PrintDirectory(char* exePath, char* dirName)
+{
+    strncat(dirName, "\\", MAX_PATH);
+    PrintFullPath(exePath, dirName);
+
+    strncat(dirName, "*", MAX_PATH);
+
+    DIR* dirStream = opendir(dirName);
+    if (dirStream == NULL)
+    {
+        PrintError();
+        exit(EXIT_FAILURE);
+    }
+
+    struct dirent* file = NULL;
+    while ((file = readdir(dirStream)) != NULL)
+    {
+        PrintInfo(file);
+    }
+    
+    if (closedir(dirStream) == -1)
+    {
+        PrintError();
+        exit(EXIT_FAILURE);
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    setlocale(LC_ALL, "Russian");
+    char dirName[MAX_PATH] = { 0 };
+    char* exePath = argv[0];
+
+    if (argc == 1)
+    {
+        snprintf(dirName, MAX_PATH, ".");
+        PrintDirectory(exePath, dirName);
+    }
+    else
+    {
+        while (argc > 1)
+        {
+            snprintf(dirName, MAX_PATH, "%s", argv[1]);
+            PrintDirectory(exePath, dirName);
+            --argc;
+            ++argv;
+        }
+    }
+
+    return EXIT_SUCCESS;
+}
+
 #endif
