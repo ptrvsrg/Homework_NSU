@@ -1,3 +1,4 @@
+#if defined _WIN32
 #define _CRT_SECURE_NO_WARNINGS
 #include <locale.h>
 #include <math.h>
@@ -238,3 +239,5 @@ int _tmain(int argc, TCHAR *argv[])
 
     return EXIT_SUCCESS;
 }
+
+#endif
