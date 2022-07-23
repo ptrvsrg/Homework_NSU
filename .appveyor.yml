@@ -1,6 +1,6 @@
 image:
   - Ubuntu2004
-  - Visual Studio 2015
+  - Visual Studio 2019
 
 build_script:
   - sh: bash building.sh || exit 1
