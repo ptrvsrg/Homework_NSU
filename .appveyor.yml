@@ -4,4 +4,4 @@ image:
 
 build_script:
   - sh: bash building.sh || exit 1
-  - cmd: building.cmd
+  - ps: ./building.ps1
