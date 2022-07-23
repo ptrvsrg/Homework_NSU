@@ -1,6 +1,8 @@
 @echo off
 Setlocal EnableDelayedExpansion
 
+chcp 1251 > nul
+
 for /F "delims=" %%a in ('echo %cd%') do set HOME_DIR=%%a
 set EXIT_STATUS=0
 
