@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define UNUSED(x) (void)(x)
+
 static jmp_buf position;
 
 enum
@@ -23,7 +25,7 @@ typedef struct
 
 float VectorLength(TPoint a, TPoint b)
 {
-    return sqrt((a.X - b.X)*(a.X - b.X) + (a.Y - b.Y)*(a.Y - b.Y));
+    return (float)sqrt((a.X - b.X)*(a.X - b.X) + (a.Y - b.Y)*(a.Y - b.Y));
 }
 
 ///////////////////////////////////  ADDITIONAL TYPE  ///////////////////////////////////
@@ -352,8 +354,10 @@ float ConvexHullPerimeter(TVector vector)
 int main(void)
 {
     FILE* in = freopen("in.txt", "r", stdin);
+    UNUSED(in);
     assert(in != NULL);
     FILE* out = freopen("out.txt", "w", stdout);
+    UNUSED(out);
     assert(out != NULL);
 
     if (setjmp(position) == 0)
