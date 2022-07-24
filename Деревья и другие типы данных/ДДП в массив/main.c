@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define UNUSED(x) (void)(x);
+
 typedef int TValue;
 
 struct TbinSearchTree
@@ -119,6 +121,7 @@ int main(void)
     assert(array2 != NULL);
 
     int arraySize2 = ConvertBinarySearchTreeToArray(tree, array2, 0);
+    UNUSED(arraySize2);
     assert(arraySize1 == arraySize2);
 
     PrintTree(tree);
