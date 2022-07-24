@@ -26,4 +26,8 @@ else()
         -O1
     )
 endif()
-target_link_libraries(main PUBLIC m)
+
+find_library(MATH_LIBRARY m)
+if(MATH_LIBRARY)
+	target_link_libraries(main PUBLIC ${MATH_LIBRARY})
+endif()
