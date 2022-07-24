@@ -4,11 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef char TValue;
-
 struct Tstack 
 {
-    TValue Value;
+    int Value;
     struct Tstack* Next;
 };
 
@@ -19,7 +17,7 @@ bool IsEmptyStack(TStack list)
     return list == NULL;
 }
 
-TStack CreateItem(TValue value)
+TStack CreateItem(int value)
 {
     TStack new = malloc(sizeof(*new));
     assert(!IsEmptyStack(new));
@@ -30,7 +28,7 @@ TStack CreateItem(TValue value)
     return new;
 }
 
-TStack Push(float value, TStack* list)
+TStack Push(int value, TStack* list)
 {
     TStack new = CreateItem(value);
     new->Next = *list;
@@ -52,11 +50,11 @@ TStack ConvertArrayToStack(size_t arraySize, char* array)
     return list;
 }
 
-TValue Pop(TStack* stack)
+int Pop(TStack* stack)
 {
     assert(!IsEmptyStack(*stack));
 
-    TValue value = (*stack)->Value;
+    int value = (*stack)->Value;
 
     TStack removeElem = *stack;
     *stack = (*stack)->Next;
@@ -74,7 +72,7 @@ void FreeStack(TStack* stack)
     }
 }
 
-float Fabs(float num)
+int Fabs(int num)
 {
     return (num >= 0) ? num : -num;
 }
@@ -84,12 +82,12 @@ bool IsDigit(char symbol)
     return symbol >= '0' && symbol <= '9';
 }
 
-float SymbolToDigit(char symbol)
+int SymbolToDigit(char symbol)
 {
     return symbol - '0';
 }
 
-float GetExpressionValue(char operator, float first, float second)
+int GetExpressionValue(char operator, int first, int second)
 {
     switch(operator)
     {
@@ -103,7 +101,7 @@ float GetExpressionValue(char operator, float first, float second)
     }
 }
 
-float CalcPrefix(TStack* prefix)
+int CalcPrefix(TStack* prefix)
 {
     char symbol = Pop(prefix);
 
@@ -113,8 +111,8 @@ float CalcPrefix(TStack* prefix)
     }
     else
     {
-        float first = CalcPrefix(prefix);
-        float second = CalcPrefix(prefix);
+        int first = CalcPrefix(prefix);
+        int second = CalcPrefix(prefix);
         return GetExpressionValue(symbol, first, second);
     }
 }

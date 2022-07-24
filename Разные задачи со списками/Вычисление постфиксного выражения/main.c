@@ -6,7 +6,7 @@
 
 struct Tstack 
 {
-    float Value;
+    int Value;
     struct Tstack* Next;
 };
 
@@ -17,7 +17,7 @@ bool IsEmptyStack(TStack list)
     return list == NULL;
 }
 
-TStack CreateItem(float value)
+TStack CreateItem(int value)
 {
     TStack new = malloc(sizeof(*new));
     assert(!IsEmptyStack(new));
@@ -28,7 +28,7 @@ TStack CreateItem(float value)
     return new;
 }
 
-TStack Push(float value, TStack* list)
+TStack Push(int value, TStack* list)
 {
     TStack new = CreateItem(value);
     new->Next = *list;
@@ -43,11 +43,11 @@ TStack GetNext(TStack stack)
     return stack->Next;
 }
 
-float Pop(TStack* stack)
+int Pop(TStack* stack)
 {
     assert(!IsEmptyStack(*stack));
 
-    float value = (*stack)->Value;
+    int value = (*stack)->Value;
 
     TStack removeElem = *stack;
     *stack = GetNext(*stack);
@@ -78,7 +78,7 @@ TStack ConvertArrayToStack(size_t arraySize, char* array)
     return list;
 }
 
-float Fabs(float num)
+int Fabs(int num)
 {
     return (num >= 0) ? num : -num;
 }
@@ -88,12 +88,12 @@ bool IsDigit(char symbol)
     return symbol >= '0' && symbol <= '9';
 }
 
-float SymbolToDigit(char symbol)
+int SymbolToDigit(char symbol)
 {
     return symbol - '0';
 }
 
-float GetExpressionValue(char operator, float first, float second)
+int GetExpressionValue(char operator, int first, int second)
 {
     switch(operator)
     {
@@ -101,13 +101,13 @@ float GetExpressionValue(char operator, float first, float second)
         case '-': return first - second;
         case '*': return first * second;
         case '/':
-            assert(Fabs(second) > 1E-6);
+            assert(second != 0);
             return first / second;
         default: assert(false);
     }
 }
 
-float CalcPostfix(TStack postfix)
+int CalcPostfix(TStack postfix)
 {
     TStack numberStack = NULL;
 
@@ -119,15 +119,15 @@ float CalcPostfix(TStack postfix)
         }
         else
         {
-            float a = Pop(&numberStack);
-            float b = Pop(&numberStack);
+            int a = Pop(&numberStack);
+            int b = Pop(&numberStack);
             Push(GetExpressionValue(postfix->Value, b, a), &numberStack);
         }
 
         postfix = GetNext(postfix);
     }
 
-    float answer = Pop(&numberStack);
+    int answer = Pop(&numberStack);
 
     assert(IsEmptyStack(numberStack));
 
