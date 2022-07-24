@@ -7,7 +7,7 @@ enum
 	SUCCESS = 0,
 	FAILURE = 1,
 	BYTE_SIZE = 8,
-        INT_BYTE = 4
+    INT_BYTE = 4
 };
 
 void Swap(unsigned char* A, unsigned char* B)
@@ -38,7 +38,7 @@ void PrintBits(unsigned int Symbol)
 
 unsigned char* IntToCharArray(unsigned int number)
 {
-    unsigned char Mask = ~0U;
+    unsigned char Mask = ~'\0';
     unsigned char* Array = malloc(4 * sizeof(*Array));
 
     for(int i = INT_BYTE - 1; i >= 0; i--)
@@ -96,7 +96,7 @@ unsigned int ReverseIntBits(unsigned int Number)
 
     for(size_t i = 0; i < INT_BYTE; ++i)
     {
-        Array[i] = ReverseCharBits(Array[i], ~0U, BYTE_SIZE);
+        Array[i] = ReverseCharBits(Array[i], ~'\0', BYTE_SIZE);
     }
 
     ReverseArray(Array);

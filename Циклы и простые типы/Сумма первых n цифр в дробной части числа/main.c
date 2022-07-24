@@ -5,7 +5,7 @@
 int SumDigitsFractionalPart(int n, float x)
 {
 	int sum = 0;
-    int y = x * (int)pow(10, n);
+    int y = (int)(x * pow(10, n));
 
 	for (int i = 0; i < n; i++)
 	{
