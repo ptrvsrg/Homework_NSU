@@ -4,11 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef int TValue;
 typedef struct Tlist* TList;
 typedef struct Ttree* TTree;
 
-TValue Max(TValue value1, TValue value2)
+int Max(int value1, int value2)
 {
     return value1 >= value2 ? value1 : value2;
 }
@@ -17,7 +16,7 @@ TValue Max(TValue value1, TValue value2)
 
 struct Ttree
 {
-    TValue Value;
+    int Value;
     TList Children;
 };
 
@@ -26,7 +25,7 @@ bool IsEmptyTree(TTree tree)
     return tree == NULL;
 }
 
-TTree CreateTree(TValue value, TList list)
+TTree CreateTree(int value, TList list)
 {
     TTree tree = malloc(sizeof(*tree));
     assert(!IsEmptyTree(tree));
@@ -37,7 +36,7 @@ TTree CreateTree(TValue value, TList list)
     return tree;
 }
 
-TTree CreateLeaf(TValue value)
+TTree CreateLeaf(int value)
 {
     return CreateTree(value, NULL);
 }
@@ -197,10 +196,10 @@ int DepthTree(TTree tree)
 
 //////////////////// MAX VALUE ////////////////////
 
-TValue MaxList(TList list);
-TValue MaxTree(TTree tree);
+int MaxList(TList list);
+int MaxTree(TTree tree);
 
-TValue MaxList(TList list)
+int MaxList(TList list)
 {
     if(IsEmptyList(list))
     {
@@ -210,7 +209,7 @@ TValue MaxList(TList list)
     return Max(MaxTree(list->Tree), MaxList(list->Next));
 }
 
-TValue MaxTree(TTree tree)
+int MaxTree(TTree tree)
 {
     if(IsEmptyTree(tree))
     {
@@ -277,13 +276,13 @@ void PrintTree(TTree tree)
 
 int main(void)
 {
-    TValue array1[] = { 
+    TTree array1[] = { 
         CreateLeaf(4), 
         CreateLeaf(5), 
         CreateLeaf(6) 
     };
 
-    TValue array2[] = { 
+    TTree array2[] = { 
         CreateLeaf(7), 
         CreateLeaf(8) 
     };
@@ -291,12 +290,12 @@ int main(void)
     TList list1 = ConvertArrayToTreeList(sizeof(array1) / sizeof(*array1), array1);
     TList list2 = ConvertArrayToTreeList(sizeof(array2) / sizeof(*array2), array2);
 
-    TTree treeArray[] = {
+    TTree array3[] = {
         CreateTree(2, list1),
         CreateTree(3, list2)
     };
 
-    TList list3 = ConvertArrayToTreeList(sizeof(treeArray) / sizeof(*treeArray), treeArray);
+    TList list3 = ConvertArrayToTreeList(sizeof(array3) / sizeof(*array3), array3);
 
     TTree tree = CreateTree(1, list3);
 
