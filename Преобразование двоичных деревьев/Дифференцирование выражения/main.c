@@ -234,6 +234,7 @@ int OperatorPriority(char value)
     }
 
     assert(false);
+    return -1;
 }
 
 TStack InfixToPrefixStack(const char* infix) 
