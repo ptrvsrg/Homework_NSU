@@ -6,7 +6,7 @@
 
 struct Tstack 
 {
-    int Value;
+    char Value;
     struct Tstack* Next;
 };
 
@@ -17,7 +17,7 @@ bool IsEmptyStack(TStack list)
     return list == NULL;
 }
 
-TStack CreateItem(int value)
+TStack CreateItem(char value)
 {
     TStack new = malloc(sizeof(*new));
     assert(!IsEmptyStack(new));
@@ -28,13 +28,11 @@ TStack CreateItem(int value)
     return new;
 }
 
-TStack Push(int value, TStack* list)
+void Push(char value, TStack* list)
 {
     TStack new = CreateItem(value);
     new->Next = *list;
     (*list) = new;
-
-    return *list;
 }
 
 TStack ConvertArrayToStack(size_t arraySize, char* array)
@@ -50,11 +48,11 @@ TStack ConvertArrayToStack(size_t arraySize, char* array)
     return list;
 }
 
-int Pop(TStack* stack)
+char Pop(TStack* stack)
 {
     assert(!IsEmptyStack(*stack));
 
-    int value = (*stack)->Value;
+    char value = (*stack)->Value;
 
     TStack removeElem = *stack;
     *stack = (*stack)->Next;
@@ -70,11 +68,6 @@ void FreeStack(TStack* stack)
     {
         Pop(stack);
     }
-}
-
-int Fabs(int num)
-{
-    return (num >= 0) ? num : -num;
 }
 
 bool IsDigit(char symbol)
@@ -95,10 +88,12 @@ int GetExpressionValue(char operator, int first, int second)
         case '-': return first - second;
         case '*': return first * second;
         case '/':
-            assert(Fabs(second) > 1E-6);
+            assert(second != 0);
             return first / second;
-        default: assert(false);
     }
+
+    assert(false);
+    return -1;
 }
 
 int CalcPrefix(TStack* prefix)
@@ -125,8 +120,8 @@ int main(void)
     TStack stack1 = ConvertArrayToStack(strlen(prefix1), prefix1);
     TStack stack2 = ConvertArrayToStack(strlen(prefix2), prefix2);
     
-    printf("%s = %f\n", prefix1, CalcPrefix(&stack1));
-    printf("%s = %f\n", prefix2, CalcPrefix(&stack2));
+    printf("%s = %d\n", prefix1, CalcPrefix(&stack1));
+    printf("%s = %d\n", prefix2, CalcPrefix(&stack2));
 
     return 0;
 }

@@ -6,7 +6,7 @@
 
 struct Tstack 
 {
-    int Value;
+    char Value;
     struct Tstack* Next;
 };
 
@@ -17,7 +17,7 @@ bool IsEmptyStack(TStack list)
     return list == NULL;
 }
 
-TStack CreateItem(int value)
+TStack CreateItem(char value)
 {
     TStack new = malloc(sizeof(*new));
     assert(!IsEmptyStack(new));
@@ -28,13 +28,11 @@ TStack CreateItem(int value)
     return new;
 }
 
-TStack Push(int value, TStack* list)
+void Push(char value, TStack* list)
 {
     TStack new = CreateItem(value);
     new->Next = *list;
     (*list) = new;
-
-    return *list;
 }
 
 TStack GetNext(TStack stack)
@@ -43,11 +41,11 @@ TStack GetNext(TStack stack)
     return stack->Next;
 }
 
-int Pop(TStack* stack)
+char Pop(TStack* stack)
 {
     assert(!IsEmptyStack(*stack));
 
-    int value = (*stack)->Value;
+    char value = (*stack)->Value;
 
     TStack removeElem = *stack;
     *stack = GetNext(*stack);
@@ -78,11 +76,6 @@ TStack ConvertArrayToStack(size_t arraySize, char* array)
     return list;
 }
 
-int Fabs(int num)
-{
-    return (num >= 0) ? num : -num;
-}
-
 bool IsDigit(char symbol)
 {
     return symbol >= '0' && symbol <= '9';
@@ -103,8 +96,10 @@ int GetExpressionValue(char operator, int first, int second)
         case '/':
             assert(second != 0);
             return first / second;
-        default: assert(false);
     }
+    
+    assert(false);
+    return -1;
 }
 
 int CalcPostfix(TStack postfix)
@@ -115,19 +110,19 @@ int CalcPostfix(TStack postfix)
     {
         if(IsDigit(postfix->Value))
         {
-            Push(SymbolToDigit(postfix->Value), &numberStack);
+            Push((char)SymbolToDigit(postfix->Value), &numberStack);
         }
         else
         {
-            int a = Pop(&numberStack);
-            int b = Pop(&numberStack);
-            Push(GetExpressionValue(postfix->Value, b, a), &numberStack);
+            int a = (int)Pop(&numberStack);
+            int b = (int)Pop(&numberStack);
+            Push((char)GetExpressionValue(postfix->Value, b, a), &numberStack);
         }
 
         postfix = GetNext(postfix);
     }
 
-    int answer = Pop(&numberStack);
+    int answer = (int)Pop(&numberStack);
 
     assert(IsEmptyStack(numberStack));
 
@@ -142,8 +137,8 @@ int main(void)
     TStack stack1 = ConvertArrayToStack(strlen(postfix1), postfix1);
     TStack stack2 = ConvertArrayToStack(strlen(postfix2), postfix2);
 
-    printf("%s = %f\n", postfix1, CalcPostfix(stack1));
-    printf("%s = %f\n", postfix2, CalcPostfix(stack2));
+    printf("%s = %d\n", postfix1, CalcPostfix(stack1));
+    printf("%s = %d\n", postfix2, CalcPostfix(stack2));
 
     return 0;
 }
