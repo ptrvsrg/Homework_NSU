@@ -4,20 +4,32 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <tchar.h>
+#include <string.h>
 #include <windows.h>
 
 #define PREFIX 1024 
 
-typedef enum DIMENSION
+enum DIMENSION
 {
     B, KB, MB, GB, TB
 } DIMENSION;
 
+struct file_size_t
+{
+    DWORD fsv_size;
+    enum DIMENSION fsv_dimension;
+};
+
+static void GetWorkingDirectory(char* exePath)
+{
+    char* tail = strrchr(exePath, '\\');
+    tail[1] = '\0';
+}
+
 static void PrintError(void)
 {
-    TCHAR errorMessage[MAX_PATH] = { 0 };
-    FormatMessage(
+    char errorMessage[MAX_PATH] = { 0 };
+    FormatMessageA(
         FORMAT_MESSAGE_FROM_SYSTEM, 
         NULL, 
         GetLastError(),
@@ -27,29 +39,20 @@ static void PrintError(void)
         NULL
     );
 
-    _tprintf(_TEXT("%s\n"), errorMessage);
+    printf("%s\n", errorMessage);
 }
 
-static void PrintFullPath(PTCHAR exePath, PTCHAR dirName)
+static void PrintFullPath(const char* workingDirName, const char* dirName)
 {
-    TCHAR fullPath[MAX_PATH] = { 0 };
-
-    if (dirName[1] != _TEXT(':'))
-    {
-        PTCHAR endPath = _tcsrchr(exePath, _TEXT('\\'));
-        endPath[1] = _TEXT('\0');
-        _stprintf(fullPath, _TEXT("%s"), exePath);
-    }
-
-    _tprintf(_TEXT("\n\tDirectory of %s%s\n\n"), 
-        fullPath, 
-        (_tcscmp(dirName, _TEXT(".\\")) == 0) ? _TEXT("") : dirName
+    printf("\n\tDirectory of %s%s\n\n", 
+        (dirName[1] == ':') ? "" : workingDirName,
+        (dirName[0] == '.') ? "" : dirName
     );
 }
 
 static void PrintSystemTime(SYSTEMTIME st)
 {
-    _tprintf(_TEXT("%02hu/%02hu/%hu\t%02d:%02hu %s"),  
+    printf("%02hu/%02hu/%hu\t%02d:%02hu %s",  
         st.wMonth, st.wDay, st.wYear,
         (st.wHour % 12 == 0) ? 12 : st.wHour % 12, 
         st.wMinute,
@@ -59,41 +62,46 @@ static void PrintSystemTime(SYSTEMTIME st)
 
 static void PrintAttribute(DWORD fileAttribute)
 {
-    _tprintf(_TEXT((FILE_ATTRIBUTE_DIRECTORY            & fileAttribute) ? "D" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_ARCHIVE              & fileAttribute) ? "A" : "-"));    
-    _tprintf(_TEXT((FILE_ATTRIBUTE_HIDDEN               & fileAttribute) ? "H" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_SYSTEM               & fileAttribute) ? "S" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_READONLY             & fileAttribute) ? "R" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_COMPRESSED           & fileAttribute) ? "C" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_ENCRYPTED            & fileAttribute) ? "E" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_NOT_CONTENT_INDEXED  & fileAttribute) ? "I" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_REPARSE_POINT        & fileAttribute) ? "L" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_OFFLINE              & fileAttribute) ? "O" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_SPARSE_FILE          & fileAttribute) ? "P" : "-"));
-    _tprintf(_TEXT((FILE_ATTRIBUTE_TEMPORARY            & fileAttribute) ? "T" : "-"));
+    printf((FILE_ATTRIBUTE_DIRECTORY            & fileAttribute) ? "D" : "-");
+    printf((FILE_ATTRIBUTE_ARCHIVE              & fileAttribute) ? "A" : "-");    
+    printf((FILE_ATTRIBUTE_HIDDEN               & fileAttribute) ? "H" : "-");
+    printf((FILE_ATTRIBUTE_SYSTEM               & fileAttribute) ? "S" : "-");
+    printf((FILE_ATTRIBUTE_READONLY             & fileAttribute) ? "R" : "-");
+    printf((FILE_ATTRIBUTE_COMPRESSED           & fileAttribute) ? "C" : "-");
+    printf((FILE_ATTRIBUTE_ENCRYPTED            & fileAttribute) ? "E" : "-");
+    printf((FILE_ATTRIBUTE_NOT_CONTENT_INDEXED  & fileAttribute) ? "I" : "-");
+    printf((FILE_ATTRIBUTE_REPARSE_POINT        & fileAttribute) ? "L" : "-");
+    printf((FILE_ATTRIBUTE_OFFLINE              & fileAttribute) ? "O" : "-");
+    printf((FILE_ATTRIBUTE_SPARSE_FILE          & fileAttribute) ? "P" : "-");
+    printf((FILE_ATTRIBUTE_TEMPORARY            & fileAttribute) ? "T" : "-");
 }
 
-static void StandardizeSize(LPDWORD size, DIMENSION* unit)
+static struct file_size_t StandardizeSize(DWORD size)
 {
-    *unit = B;
-    while ((*size) % PREFIX != (*size))
+    struct file_size_t newSize = { 
+        .fsv_size = 0, 
+        .fsv_dimension = B 
+    };
+
+    while (size % PREFIX != size)
     {
-        (*size) = (DWORD)ceil((double)(*size) / PREFIX);
-        ++(*unit);
+        size = (DWORD)ceil((double)size / PREFIX);
+        ++newSize.fsv_dimension;
     }
+
+    return newSize;
 }
 
 static void PrintFileSize(WIN32_FIND_DATA fileData)
 {
     DWORD size = (fileData.nFileSizeHigh * (MAXDWORD+1)) + fileData.nFileSizeLow;
+    struct file_size_t newSize = StandardizeSize(size);
 
-    DIMENSION unit;
-    StandardizeSize(&size, &unit);
-    _tprintf(_TEXT("%lu %s"), size,
-        (unit == B) ? _TEXT("B") :
-        (unit == KB) ? _TEXT("KB") :
-        (unit == MB) ? _TEXT("MB") :
-        (unit == GB) ? _TEXT("GB") : _TEXT("TB")
+    printf("%lu %s", newSize.fsv_size,
+        (newSize.fsv_dimension == B) ? "B" :
+        (newSize.fsv_dimension == KB) ? "KB" :
+        (newSize.fsv_dimension == MB) ? "MB" :
+        (newSize.fsv_dimension == GB) ? "GB" : "TB"
     );
 }
 
@@ -106,31 +114,28 @@ static void PrintInfo(WIN32_FIND_DATA fileData)
         exit(EXIT_FAILURE);
     }
     PrintSystemTime(stLastWrite);
-    _tprintf(_TEXT("\t"));
+    printf("\t");
 
     if ((fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
     {
         PrintFileSize(fileData);
     }
-    _tprintf(_TEXT("\t"));
+    printf("\t");
 
     PrintAttribute(fileData.dwFileAttributes);
-    _tprintf(_TEXT("\t"));
+    printf("\t");
 
-    _tprintf(_TEXT("%s"), fileData.cFileName);
-    _tprintf(_TEXT("\n"));
+    printf("%s", fileData.cFileName);
+    printf("\n");
 }
 
-static void PrintDirectory(PTCHAR exePath, PTCHAR dirName)
+static void PrintDirectory(const char* workingDirName, char* dirName)
 {
-    _tcscat(dirName, _TEXT("\\"));
-    PrintFullPath(exePath, dirName);
+    PrintFullPath(workingDirName, dirName);
 
-    _tcscat(dirName, _TEXT("*"));
-
+    strcat(dirName, "\\*");
     WIN32_FIND_DATA findFileData;
     HANDLE hFile = FindFirstFile(dirName, &findFileData);
-
     if (hFile == INVALID_HANDLE_VALUE)
     {
         PrintError();
@@ -149,23 +154,24 @@ static void PrintDirectory(PTCHAR exePath, PTCHAR dirName)
     }
 }
 
-int _tmain(int argc, TCHAR *argv[])
+int main(int argc, char* argv[])
 {
     setlocale(LC_ALL, "Russian");
-    TCHAR dirName[MAX_PATH] = { 0 };
-    PTCHAR exePath = argv[0];
+    char dirName[MAX_PATH] = { 0 };
+    char* workingDirName = argv[0];
+    GetWorkingDirectory(workingDirName);
 
     if (argc == 1)
     {
-        _stprintf(dirName, _TEXT("."));
-        PrintDirectory(exePath, dirName);
+        snprintf(dirName, MAX_PATH, ".");
+        PrintDirectory(workingDirName, dirName);
     }
     else
     {
         while (argc > 1)
         {
-            _stprintf(dirName, _TEXT("%s"), argv[1]);
-            PrintDirectory(exePath, dirName);
+            snprintf(dirName, MAX_PATH, "%s", argv[1]);
+            PrintDirectory(workingDirName, dirName);
             --argc;
             ++argv;
         }
