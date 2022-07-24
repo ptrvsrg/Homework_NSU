@@ -251,35 +251,36 @@ int _tmain(int argc, TCHAR *argv[])
 #include <sys/stat.h>
 #include <time.h>
 
-#ifndef MAX_PATH
 #define MAX_PATH 256
-#endif // MAX_PATH
-
 #define PREFIX 1024 
 
-typedef enum DIMENSION
+enum DIMENSION
 {
     B, KB, MB, GB, TB
-} DIMENSION;
+};
+
+struct file_size_t
+{
+    off_t fsv_size;
+    enum DIMENSION fsv_dimension;
+};
+
+static void GetWorkingDirectory(char* exePath)
+{
+    char* tail = strrchr(exePath, '/');
+    tail[1] = '\0';
+}
+
 static void PrintError(void)
 {
     perror(strerror(errno));
 }
 
-static void PrintFullPath(char* exePath, char* dirName)
+static void PrintFullPath(const char* workingDirName, const char* dirName)
 {
-    char fullPath[MAX_PATH] = { 0 };
-
-    if (dirName[1] != ':')
-    {
-        char* endPath = strrchr(exePath, '\\');
-        endPath[1] = '\0';
-        snprintf(fullPath, MAX_PATH, "%s", exePath);
-    }
-
     printf("\n\tDirectory of %s%s\n\n", 
-        fullPath, 
-        (strcmp(dirName, ".\\") == 0) ? "" : dirName
+        (dirName[0] == '/') ? "" : workingDirName,
+        (dirName[0] == '.') ? "" : dirName
     );
 }
 
@@ -325,31 +326,36 @@ static void PrintAttribute(mode_t attribute)
     printf("%c", (attribute & S_IXOTH) ? 'x' : '-');
 }
 
-static void StandardizeSize(off_t* size, DIMENSION* unit)
+static struct file_size_t StandardizeSize(off_t size)
 {
-    *unit = B;
-    while ((*size) % PREFIX != (*size))
+    struct file_size_t newSize = { 
+        .fsv_size = 0, 
+        .fsv_dimension = B 
+    };
+
+    while (size % PREFIX != size)
     {
-        (*size) = (off_t)ceil((double)(*size) / PREFIX);
-        ++(*unit);
+        size = (off_t)ceil((double)size / PREFIX);
+        ++newSize.fsv_dimension;
     }
+
+    return newSize;
 }
 
 static void PrintFileSize(off_t fileSize)
 {
-    DIMENSION unit;
-    StandardizeSize(&fileSize, &unit);
-    printf("%lu %s", fileSize,
-        (unit == B) ? "B" :
-        (unit == KB) ? "KB" :
-        (unit == MB) ? "MB" :
-        (unit == GB) ? "GB" : "TB"
+    struct file_size_t size = StandardizeSize(fileSize);
+    printf("%lu %s", size.fsv_size,
+        (size.fsv_dimension == B) ? "B" :
+        (size.fsv_dimension == KB) ? "KB" :
+        (size.fsv_dimension == MB) ? "MB" :
+        (size.fsv_dimension == GB) ? "GB" : "TB"
     );
 }
 
 static void PrintSystemTime(struct timespec st)
 {
-    struct tm* clock = localtime(&st.tv_sec);
+    const struct tm * const clock = localtime(&st.tv_sec);
     
     printf("%02d/%02d/%d\t%02d:%02d %s",  
         clock->tm_mon, clock->tm_mday, clock->tm_year,
@@ -359,10 +365,17 @@ static void PrintSystemTime(struct timespec st)
     );
 }
 
-static void PrintInfo(struct dirent* file)
+static void PrintInfo(const char* dirName, const char* fileName)
 {
+    char fullFileName[MAX_PATH] = { 0 };
+    snprintf(fullFileName, MAX_PATH, "%s%s%s",
+        dirName,
+        (dirName[strlen(dirName) - 1] != '/') ? "/" : "",
+        fileName
+    );
+
     struct stat fileStat;
-    if (stat(file->d_name, &fileStat) == -1)
+    if (stat(fullFileName, &fileStat) == -1)
     {
         PrintError();
         exit(EXIT_FAILURE);
@@ -380,28 +393,25 @@ static void PrintInfo(struct dirent* file)
     PrintSystemTime(fileStat.st_ctim);
     printf("\t");
 
-    printf("%s", file->d_name);
+    printf("%s", fileName);
     printf("\n");
 }
 
-static void PrintDirectory(char* exePath, char* dirName)
+static void PrintDirectory(const char* workingDirName, const char* dirName)
 {
-    strncat(dirName, "\\", MAX_PATH);
-    PrintFullPath(exePath, dirName);
-
-    strncat(dirName, "*", MAX_PATH);
-
-    DIR* dirStream = opendir(dirName);
+    DIR * const  dirStream = opendir(dirName);
     if (dirStream == NULL)
     {
         PrintError();
         exit(EXIT_FAILURE);
     }
 
+    PrintFullPath(workingDirName, dirName);
+
     struct dirent* file = NULL;
     while ((file = readdir(dirStream)) != NULL)
     {
-        PrintInfo(file);
+        PrintInfo(dirName, file->d_name);
     }
     
     if (closedir(dirStream) == -1)
@@ -415,19 +425,19 @@ int main(int argc, char *argv[])
 {
     setlocale(LC_ALL, "Russian");
     char dirName[MAX_PATH] = { 0 };
-    char* exePath = argv[0];
+    char* workingDirName = argv[0];
+    GetWorkingDirectory(workingDirName);
 
     if (argc == 1)
     {
         snprintf(dirName, MAX_PATH, ".");
-        PrintDirectory(exePath, dirName);
+        PrintDirectory(workingDirName, dirName);
     }
     else
     {
         while (argc > 1)
         {
-            snprintf(dirName, MAX_PATH, "%s", argv[1]);
-            PrintDirectory(exePath, dirName);
+            PrintDirectory(workingDirName, argv[1]);
             --argc;
             ++argv;
         }
