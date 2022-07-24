@@ -12,7 +12,7 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
 
     foreach ($str in (Get-Content -Path "build\CMakeLog.txt" | Select-Object -Skip 3 -First 3))
     {
-        Write-Host -ForegroundColor DarkGreen $str
+        Write-Host -ForegroundColor Green $str
     }
 
     if (Select-String -Path "build\CMakeLog.txt" -Pattern "warning", "error")
@@ -20,7 +20,7 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
         $EXIT_STATUS = 1
         foreach ($str in (Get-Content -Path "build\CMakeLog.txt" | Select-Object -Skip 6))
         {
-            Write-Host -ForegroundColor DarkRed $str
+            Write-Host -ForegroundColor Red $str
         }
         
         Write-Host -ForegroundColor Red Build failed
@@ -29,14 +29,13 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
     {
         foreach ($str in (Get-Content -Path "build\CMakeLog.txt" | Select-Object -Skip 6))
         {
-            Write-Host -ForegroundColor DarkGreen $str
+            Write-Host -ForegroundColor Green $str
         }
 
         Write-Host -ForegroundColor Green Build completed    
     }
 
     Write-Host ""
-	Remove-Item -Path build -Recurse 2> $null
     Set-Location $HOME_DIR
 }
 
