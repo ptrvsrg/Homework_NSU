@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define YEAR_SIZE_IN_DAYS  365.25
+#define YEAR_SIZE_IN_DAYS  365
 
 enum
 {
