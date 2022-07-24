@@ -59,84 +59,18 @@ static void PrintSystemTime(SYSTEMTIME st)
 
 static void PrintAttribute(DWORD fileAttribute)
 {
-    while (fileAttribute)
-    {
-        if (FILE_ATTRIBUTE_READONLY & fileAttribute)
-        {
-            _tprintf(_TEXT("<R>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_READONLY;
-        }
-        if (FILE_ATTRIBUTE_HIDDEN & fileAttribute)
-        {
-            _tprintf(_TEXT("<H>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_HIDDEN;
-        }
-        if (FILE_ATTRIBUTE_SYSTEM & fileAttribute)
-        {
-            _tprintf(_TEXT("<S>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_SYSTEM;
-        }
-        if (FILE_ATTRIBUTE_DIRECTORY & fileAttribute)
-        {
-            _tprintf(_TEXT("<DIR>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_DIRECTORY;
-        }
-        if (FILE_ATTRIBUTE_ARCHIVE & fileAttribute)
-        {
-            _tprintf(_TEXT("<A>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_ARCHIVE;
-        }
-        if (FILE_ATTRIBUTE_DEVICE & fileAttribute)
-        {
-            _tprintf(_TEXT("<DEV>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_DEVICE;
-        }
-        if (FILE_ATTRIBUTE_NORMAL & fileAttribute)
-        {
-            _tprintf(_TEXT("<N>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_NORMAL;
-        }
-        if (FILE_ATTRIBUTE_TEMPORARY & fileAttribute)
-        {
-            _tprintf(_TEXT("<T>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_TEMPORARY;
-        }
-        if (FILE_ATTRIBUTE_SPARSE_FILE & fileAttribute)
-        {
-            _tprintf(_TEXT("<S>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_SPARSE_FILE;
-        }
-        if (FILE_ATTRIBUTE_REPARSE_POINT & fileAttribute)
-        {
-            _tprintf(_TEXT("<R>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_REPARSE_POINT;
-        }
-        if (FILE_ATTRIBUTE_COMPRESSED & fileAttribute)
-        {
-            _tprintf(_TEXT("<C>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_COMPRESSED;
-        }
-        if (FILE_ATTRIBUTE_OFFLINE & fileAttribute)
-        {
-            _tprintf(_TEXT("<O>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_OFFLINE;
-        }
-        if (FILE_ATTRIBUTE_NOT_CONTENT_INDEXED & fileAttribute)
-        {
-            _tprintf(_TEXT("<N>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_NOT_CONTENT_INDEXED;
-        }
-        if (FILE_ATTRIBUTE_ENCRYPTED & fileAttribute)
-        {
-            _tprintf(_TEXT("<E>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_ENCRYPTED;
-        }
-        if (FILE_ATTRIBUTE_VIRTUAL & fileAttribute)
-        {
-            _tprintf(_TEXT("<V>"));
-            fileAttribute &= ~FILE_ATTRIBUTE_VIRTUAL;
-        }
-    }
+    _tprintf(_TEXT((FILE_ATTRIBUTE_DIRECTORY            & fileAttribute) ? "D" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_ARCHIVE              & fileAttribute) ? "A" : "-"));    
+    _tprintf(_TEXT((FILE_ATTRIBUTE_HIDDEN               & fileAttribute) ? "H" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_SYSTEM               & fileAttribute) ? "S" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_READONLY             & fileAttribute) ? "R" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_COMPRESSED           & fileAttribute) ? "C" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_ENCRYPTED            & fileAttribute) ? "E" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_NOT_CONTENT_INDEXED  & fileAttribute) ? "I" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_REPARSE_POINT        & fileAttribute) ? "L" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_OFFLINE              & fileAttribute) ? "O" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_SPARSE_FILE          & fileAttribute) ? "P" : "-"));
+    _tprintf(_TEXT((FILE_ATTRIBUTE_TEMPORARY            & fileAttribute) ? "T" : "-"));
 }
 
 static void StandardizeSize(LPDWORD size, DIMENSION* unit)
