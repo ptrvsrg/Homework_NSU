@@ -1,9 +1,11 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <assert.h>
 #include <setjmp.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#define UNUSED(x) (void)(x)
 #define SUCCESS_JUMP 1
 static jmp_buf position;
 
@@ -28,6 +30,7 @@ void ScanInt(void* value)
 {
     int* newValue = value;
     int control = scanf("%d", newValue);
+    UNUSED(control);
     assert(control == 1);
 }
 
@@ -198,6 +201,7 @@ int main(void)
 {
     int stoneCount = 0;
     int control = scanf("%d", &stoneCount);
+    UNUSED(control);
     assert(control == 1);
     
     TVector stone = ScanVector(sizeof(int), stoneCount, ScanInt);

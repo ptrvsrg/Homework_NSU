@@ -1,7 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#define UNUSED(x) (void)(x)
 
 typedef struct TList* TList;
 
@@ -33,7 +36,8 @@ TList InputList(size_t listSize)
         assert(!IsEmptyList(list));
 
         int control = scanf("%d", &(list->Value));
-        assert(control != EOF);
+        UNUSED(control);
+        assert(control == 1);
 
         list->Next = InputList(listSize - 1);
 
@@ -131,7 +135,8 @@ int main(void)
 {
     int listSize = 0;
     int control = scanf("%d", &listSize);
-    assert(control != EOF);
+    UNUSED(control);
+    assert(control == 1);
 
     TList list = InputList(listSize);
 

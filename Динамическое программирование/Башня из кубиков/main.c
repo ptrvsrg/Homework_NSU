@@ -1,8 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#define UNUSED(x) (void)(x);
 #define IMPOSSIBLE -1
 #define MAX_CUBE_COUNT 1000
 
@@ -128,6 +130,7 @@ void ScanCube(void* value)
 {
     TCube* newValue = value;
     int control = scanf("%d%d%d", &newValue->X, &newValue->Y, &newValue->Z);
+    UNUSED(control);
     assert(control == 3);
 }
 
@@ -240,6 +243,7 @@ int main(void)
 
     int cubeCount = 0;
     int control = scanf("%d", &cubeCount);
+    UNUSED(control);
     assert(control == 1);
 
     if (cubeCount >= MAX_CUBE_COUNT)
