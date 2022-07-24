@@ -37,11 +37,16 @@ TTree CreateTree(TValue value, TList list)
     return tree;
 }
 
+TTree CreateLeaf(TValue value)
+{
+    return CreateTree(value, NULL);
+}
+
 //////////////////// TREE LIST TYPE ////////////////////
 
 struct Tlist
 {
-    TTree Child;
+    TTree Tree;
     TList Next;
 };
 
@@ -55,7 +60,7 @@ TList CreateItem(TTree tree)
     TList list = malloc(sizeof(*list));
     assert(!IsEmptyList(list));
 
-    list->Child = tree;
+    list->Tree = tree;
     list->Next = NULL;
 
     return list;
@@ -71,7 +76,7 @@ void PushList(TTree tree, TList* list)
 TTree GetTopList(TList list)
 {
     assert(!IsEmptyList(list));
-    return list->Child;
+    return list->Tree;
 }
 
 TTree PopList(TList* list)
@@ -94,19 +99,6 @@ int SizeList(TList list)
     }
 
     return 1 + SizeList(list->Next);
-}
-
-TList ConvertArrayToLeafList(int arraySize, TValue array[])
-{
-    if(arraySize <= 0)
-    {
-        return NULL;
-    }
-
-    TList list = CreateItem(CreateTree(*array, NULL));
-    list->Next = ConvertArrayToLeafList(arraySize - 1, array + 1);
-
-    return list;
 }
 
 TList ConvertArrayToTreeList(int arraySize, TTree array[])
@@ -190,7 +182,7 @@ int DepthList(TList list)
         return 0;
     }
 
-    return Max(DepthTree(list->Child), DepthList(list->Next));
+    return Max(DepthTree(list->Tree), DepthList(list->Next));
 }
 
 int DepthTree(TTree tree)
@@ -215,7 +207,7 @@ TValue MaxList(TList list)
         return INT_MIN;
     }
 
-    return Max(MaxTree(list->Child), MaxList(list->Next));
+    return Max(MaxTree(list->Tree), MaxList(list->Next));
 }
 
 TValue MaxTree(TTree tree)
@@ -238,7 +230,7 @@ void DestroyList(TList* list)
     if(!IsEmptyList(*list))
     {
         DestroyList(&(*list)->Next);
-        DestroyTree(&(*list)->Child);
+        DestroyTree(&(*list)->Tree);
         free(*list);
     }
 }
@@ -262,7 +254,7 @@ void PrintTree(TTree tree)
 
     while (!IsEmptyQueue(queue))
     {
-        TTree tree = PopQueue(&queue);
+        TTree subtree = PopQueue(&queue);
         --subtreeCount;
 
         if(IsEmptyTree(tree))
@@ -270,8 +262,8 @@ void PrintTree(TTree tree)
             continue;
         }
 
-        PushListQueue(tree->Children, &queue);
-        printf("%d ", tree->Value);
+        PushListQueue(subtree->Children, &queue);
+        printf("%d ", subtree->Value);
 
         if(subtreeCount == 0)
         {
@@ -285,11 +277,19 @@ void PrintTree(TTree tree)
 
 int main(void)
 {
-    TValue array1[] = { 4, 5, 6 };
-    TValue array2[] = { 7, 8 };
+    TValue array1[] = { 
+        CreateLeaf(4), 
+        CreateLeaf(5), 
+        CreateLeaf(6) 
+    };
+
+    TValue array2[] = { 
+        CreateLeaf(7), 
+        CreateLeaf(8) 
+    };
     
-    TList list1 = ConvertArrayToLeafList(sizeof(array1) / sizeof(*array1), array1);
-    TList list2 = ConvertArrayToLeafList(sizeof(array2) / sizeof(*array2), array2);
+    TList list1 = ConvertArrayToTreeList(sizeof(array1) / sizeof(*array1), array1);
+    TList list2 = ConvertArrayToTreeList(sizeof(array2) / sizeof(*array2), array2);
 
     TTree treeArray[] = {
         CreateTree(2, list1),
