@@ -22,5 +22,5 @@ float Sqrt(float arg, float eps)
 
 int main(void)
 {
-    printf("%f", Sqrt(0.04, 0.01));
+    printf("%f", Sqrt(0.04F, 0.01F));
 }

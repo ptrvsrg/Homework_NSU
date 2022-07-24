@@ -108,7 +108,7 @@ TValue MaxSingleBitsList(TList list);
 
 TValue Max(TValue a, TValue b)
 {
-    return (PopulationCount(a, ~0, UINT_SIZE) <= PopulationCount(b, ~0, UINT_SIZE)) ? b : a;
+    return (PopulationCount(a, ~0U, UINT_SIZE) <= PopulationCount(b, ~0U, UINT_SIZE)) ? b : a;
 }
 
 TValue MaxSingleBitsTree(TTree tree)

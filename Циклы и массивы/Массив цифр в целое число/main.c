@@ -13,7 +13,7 @@ int NumberToDigitsArray(int* Array, int SizeOfArray)
 
 	for (int i = 0; i < SizeOfArray; i++)
 	{
-		Sum += Array[i] * pow(10, i);
+		Sum += Array[i] * (int)pow(10, i);
 	}
 
 	return Sum;

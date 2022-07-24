@@ -60,7 +60,7 @@ int main()
 	}
     
 	PrintBits(Number);
-	printf("\nCount of single bits is %d", PopulationCount(Number, ~0, UNSIGNED_INT_SIZE));
+	printf("\nCount of single bits is %d", PopulationCount(Number, ~0U, UNSIGNED_INT_SIZE));
 
 	return SUCCESS;
 }

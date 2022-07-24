@@ -31,7 +31,7 @@ int SearchSpace(int begin, int end, const char* string)
 
 void ReverseString(char* string)
 {
-    int length = strlen(string);
+    int length = (int)strlen(string);
     int begin = 0;
     int end = 0;
 

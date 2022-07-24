@@ -154,7 +154,7 @@ bool IsEndBracket(char symbol)
 void CheckBrackets(const char* line)
 {
     TStack stack = CreateStack();
-    size_t index = 0;
+    int index = 0;
 
     while(line[index] != '\0')
     {
