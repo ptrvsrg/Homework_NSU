@@ -38,12 +38,12 @@ void PrintBits(unsigned int Symbol)
 
 unsigned char* IntToCharArray(unsigned int number)
 {
-    unsigned char Mask = ~'\0';
+    unsigned int Mask = 255U;
     unsigned char* Array = malloc(4 * sizeof(*Array));
 
     for(int i = INT_BYTE - 1; i >= 0; i--)
     {
-        Array[i] = Mask & number;
+        Array[i] = (unsigned char)(Mask & number);
         number >>= BYTE_SIZE;
     }
 
@@ -96,7 +96,7 @@ unsigned int ReverseIntBits(unsigned int Number)
 
     for(size_t i = 0; i < INT_BYTE; ++i)
     {
-        Array[i] = ReverseCharBits(Array[i], ~'\0', BYTE_SIZE);
+        Array[i] = ReverseCharBits(Array[i], (unsigned char)255, BYTE_SIZE);
     }
 
     ReverseArray(Array);
