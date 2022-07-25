@@ -1,6 +1,0 @@
-image:
-  - Ubuntu2004
-  - Visual Studio 2019
-
-build_script:
-  - pwsh: ./building.ps1
