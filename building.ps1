@@ -9,8 +9,13 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
 {
     Write-Host  -ForegroundColor White "Building $MY_PATH..."
     Set-Location $MY_PATH
-	Remove-Item -Path build -Recurse 2> $null
-	cmake -Bbuild > $null
+
+    if (Test-Path "build")
+    {
+	    Remove-Item -Path build -Recurse
+    }
+	
+    cmake -Bbuild > $null
     New-Item -Path $CMAKE_LOG_PATH > $null
 
     if ($IsWindows) 
@@ -49,16 +54,17 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
 
         if ((Get-Content -Path $CMAKE_LOG_PATH).length -eq 0)
         {
-            Write-Host ""
-            Get-Content -Path $CMAKE_LOG_PATH
-            $EXIT_STATUS = 1
-
+            Write-Host -ForegroundColor Green "Build completed"
+        }
+        else 
+        {
             foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH))
             {
                 Write-Host -ForegroundColor Red $str
             }
             
             Write-Host -ForegroundColor Red "Build failed"
+            $EXIT_STATUS = 1
         }
     }
 
