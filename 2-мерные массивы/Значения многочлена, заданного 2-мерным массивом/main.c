@@ -4,7 +4,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-void PrintArray(size_t row, size_t column, float array[row][column])
+#define ROW 3
+#define COLUMN 2
+
+void PrintArray(size_t row, size_t column, float array[ROW][COLUMN])
 {
 	for (size_t i = 0; i < row; i++)
 	{
@@ -17,9 +20,9 @@ void PrintArray(size_t row, size_t column, float array[row][column])
 	}
 }
 
-void FillRandomValues(size_t row, size_t column, float array[row][column])
+void FillRandomValues(size_t row, size_t column, float array[ROW][COLUMN])
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	for (size_t i = 0; i < row; i++)
 	{
@@ -30,7 +33,7 @@ void FillRandomValues(size_t row, size_t column, float array[row][column])
 	}
 }
 
-float CalcPoly(size_t row, size_t column, float array[row][column], float x, float y)
+float CalcPoly(size_t row, size_t column, float array[ROW][COLUMN], float x, float y)
 {
 	if (x == 0.0 || y == 0.0)
 	{
@@ -58,15 +61,15 @@ float CalcPoly(size_t row, size_t column, float array[row][column], float x, flo
 
 int main(void)
 {
-	float array[2][3];
+	float array[ROW][COLUMN];
 	float x, y;
 
 	assert(scanf("%f %f", &x, &y) != 2);
 
-	FillRandomValues(2, 3, array);
-	PrintArray(2, 3, array);
+	FillRandomValues(ROW, COLUMN, array);
+	PrintArray(ROW, COLUMN, array);
 
-	printf("\nPolynom is %f\n", CalcPoly(2, 3, array, x, y));
+	printf("\nPolynom is %f\n", CalcPoly(ROW, COLUMN, array, x, y));
 
 	return 0;
 }

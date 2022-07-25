@@ -4,7 +4,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-void PrintArray(size_t row, size_t column, float array[row][column])
+#define ROW 3
+#define COLUMN 2
+
+void PrintArray(size_t row, size_t column, float array[ROW][COLUMN])
 {
 	for (size_t i = 0; i < row; i++)
 	{
@@ -17,9 +20,9 @@ void PrintArray(size_t row, size_t column, float array[row][column])
 	}
 }
 
-void FillRandomValues(size_t row, size_t column, float array[row][column])
+void FillRandomValues(size_t row, size_t column, float array[ROW][COLUMN])
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	for (size_t i = 0; i < row; i++)
 	{
@@ -30,13 +33,11 @@ void FillRandomValues(size_t row, size_t column, float array[row][column])
 	}
 }
 
-void ArrayCopy(size_t row1, size_t column1, float array1[row1][column1], size_t row2, size_t column2, float array2[row2][column2])
+void ArrayCopy(size_t row, size_t column, float array1[ROW][COLUMN], float array2[ROW][COLUMN])
 {
-	assert(row1 == row2 && column1 == column2);
-
-    for (size_t i = 0; i < row1; i++)
+    for (size_t i = 0; i < row; i++)
     {
-        for (size_t j = 0; j < column1; j++)
+        for (size_t j = 0; j < column; j++)
         {
             array2[i][j] = array1[i][j];
         }
@@ -45,16 +46,16 @@ void ArrayCopy(size_t row1, size_t column1, float array1[row1][column1], size_t 
 
 int main(void)
 {
-	float array1[3][4];
-	float array2[3][4];
+	float array1[ROW][COLUMN];
+	float array2[ROW][COLUMN];
 
-	FillRandomValues(3, 4, array1);
+	FillRandomValues(ROW, COLUMN, array1);
 	printf("First matrix: \n");
 	PrintArray(3, 4, array1);
 
     printf("\nCopied matrix:\n");
-    ArrayCopy(3, 4, array1, 3, 4, array2);
-    PrintArray(3, 4, array2);
+    ArrayCopy(ROW, COLUMN, array1, array2);
+    PrintArray(ROW, COLUMN, array2);
 
 	return 0;
 }

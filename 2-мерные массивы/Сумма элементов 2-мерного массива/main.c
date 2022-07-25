@@ -3,7 +3,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-void PrintArray(size_t row, size_t column, float array[row][column])
+#define ROW 3
+#define COLUMN 2 
+
+void PrintArray(size_t row, size_t column, float array[ROW][COLUMN])
 {
 	for (size_t i = 0; i < row; i++)
 	{
@@ -16,9 +19,9 @@ void PrintArray(size_t row, size_t column, float array[row][column])
 	}
 }
 
-void FillRandomValues(size_t row, size_t column, float array[row][column])
+void FillRandomValues(size_t row, size_t column, float array[ROW][COLUMN])
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	for (size_t i = 0; i < row; i++)
 	{
@@ -29,7 +32,7 @@ void FillRandomValues(size_t row, size_t column, float array[row][column])
 	}
 }
 
-float SumElementOfArray(size_t row, size_t column, float array[row][column])
+float SumElementOfArray(size_t row, size_t column, float array[ROW][COLUMN])
 {
 	float sum = 0.0;
 
@@ -46,12 +49,12 @@ float SumElementOfArray(size_t row, size_t column, float array[row][column])
 
 int main(void)
 {
-	float array[3][4];
+	float array[ROW][COLUMN];
 
-	FillRandomValues(3, 4, array);
-	PrintArray(3, 4, array);
+	FillRandomValues(ROW, COLUMN, array);
+	PrintArray(ROW, COLUMN, array);
 
-	printf("\nSum is %f\n", SumElementOfArray(3, 4, array));
+	printf("\nSum is %f\n", SumElementOfArray(ROW, COLUMN, array));
 
 	return 0;
 }

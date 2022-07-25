@@ -1,7 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
-void PrintArray(int row, int column, const float array[row][column])
+#define ROW 3
+#define COLUMN 2
+
+void PrintArray(int row, int column, const float array[ROW][COLUMN])
 {
 	for (int i = 0; i < row; i++)
 	{
@@ -14,7 +17,7 @@ void PrintArray(int row, int column, const float array[row][column])
 	}
 }
 
-int GetNumberOfNullRow(int row, int column, const float array[row][column])
+int GetNumberOfNullRow(int row, int column, const float array[ROW][COLUMN])
 {
 	int nullRow = 0;
 
@@ -38,25 +41,14 @@ int GetNumberOfNullRow(int row, int column, const float array[row][column])
 
 int main()
 {
-	const float array1[3][4] = { 
-		{1, 2, 3, 4}, 
-		{0, 0, 0, 0}, 
-		{4, 3, 2, 1} 
+	const float array1[ROW][COLUMN] = { 
+		{ 1, 2 }, 
+		{ 0, 0 }, 
+		{ 4, 3 } 
 	};
 
-	const float array2[5][2] = { 
-		{1, 2}, 
-		{0, 0}, 
-		{4, 3}, 
-		{0, 0}, 
-		{0, 0} 
-	};
-
-	PrintArray(3, 4, array1);
-	printf("Number of null rows is %d\n\n", GetNumberOfNullRow(3, 4, array1));
-
-	PrintArray(5, 2, array2);
-	printf("Number of null rows is %d\n", GetNumberOfNullRow(5, 2, array2));
+	PrintArray(ROW, COLUMN, array1);
+	printf("Number of null rows is %d\n\n", GetNumberOfNullRow(ROW, COLUMN, array1));
 
 	return 0;
 }
