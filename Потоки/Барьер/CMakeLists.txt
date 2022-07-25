@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.1)
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.16.3)
 project(Homework C)
 
 set(SRC main.c)
