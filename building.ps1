@@ -3,6 +3,8 @@ $EXIT_STATUS = 0
 if ($IsWindows) { $CMAKE_LOG_PATH = "build\CMakeLog.txt" }
 if ($IsLinux) { $CMAKE_LOG_PATH = "build/CMakeLog.txt" }
 
+Write-Host ""
+
 foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).replace('CMakeLists.txt', '')))
 {
     Write-Host  -ForegroundColor White "Building $MY_PATH..."
@@ -47,10 +49,7 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
 
         if ((Get-Content -Path $CMAKE_LOG_PATH).length -eq 0)
         {
-            Write-Host -ForegroundColor Red "Build failed"
-        }
-        else
-        {
+            Write-Host ""
             Get-Content -Path $CMAKE_LOG_PATH
             $EXIT_STATUS = 1
 
@@ -59,7 +58,7 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
                 Write-Host -ForegroundColor Red $str
             }
             
-            Write-Host -ForegroundColor Green "Build completed"
+            Write-Host -ForegroundColor Red "Build failed"
         }
     }
 
