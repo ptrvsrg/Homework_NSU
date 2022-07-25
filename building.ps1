@@ -1,7 +1,5 @@
 $HOME_DIR = (Get-Location).path
 $EXIT_STATUS = 0
-if ($IsWindows) { $CMAKE_LOG_PATH = "build\CMakeLog.txt" }
-if ($IsLinux) { $CMAKE_LOG_PATH = "build/CMakeLog.txt" }
 
 Write-Host ""
 
@@ -16,21 +14,20 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
     }
 	
     cmake -Bbuild > $null
-    New-Item -Path $CMAKE_LOG_PATH > $null
 
     if ($IsWindows) 
     {
-        cmake --build build > $CMAKE_LOG_PATH
+        $CMAKE_LOG = (cmake --build build)
 
-        foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH -Encoding UTF8 | Select-Object -Skip 3 -First 3))
+        foreach ($str in ($CMAKE_LOG | Select-Object -Skip 3 -First 3))
         {
             Write-Host -ForegroundColor Green $str
         }
 
-        if (Select-String -Path $CMAKE_LOG_PATH -Pattern "warning", "error")
+        if ($CMAKE_LOG | Select-String -Pattern "warning", "error")
         {
             $EXIT_STATUS = 1
-            foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH -Encoding UTF8 | Select-Object -Skip 6))
+            foreach ($str in ($CMAKE_LOG | Select-Object -Skip 6))
             {
                 Write-Host -ForegroundColor Red $str
             }
@@ -39,7 +36,7 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
         }
         else
         {
-            foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH -Encoding UTF8 | Select-Object -Skip 6))
+            foreach ($str in ($CMAKE_LOG | Select-Object -Skip 6))
             {
                 Write-Host -ForegroundColor Green $str
             }
@@ -50,21 +47,31 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
 
     if ($IsLinux)
     {
-        cmake --build build 2> $CMAKE_LOG_PATH
+        $CMAKE_LOG = (cmake --build build)
 
-        if ((Get-Content -Path $CMAKE_LOG_PATH).length -eq 0)
+        foreach ($str in ($CMAKE_LOG | Select-Object -First 2))
         {
-            Write-Host -ForegroundColor Green "Build completed"
+            Write-Host -ForegroundColor Green $str
         }
-        else 
+
+        if ($CMAKE_LOG | Select-String -Pattern "warning", "error")
         {
-            foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH))
+            $EXIT_STATUS = 1
+            foreach ($str in ($CMAKE_LOG | Select-Object -Skip 2))
             {
                 Write-Host -ForegroundColor Red $str
             }
             
-            Write-Host -ForegroundColor Red "Build failed"
-            $EXIT_STATUS = 1
+            Write-Host -ForegroundColor Red Build failed
+        }
+        else
+        {
+            foreach ($str in ($CMAKE_LOG | Select-Object -Skip 2))
+            {
+                Write-Host -ForegroundColor Green $str
+            }
+
+            Write-Host -ForegroundColor Green Build completed    
         }
     }
 
