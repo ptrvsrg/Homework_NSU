@@ -22,7 +22,7 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
     {
         cmake --build build > $CMAKE_LOG_PATH
 
-        foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH | Select-Object -Skip 3 -First 3))
+        foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH -Encoding UTF8 | Select-Object -Skip 3 -First 3))
         {
             Write-Host -ForegroundColor Green $str
         }
@@ -30,7 +30,7 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
         if (Select-String -Path $CMAKE_LOG_PATH -Pattern "warning", "error")
         {
             $EXIT_STATUS = 1
-            foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH | Select-Object -Skip 6))
+            foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH -Encoding UTF8 | Select-Object -Skip 6))
             {
                 Write-Host -ForegroundColor Red $str
             }
@@ -39,7 +39,7 @@ foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).repla
         }
         else
         {
-            foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH | Select-Object -Skip 6))
+            foreach ($str in (Get-Content -Path $CMAKE_LOG_PATH -Encoding UTF8 | Select-Object -Skip 6))
             {
                 Write-Host -ForegroundColor Green $str
             }
