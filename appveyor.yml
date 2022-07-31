@@ -3,15 +3,14 @@ image:
 - Ubuntu2004
 - Visual Studio 2019
 build_script:
-- ps: $PSVersiontable
-- ps: $STATUS = 0
-- ps: $PATHS = (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).replace('CMakeLists.txt', ''))
-- ps: >-
+- pwsh: $STATUS = 0
+- pwsh: $PATHS = (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).replace('CMakeLists.txt', ''))
+- pwsh: >-
     foreach ($MY_PATH in $PATHS)
     {
       (./building.ps1 $MY_PATH) || ($STATUS = 1)
     }
-- ps: exit $STATUS
+- pwsh: exit $STATUS
 notifications:
 - provider: Email
   to:
