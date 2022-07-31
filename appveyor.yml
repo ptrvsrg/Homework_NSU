@@ -6,10 +6,10 @@ build_script:
 - ps: $STATUS = 0
 - ps: $PATHS = (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).replace('CMakeLists.txt', ''))
 - ps: >-
-foreach ($MY_PATH in $PATHS)
-{
-  ./building.ps1 $MY_PATH || STATUS = 1
-}
+    foreach ($MY_PATH in $PATHS)
+    {
+      ./building.ps1 $MY_PATH || STATUS = 1
+    }
 - ps: exit $STATUS
 notifications:
 - provider: Email
