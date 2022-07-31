@@ -3,6 +3,7 @@ image:
 - Ubuntu2004
 - Visual Studio 2019
 build_script:
+- ps: $PSVersiontable
 - ps: $STATUS = 0
 - ps: $PATHS = (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).replace('CMakeLists.txt', ''))
 - ps: >-
