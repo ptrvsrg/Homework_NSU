@@ -4,8 +4,9 @@ image:
 - Visual Studio 2019
 build_script:
 - ps: $STATUS = 0
+- ps: $PATHS = (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).replace('CMakeLists.txt', ''))
 - ps: >-
-foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).replace('CMakeLists.txt', '')))
+foreach ($MY_PATH in $PATHS)
 {
   ./building.ps1 $MY_PATH || STATUS = 1
 }
