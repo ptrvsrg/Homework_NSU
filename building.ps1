@@ -1,79 +1,31 @@
 $HOME_DIR = (Get-Location).path
-$EXIT_STATUS = 0
+$MY_PATH = $args[0]
 
-Write-Host ""
-
-foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).replace('CMakeLists.txt', '')))
+Set-Location $MY_PATH
+if (-not (Test-Path "CMakeLists.txt"))
 {
-    Write-Host  -ForegroundColor White "Building $MY_PATH..."
-    Set-Location $MY_PATH
-
-    if (Test-Path "build")
-    {
-	    Remove-Item -Path build -Recurse
-    }
-	
-    cmake -Bbuild > $null
-    $CMAKE_LOG = (cmake --build build)
-
-    if ($IsWindows) 
-    {
-        foreach ($str in ($CMAKE_LOG | Select-Object -Skip 3 -First 3))
-        {
-            Write-Host -ForegroundColor Green $str
-        }
-
-        if ($CMAKE_LOG | Select-String -Pattern "warning", "error")
-        {
-            $EXIT_STATUS = 1
-            foreach ($str in ($CMAKE_LOG | Select-Object -Skip 6))
-            {
-                Write-Host -ForegroundColor Red $str
-            }
-            
-            Write-Host -ForegroundColor Red Build failed
-        }
-        else
-        {
-            foreach ($str in ($CMAKE_LOG | Select-Object -Skip 6))
-            {
-                Write-Host -ForegroundColor Green $str
-            }
-
-            Write-Host -ForegroundColor Green Build completed    
-        }
-    }
-
-    if ($IsLinux)
-    {
-        foreach ($str in ($CMAKE_LOG | Select-Object -First 2))
-        {
-            Write-Host -ForegroundColor Green $str
-        }
-
-        if ($CMAKE_LOG | Select-String -Pattern "warning", "error")
-        {
-            $EXIT_STATUS = 1
-            foreach ($str in ($CMAKE_LOG | Select-Object -Skip 2))
-            {
-                Write-Host -ForegroundColor Red $str
-            }
-            
-            Write-Host -ForegroundColor Red Build failed
-        }
-        else
-        {
-            foreach ($str in ($CMAKE_LOG | Select-Object -Skip 2))
-            {
-                Write-Host -ForegroundColor Green $str
-            }
-
-            Write-Host -ForegroundColor Green Build completed    
-        }
-    }
-
-    Write-Host ""
-    Set-Location $HOME_DIR
+    Write-Host -ForegroundColor Red "CMakeLists.txt not found"
+    exit 1
 }
 
-exit $EXIT_STATUS
+Write-Host -ForegroundColor White "Building $MY_PATH..."
+
+if (Test-Path "build")
+{
+    Remove-Item -Path build -Recurse
+}
+
+cmake -Bbuild
+cmake --build build
+
+Write-Host ""
+Set-Location $HOME_DIR
+
+if (Test-Path "build/Debug/*") 
+{
+    exit 0
+}
+else 
+{
+    exit 1
+}
