@@ -8,7 +8,7 @@ if (-not (Test-Path "CMakeLists.txt"))
     exit 1
 }
 
-Write-Host -ForegroundColor White "Building $MY_PATH..."
+Write-Host -ForegroundColor Green "Building $MY_PATH..." -NoNewline
 
 if (Test-Path "build")
 {
