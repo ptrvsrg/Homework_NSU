@@ -3,7 +3,13 @@ image:
 - Ubuntu2004
 - Visual Studio 2019
 build_script:
-- ps: ./building.ps1
+- ps: $STATUS = 0
+- ps: >-
+foreach ($MY_PATH in (((Get-ChildItem -Recurse 'CMakeLists.txt').FullName).replace('CMakeLists.txt', '')))
+{
+  ./building.ps1 $MY_PATH || STATUS = 1
+}
+- ps: exit $STATUS
 notifications:
 - provider: Email
   to:
