@@ -1,17 +1,21 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(Homework C)
 
-set(SRC main.c)
+if(NOT DEFINED TARGET)
+    set(TARGET main)
+endif()
 
-add_executable(main ${SRC})
+file(GLOB SRC "*.c")
+
+add_executable(${TARGET} ${SRC})
 
 if(WIN32)
-    target_compile_options(main PUBLIC
+    target_compile_options(${TARGET} PUBLIC
         /W4
         /WX
     )
 else()
-    target_compile_options(main PUBLIC
+    target_compile_options(${TARGET} PUBLIC
         -Werror
         -Wall
         -Wextra
