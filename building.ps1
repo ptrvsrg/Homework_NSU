@@ -1,49 +1,27 @@
 if ($args[0])
 {
-    $HOME_DIR = (Get-Location).path
     $MY_PATH = $args[0]
-
-    Set-Location $MY_PATH
-    if (-not (Test-Path "CMakeLists.txt"))
-    {
-        Write-Host -ForegroundColor Red "CMakeLists.txt not found"
-        exit 1
-    }
-
-    Write-Host -ForegroundColor Green "Building $MY_PATH..." -NoNewline
-
-    if (Test-Path "build")
-    {
-        Remove-Item -Path build -Recurse
-    }
-
-    cmake -Bbuild
-    cmake --build build
-
-    Write-Host ""
-    Set-Location $HOME_DIR
-
-    if (Test-Path "build/Debug/*") 
-    {
-        exit 0
-    }
-    else 
-    {
-        exit 1
-    }
 }
-else
+else 
 {
-    cmake -Bbuild
-    cmake --build build
-    
-    $DEBUG_DIR = ((Get-ChildItem -Path build -Recurse Debug).FullName)
+    $MY_PATH = "."
+}
 
-    foreach ($path in $DEBUG_DIR) 
-    {
-        if (-not (Test-Path "$path/*")) 
-        {
-            exit 1
-        }
-    }
+if (-not (Test-Path "$MY_PATH/CMakeLists.txt"))
+{
+    Write-Host -ForegroundColor Red "$MY_PATH/CMakeLists.txt not found"
+    exit 1
+}
+
+if (Test-Path "$MY_PATH/build")
+{
+    Remove-Item -Path "$MY_PATH/build" -Recurse
+}
+
+cmake -B $MY_PATH/build -S $MY_PATH
+cmake --build $MY_PATH/build
+
+if (cmake --build $MY_PATH/build | Select-String -Pattern "error", "warning") 
+{
+    exit 1
 }
