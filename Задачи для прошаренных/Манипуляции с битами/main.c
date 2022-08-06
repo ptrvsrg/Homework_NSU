@@ -1,15 +1,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
-#define MASK 0b10000000U
-#define MAX_MASK 0b11111111U
+#define MASK (unsigned char)128U
+#define MAX_MASK (unsigned char)255U
 #define BYTE_SIZE 8
 
 typedef unsigned char byte_t;
 
 void PrintBits(byte_t a)
 {
-    for (int i = 0; i < sizeof(byte_t) * BYTE_SIZE; ++i)
+    for (int i = 0; i < (int)sizeof(byte_t) * BYTE_SIZE; ++i)
     {
         printf("%d", ((a & MASK) != 0) ? 1 : 0);
         a <<= 1;
@@ -18,7 +18,7 @@ void PrintBits(byte_t a)
 
 byte_t ChangeBits(byte_t x, byte_t y, int m)
 {
-    if (m < 0 || m > sizeof(byte_t) * BYTE_SIZE)
+    if (m < 0 || m > (int)sizeof(byte_t) * BYTE_SIZE)
     {
         fprintf(stderr, "Wrong \"m\" value\n");
         exit(EXIT_FAILURE);
