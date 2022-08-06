@@ -33,5 +33,5 @@ endif()
 
 find_library(MATH_LIBRARY m)
 if(MATH_LIBRARY)
-	target_link_libraries(main PUBLIC ${MATH_LIBRARY})
+	target_link_libraries(${TARGET} PUBLIC ${MATH_LIBRARY})
 endif()
