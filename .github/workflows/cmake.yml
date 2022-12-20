@@ -15,7 +15,7 @@ jobs:
         IFS=$'\n'
         for tasks in $(find . -name "CMakeLists.txt" | sed 's/CMakeLists.txt//g')
         do
-          cmake -B ./${tasks}/build -S ./${i};
+          cmake -B ./${tasks}/build -S ./${tasks};
           cmake --build ./${tasks}/build
         done
         unset IFS
