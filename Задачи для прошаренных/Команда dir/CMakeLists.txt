@@ -6,12 +6,12 @@ file(GLOB SRC "*.c")
 add_executable(main ${SRC})
 
 if(WIN32)
-    target_compile_options(${TARGET} PUBLIC
+    target_compile_options(main PUBLIC
         /W4
         /WX
     )
 else()
-    target_compile_options(${TARGET} PUBLIC
+    target_compile_options(main PUBLIC
         -Werror
         -Wall
         -Wextra
@@ -29,5 +29,5 @@ endif()
 
 find_library(MATH_LIBRARY m)
 if(MATH_LIBRARY)
-	target_link_libraries(${TARGET} PUBLIC ${MATH_LIBRARY})
+	target_link_libraries(main PUBLIC ${MATH_LIBRARY})
 endif()
