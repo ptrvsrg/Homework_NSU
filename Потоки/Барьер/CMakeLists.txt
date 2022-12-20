@@ -1,13 +1,9 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(Homework C)
 
-if(NOT DEFINED TARGET)
-    set(TARGET main)
-endif()
-
 file(GLOB SRC "*.c")
 
-add_executable(${TARGET} ${SRC})
+add_executable(main ${SRC})
 
 if(WIN32)
     target_compile_options(${TARGET} PUBLIC
