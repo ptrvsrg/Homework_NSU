@@ -17,5 +17,6 @@ jobs:
         do
           cmake -B ./${tasks}/build -S ./${tasks};
           cmake --build ./${tasks}/build
+          echo
         done
         unset IFS
